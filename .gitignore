@@ -75,3 +75,6 @@ fabric.properties
 # logfile
 log/**
 target/**
+
+student.xlsx
+write.xlsx
