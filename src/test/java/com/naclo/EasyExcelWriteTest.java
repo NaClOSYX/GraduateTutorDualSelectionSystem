@@ -17,7 +17,7 @@ public class EasyExcelWriteTest {
     public void writeTest() {
         //实现excel写的操作
         //1 设置写入文件夹地址和excel文件名称
-        String filename = "D:\\MyPrograms\\Java\\IdeaProjects\\GraduateTutorDualSelectionSystem\\write.xlsx";
+        String filename = "D:\\MyPrograms\\Java\\IdeaProjects\\GraduateTutorDualSelectionSystem\\excel\\write.xlsx";
         // 2 调用easyexcel里面的方法实现写操作
         // write方法两个参数：第一个参数文件路径名称，第二个参数实体类class
         EasyExcel.write(filename, DemoData.class).sheet("学生列表").doWrite(getData());
@@ -26,7 +26,7 @@ public class EasyExcelWriteTest {
     @Test
     public void writeTest2() {
         List<Student> students = studentService.queryAllStudents();
-        String filename = "D:\\MyPrograms\\Java\\IdeaProjects\\GraduateTutorDualSelectionSystem\\student.xlsx";
+        String filename = "D:\\MyPrograms\\Java\\IdeaProjects\\GraduateTutorDualSelectionSystem\\excel\\student.xlsx";
         EasyExcel.write(filename, Student.class).sheet("学生列表").doWrite(students);
     }
 
