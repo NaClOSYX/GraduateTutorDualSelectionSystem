@@ -40,7 +40,7 @@
         <!--<fastjson.version>1.2.58</fastjson.version>-->
         <fastjson.version>1.2.68</fastjson.version>
         <fileupload.version>1.4</fileupload.version>
-        <log4j.version>2.13.2</log4j.version>
+        <log4j.version>1.2.17</log4j.version>
         <slf4j.version>2.0.0-alpha1</slf4j.version>
     </properties>
 
@@ -102,14 +102,9 @@
             <version>${easyexcel.version}</version>
         </dependency>
         <!--log4j 日志-->
-        <!--        <dependency>
-                    <groupId>log4j</groupId>
-                    <artifactId>log4j</artifactId>
-                    <version>1.2.17</version>
-                </dependency>-->
         <dependency>
-            <groupId>org.apache.logging.log4j</groupId>
-            <artifactId>log4j-core</artifactId>
+            <groupId>log4j</groupId>
+            <artifactId>log4j</artifactId>
             <version>${log4j.version}</version>
         </dependency>
         <dependency>

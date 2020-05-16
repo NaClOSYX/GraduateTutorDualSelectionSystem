@@ -11,10 +11,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-/**
- * @Author NaClO
- * @create 2020/5/9 15:58
- */
 public class StudentListener extends AnalysisEventListener<Student> {
     Logger logger = Logger.getLogger(this.getClass());
     List<Student> studentList = new ArrayList<Student>();

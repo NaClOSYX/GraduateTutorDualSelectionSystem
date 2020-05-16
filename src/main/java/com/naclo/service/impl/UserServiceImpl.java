@@ -7,7 +7,6 @@ import com.naclo.service.UserService;
 import com.naclo.utils.DBUtil;
 
 import java.sql.Connection;
-import java.sql.SQLException;
 
 /**
  * @Author NaClO
@@ -18,7 +17,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User queryUserById(String id) {
-        Connection connection = connection = DBUtil.getConnection();
+        Connection connection = DBUtil.getConnection();
         User user = userDao.queryUserById(connection, id);
         DBUtil.closeResource(connection, null, null);
         return user;

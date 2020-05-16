@@ -1,15 +1,10 @@
 package com.naclo.service;
 
 import com.naclo.pojo.Student;
-import com.naclo.pojo.User;
 
-import java.sql.Connection;
 import java.util.List;
 
-/**
- * @Author NaClO
- * @create 2020/5/7 16:42
- */
+
 public interface StudentService {
     //根据id查询学生
     Student queryStudentById(String id);

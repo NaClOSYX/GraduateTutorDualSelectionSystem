@@ -2,14 +2,11 @@ package com.naclo.servlet;
 
 import com.alibaba.fastjson.JSONArray;
 import com.mysql.cj.util.StringUtils;
-import com.naclo.dao.StudentDao;
-import com.naclo.dao.impl.StudentDaoImpl;
 import com.naclo.pojo.Student;
 import com.naclo.service.StudentService;
 import com.naclo.service.impl.StudentServiceImpl;
 import com.naclo.utils.Constants;
 import com.naclo.utils.MD5Utils;
-import com.sun.xml.internal.bind.v2.model.core.ID;
 import org.apache.log4j.Logger;
 
 import javax.servlet.ServletException;
@@ -29,9 +26,9 @@ public class StudentServlet extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String method = req.getParameter("method");
 
-        if (method.equals("updatePassword")) {
+        if (method.equals("updatePassword")) {//更新密码
             updatePassword(req, resp);
-        } else if (method.equals("validateOldPassword")) {
+        } else if (method.equals("validateOldPassword")) {//验证旧密码
             validateOldPassword(req, resp);
         }
     }

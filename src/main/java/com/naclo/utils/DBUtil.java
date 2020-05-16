@@ -5,16 +5,10 @@ import org.apache.log4j.Logger;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.lang.reflect.Field;
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Properties;
 
-/**
- * @Author NaClO
- * @create 2020/3/25 17:40
- */
+
 //数据库操作工具类
 public class DBUtil {
     private Logger logger = Logger.getLogger(this.getClass());

@@ -5,10 +5,7 @@ import org.apache.log4j.Logger;
 import javax.servlet.*;
 import java.io.IOException;
 
-/**
- * @Author NaClO
- * @create 2020/4/29 17:40
- */
+
 /*中文编码过滤*/
 public class CharacterEncodingFilter implements Filter {
     private Logger logger = Logger.getLogger(this.getClass());

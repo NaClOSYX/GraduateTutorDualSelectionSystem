@@ -14,10 +14,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
-/**
- * @Author NaClO
- * @create 2020/4/30 16:08
- */
+
 public class LoginServlet extends HttpServlet {
     Logger logger = Logger.getLogger(this.getClass());
     UserService userService = new UserServiceImpl();

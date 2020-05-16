@@ -13,7 +13,7 @@
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
-      <module name="GraduateTutorDualSelectionSystem" options="-verbose -bootclasspath $PROJECT_DIR$/../../../../develop/Java/jdk1.8.0_231/jre/lib/rt.jar" />
+      <module name="GraduateTutorDualSelectionSystem" options="-verbose -bootclasspath D:/develop/Java/jdk1.8.0_231/jre/lib/rt.jar" />
     </option>
   </component>
 </project>

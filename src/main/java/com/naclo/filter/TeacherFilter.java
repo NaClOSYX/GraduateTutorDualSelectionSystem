@@ -10,10 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
-/**
- * @Author NaClO
- * @create 2020/5/2 19:34
- */
+
 public class TeacherFilter implements Filter {
     Logger logger = Logger.getLogger(this.getClass());
 

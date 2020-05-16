@@ -3,18 +3,13 @@ package com.naclo.servlet;
 import com.alibaba.excel.EasyExcel;
 import com.alibaba.fastjson.JSONArray;
 import com.mysql.cj.util.StringUtils;
-import com.naclo.dao.MajorDao;
 import com.naclo.pojo.Major;
 import com.naclo.pojo.Student;
 import com.naclo.pojo.StudentListener;
 import com.naclo.service.MajorService;
 import com.naclo.service.StudentService;
-import com.naclo.service.TeacherService;
 import com.naclo.service.impl.MajorServiceImpl;
 import com.naclo.service.impl.StudentServiceImpl;
-import com.naclo.service.impl.TeacherServiceImpl;
-import com.naclo.utils.Constants;
-import com.naclo.utils.MD5Utils;
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
@@ -26,7 +21,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.HashMap;
@@ -44,25 +38,25 @@ public class AdminServlet extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String method = req.getParameter("method");
 
-        if (method.equals("getAllStudents")) {
+        if (method.equals("getAllStudents")) {//获取所有学生
             getAllStudents(req, resp);
-        } else if (method.equals("deleteStudentData")) {
+        } else if (method.equals("deleteStudentData")) {//删除学生数据
             deleteStudentData(req, resp);
-        } else if (method.equals("updateStudentData")) {
+        } else if (method.equals("updateStudentData")) {//更新学生数据
             updateStudentData(req, resp);
-        } else if (method.equals("addStudentData")) {
+        } else if (method.equals("addStudentData")) {//增加学生数据
             addStudentData(req, resp);
-        } else if (method.equals("resetStudentPassword")) {
+        } else if (method.equals("resetStudentPassword")) {//重置学生密码
             resetStudentPassword(req, resp);
-        } else if (method.equals("exportStudentList")) {
+        } else if (method.equals("exportStudentList")) {//导入学生名单
             exportStudentList(req, resp);
-        } else if (method.equals("importStudentList")) {
+        } else if (method.equals("importStudentList")) {//导出学生名单
             importStudentList(req, resp);
-        } else if (method.equals("validateStudentId")) {
+        } else if (method.equals("validateStudentId")) {//验证学号是否存在
             validateStudentId(req, resp);
-        } else if (method.equals("getStudentById")) {
+        } else if (method.equals("getStudentById")) {//根据学号获取学生
             getStudentById(req, resp);
-        } else if (method.equals("getAllMajors")) {
+        } else if (method.equals("getAllMajors")) {//获取所有专业
             getAllMajors(req, resp);
         }
     }
