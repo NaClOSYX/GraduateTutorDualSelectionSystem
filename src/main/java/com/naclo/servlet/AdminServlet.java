@@ -6,10 +6,14 @@ import com.mysql.cj.util.StringUtils;
 import com.naclo.pojo.Major;
 import com.naclo.pojo.Student;
 import com.naclo.pojo.StudentListener;
+import com.naclo.pojo.Teacher;
 import com.naclo.service.MajorService;
 import com.naclo.service.StudentService;
+import com.naclo.service.TeacherService;
 import com.naclo.service.impl.MajorServiceImpl;
 import com.naclo.service.impl.StudentServiceImpl;
+import com.naclo.service.impl.TeacherServiceImpl;
+import com.naclo.utils.Constants;
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
@@ -31,7 +35,7 @@ import java.util.regex.Pattern;
 public class AdminServlet extends HttpServlet {
     Logger logger = Logger.getLogger(this.getClass());
     StudentService studentService = new StudentServiceImpl();
-    //TeacherService teacherService=new TeacherServiceImpl();
+    TeacherService teacherService = new TeacherServiceImpl();
     MajorService majorService = new MajorServiceImpl();
 
     @Override
@@ -58,6 +62,18 @@ public class AdminServlet extends HttpServlet {
             getStudentById(req, resp);
         } else if (method.equals("getAllMajors")) {//获取所有专业
             getAllMajors(req, resp);
+        } else if (method.equals("getAllTeachers")) {//获取所有老师
+            getAllTeachers(req, resp);
+        } else if (method.equals("deleteTeacherData")) {//删除老师数据
+            deleteTeacherData(req, resp);
+        } else if (method.equals("updateTeacherData")) {//删除老师数据
+            updateTeacherData(req, resp);
+        } else if (method.equals("addTeacherData")) {//删除老师数据
+            addTeacherData(req, resp);
+        } else if (method.equals("resetTeacherPassword")) {//删除老师数据
+            resetTeacherPassword(req, resp);
+        } else if (method.equals("validateTeacherId")) {//验证学号是否存在
+            validateTeacherId(req, resp);
         }
     }
 
@@ -80,7 +96,9 @@ public class AdminServlet extends HttpServlet {
         boolean flag = false;
         flag = studentService.deleteStudentById(studentId);
         if (flag) {
-            req.getRequestDispatcher(req.getContextPath() + "/admin/AdminStudentList.jsp").forward(req, resp);
+            req.getSession().setAttribute(Constants.STATE_MESSAGE, "删除学生成功");
+            resp.sendRedirect(req.getContextPath() + "/admin/AdminStudentList.jsp");
+            //req.getRequestDispatcher(req.getContextPath() + "/admin/AdminStudentList.jsp").forward(req, resp);
         } else {
             resp.sendRedirect(req.getContextPath() + "/error/error.jsp");
         }
@@ -94,7 +112,7 @@ public class AdminServlet extends HttpServlet {
         Student student = new Student(studentId, studentName, null, studentMajor);
         flag = studentService.updateStudentById(student);
         if (flag) {
-            req.getSession().setAttribute("PRmessage", "信息修改成功");
+            req.getSession().setAttribute(Constants.STATE_MESSAGE, "信息修改成功");
             resp.sendRedirect(req.getContextPath() + "/admin/AdminStudentList.jsp");
         } else {
             resp.sendRedirect(req.getContextPath() + "/error/error.jsp");
@@ -109,7 +127,9 @@ public class AdminServlet extends HttpServlet {
         Student student = new Student(studentId, studentName, null, studentMajor);
         flag = studentService.insertStudent(student);
         if (flag) {
-            req.getRequestDispatcher(req.getContextPath() + "/admin/AdminStudentList.jsp").forward(req, resp);
+            req.getSession().setAttribute(Constants.STATE_MESSAGE, "插入学生成功");
+            resp.sendRedirect(req.getContextPath() + "/admin/AdminStudentList.jsp");
+            //req.getRequestDispatcher(req.getContextPath() + "/admin/AdminStudentList.jsp").forward(req, resp);
         } else {
             resp.sendRedirect(req.getContextPath() + "/error/error.jsp");
         }
@@ -120,8 +140,7 @@ public class AdminServlet extends HttpServlet {
         boolean flag = false;
         flag = studentService.updateStudentPasswordById(studentId, studentId);
         if (flag) {
-            req.getSession().setAttribute("PRmessage", "密码重置成功");
-            req.setAttribute("PRmessage", "密码重置成功");
+            req.getSession().setAttribute(Constants.STATE_MESSAGE, "密码重置成功");
             resp.sendRedirect(req.getContextPath() + "/admin/AdminStudentList.jsp");
         } else {
             resp.sendRedirect(req.getContextPath() + "/error/error.jsp");
@@ -260,4 +279,102 @@ public class AdminServlet extends HttpServlet {
         outPrintWriter.flush();
         outPrintWriter.close();
     }
+
+
+    public void getAllTeachers(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        List<Teacher> teacherList = teacherService.queryAllTeachers();
+        resp.setContentType("application/json");
+        PrintWriter outPrintWriter = resp.getWriter();
+        outPrintWriter.write(JSONArray.toJSONString(teacherList));
+        outPrintWriter.flush();
+        outPrintWriter.close();
+    }
+
+    public void deleteTeacherData(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        String teacherId = req.getParameter("teacherId");
+        boolean flag = false;
+        flag = teacherService.deleteTeacherById(teacherId);
+        if (flag) {
+            req.getSession().setAttribute(Constants.STATE_MESSAGE, "删除导师成功");
+            resp.sendRedirect(req.getContextPath() + "/admin/AdminTeacherList.jsp");
+            //req.getRequestDispatcher(req.getContextPath() + "/admin/AdminTeacherList.jsp").forward(req, resp);
+        } else {
+            resp.sendRedirect(req.getContextPath() + "/error/error.jsp");
+        }
+    }
+
+    public void updateTeacherData(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+/*        String studentId = req.getParameter("studentId");
+        String studentName = req.getParameter("studentName");
+        String studentMajor = req.getParameter("studentMajor");
+        boolean flag = false;
+        Student student = new Student(studentId, studentName, null, studentMajor);
+        flag = studentService.updateStudentById(student);
+        if (flag) {
+            req.getSession().setAttribute(Constants.STATE_MESSAGE, "信息修改成功");
+            resp.sendRedirect(req.getContextPath() + "/admin/AdminStudentList.jsp");
+        } else {
+            resp.sendRedirect(req.getContextPath() + "/error/error.jsp");
+        }*/
+    }
+
+    public void addTeacherData(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        String teacherId = req.getParameter("teacherId");
+        String teacherName = req.getParameter("teacherName");
+        String teacherMajor = req.getParameter("teacherMajor");
+        String teacherIntroduce = req.getParameter("teacherIntroduce");
+        boolean flag = false;
+        Teacher teacher = new Teacher(teacherId, teacherName, null, teacherMajor, teacherIntroduce);
+        flag = teacherService.insertTeacher(teacher);
+        if (flag) {
+            req.getSession().setAttribute(Constants.STATE_MESSAGE, "插入导师成功");
+            //req.setAttribute(Constants.STATE_MESSAGE, "插入导师成功");
+            resp.sendRedirect(req.getContextPath() + "/admin/AdminTeacherList.jsp");
+            //req.getRequestDispatcher(req.getContextPath() + "/admin/AdminTeacherList.jsp").forward(req, resp);
+        } else {
+            resp.sendRedirect(req.getContextPath() + "/error/error.jsp");
+        }
+    }
+
+    public void resetTeacherPassword(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        String teacherId = req.getParameter("teacherId");
+        boolean flag = false;
+        flag = teacherService.updateTeacherPasswordById(teacherId, teacherId);
+        if (flag) {
+            req.getSession().setAttribute(Constants.STATE_MESSAGE, "密码重置成功");
+            req.setAttribute(Constants.STATE_MESSAGE, "密码重置成功");
+            resp.sendRedirect(req.getContextPath() + "/admin/AdminTeacherList.jsp");
+        } else {
+            resp.sendRedirect(req.getContextPath() + "/error/error.jsp");
+        }
+    }
+
+    public void validateTeacherId(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        System.out.println("validateTeacherId");
+        String teacherId = req.getParameter("teacherId");
+        System.out.println(teacherId);
+        Map<String, String> resultMap = new HashMap<String, String>();
+        if (StringUtils.isNullOrEmpty(teacherId)) {//工号输入为空
+            resultMap.put("result", "error");
+        } else if (teacherId.length() != 10) {//长度不为10位
+            resultMap.put("result", "length");
+        } else if (!(Pattern.compile("[0-9]*")).matcher(teacherId).matches()) {//不全为数字
+            resultMap.put("result", "length");
+        } else {
+            Teacher teacher = teacherService.queryTeacherById(teacherId);
+            System.out.println(teacher);
+            if (StringUtils.isNullOrEmpty(teacher.getTeacherId())) {//工号不存在
+                resultMap.put("result", "true");
+            } else {//工号存在
+                resultMap.put("result", "false");
+            }
+        }
+        resp.setContentType("application/json");
+        PrintWriter outPrintWriter = resp.getWriter();
+        outPrintWriter.write(JSONArray.toJSONString(resultMap));
+        System.out.println(JSONArray.toJSONString(resultMap));
+        outPrintWriter.flush();
+        outPrintWriter.close();
+    }
+
 }

@@ -1,9 +1,7 @@
-<%@ page import="com.naclo.service.StudentService" %>
-<%@ page import="com.naclo.service.impl.StudentServiceImpl" %>
-<%@ page import="com.naclo.utils.Constants" %>
-<%@ page import="com.naclo.pojo.Student" %>
-<%@ page import="com.naclo.utils.MD5Utils" %>
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page contentType="text/html;charset=UTF-8" language="java" pageEncoding="UTF-8" %>
+<%
+    String path = request.getContextPath();
+%>
 <!DOCTYPE HTML>
 <html>
 <head>
@@ -22,6 +20,12 @@
     <script src="https://cdn.bootcdn.net/ajax/libs/bootstrap-table/1.16.0/bootstrap-table.min.js"></script>
 
     <link href="../css/dashboard.css" rel="stylesheet">
+    \
+
+    <script src="../js/common.js" charset="UTF-8"></script>
+    <script src="../js/StudentUpdatePassword.js" charset="UTF-8"></script>
+
+
 </head>
 
 <body>
@@ -29,25 +33,12 @@
 <jsp:include page="StudentTopbar.jsp"></jsp:include>
 <!--slidebar-->
 <jsp:include page="StudentSlidebar.jsp">
-    <jsp:param name="pageTitle" value="主页"/>
+    <jsp:param name="pageTitle" value="选择导师"/>
 </jsp:include>
 
 <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4">
     <div class="panel-body" style="padding-bottom:0px;">
-        <h1>欢迎学生
-            <b>
-                <%=session.getAttribute(Constants.USER_SESSION).toString()%>
-            </b>
-            登陆
-                <%
-                StudentService studentService = new StudentServiceImpl();
-                Student student = studentService.queryStudentById(session.getAttribute(Constants.USER_SESSION).toString());
-                if (student.getStudentPassword().equals(MD5Utils.stringToMD5(student.getStudentId()))){
-                    out.print(",请<a href=\"StudentUpdatePassword.jsp\">修改密码</a></h1>");
-                }else{
-                    out.print("。");
-                }
-            %>
+
     </div>
 </main>
 
@@ -55,6 +46,7 @@
 <jsp:include page="../commons/copyright.jsp"></jsp:include>
 
 </body>
+
 <script>
 
 </script>

@@ -1,3 +1,4 @@
+<%@ page import="com.naclo.utils.Constants" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <!DOCTYPE HTML>
 <html>
@@ -14,7 +15,6 @@
     <script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.5.0/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.1/umd/popper.min.js"></script>
     <script src="https://cdn.bootcdn.net/ajax/libs/twitter-bootstrap/4.4.1/js/bootstrap.min.js"></script>
-    <script src="https://cdn.bootcdn.net/ajax/libs/bootstrap-table/1.16.0/bootstrap-table.min.js"></script>
 
     <link href="../css/dashboard.css" rel="stylesheet">
 </head>
@@ -29,7 +29,12 @@
 
 <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4">
     <div class="panel-body" style="padding-bottom:0px;">
-
+        <h1>欢迎管理员
+            <b>
+                <%=session.getAttribute(Constants.USER_SESSION).toString()%>
+            </b>
+            登陆。
+        </h1>
     </div>
 </main>
 

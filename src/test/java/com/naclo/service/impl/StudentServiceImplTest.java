@@ -21,6 +21,11 @@ class StudentServiceImplTest {
     }
 
     @Test
+    void queryStudentByNameTest() {
+        studentService.queryStudentByName("史").forEach(System.out::println);
+    }
+
+    @Test
     void queryAllStudentsTest() {
         studentService.queryAllStudents().forEach(System.out::println);
     }

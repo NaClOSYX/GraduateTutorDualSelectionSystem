@@ -1,6 +1,7 @@
+<%@ page import="com.naclo.pojo.Major" %>
 <%@ page import="com.naclo.service.MajorService" %>
 <%@ page import="com.naclo.service.impl.MajorServiceImpl" %>
-<%@ page import="com.naclo.pojo.Major" %>
+<%@ page import="com.naclo.utils.Constants" %>
 <%@ page import="java.util.List" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <!DOCTYPE HTML>
@@ -19,9 +20,12 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.1/umd/popper.min.js"></script>
     <script src="https://cdn.bootcdn.net/ajax/libs/twitter-bootstrap/4.4.1/js/bootstrap.min.js"></script>
     <script src="https://cdn.bootcdn.net/ajax/libs/bootstrap-table/1.16.0/bootstrap-table.min.js"></script>
+    <script src="https://cdn.bootcdn.net/ajax/libs/bootstrap-table/1.16.0/locale/bootstrap-table-zh-CN.js"></script>
+
+    <link href="../css/dashboard.css" rel="stylesheet">
 
     <script src="../js/common.js"></script>
-    <link href="../css/dashboard.css" rel="stylesheet">
+    <script src="../js/AdminStudentList.js"></script>
 </head>
 
 <body>
@@ -182,14 +186,13 @@
 
 </body>
 <script>
-
-    <% //密码重置成功弹窗
-    if(session.getAttribute("PRmessage")==null||"".equals(session.getAttribute("PRmessage"))){
-    }else{
-        String pRmessage = session.getAttribute("PRmessage").toString();
-        out.print("alert('"+pRmessage+"');");
-    }
-    session.setAttribute("PRmessage", "");
+    <% //操作成功弹窗
+        if(session.getAttribute(Constants.STATE_MESSAGE)==null||"".equals(session.getAttribute(Constants.STATE_MESSAGE))){
+        }else{
+            String stateMessage = session.getAttribute(Constants.STATE_MESSAGE).toString();
+            out.print("alert('"+stateMessage+"');");
+        }
+        session.setAttribute(Constants.STATE_MESSAGE, "");
     %>
 
     $('#studentTable').bootstrapTable({
@@ -219,7 +222,7 @@
         sidePagination: 'client',        //server:服务器端分页|client：前端分页
         //queryParams: 'queryParams',    //传递参数
         search: true,                    //是否显示表格搜索
-        sortName: "studentId",            //定义要排序的列
+        sortName: "studentId",           //定义要排序的列
         sortOrder: "asc",                //排序方式
         pageSize: 10,                    //单页记录数
         clickToSelect: true,             //是否启用点击选中行
@@ -229,21 +232,24 @@
         cardView: false,                 //是否显示详细视图
         showColumns: true,               //是否显示所有的列
         switchable: false,               //禁用可切换的列项
-
+        height: $(window).height() - 70,   //行高，如果没有设置height属性，表格自动根据记录条数觉得表格高度
         uniqueId: "studentId",           //每一行的唯一标识，一般为主键列
         columns: [{
             checkbox: true
         }, {
             title: '学号',
             field: 'studentId',
-            sortable: true
+            sortable: true,
+            width: 200
         }, {
             title: '姓名',
             field: 'studentName',
-            sortable: true
+            sortable: true,
+            width: 200
         }, {
             title: '专业',
             field: 'studentMajor',
+            width: 300
         }, {
             title: '操作',
             field: 'publicationTime',
@@ -282,11 +288,9 @@
             },
             error: function (data) {
                 //请求出错
-
             }
         })
     };
-
 
     //验证输入的新学生是否符合格式
     $(function () {
@@ -302,9 +306,7 @@
         newStudentName.on("focus", function () {
             validateTip(newStudentName.next(), {"color": "#666666"}, "* 请输入姓名", false);
         }).on("blur", function () {
-            console.log("log" + newStudentName.val() + "log");
             if (newStudentName.val() == "") {
-
                 validateTip(newStudentName.next(), {"color": "red"}, imgNo + " 姓名不能为空", false);
             } else {
                 validateTip(newStudentName.next(), {"color": "green"}, imgYes, true);
@@ -335,7 +337,7 @@
                         validateTip(newStudentId.next(), {"color": "red"}, imgNo + " 学号已存在", false);
                     } else if (data.result == "error") {//学号输入为空
                         validateTip(newStudentId.next(), {"color": "red"}, imgNo + " 请输入学号", false);
-                    } else if (data.result == "length") {//学号输入为空
+                    } else if (data.result == "length") {//学号格式不对
                         validateTip(newStudentId.next(), {"color": "red"}, imgNo + " 请输入正确的格式", false);
                     }
                 },

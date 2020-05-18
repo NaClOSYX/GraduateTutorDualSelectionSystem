@@ -11,4 +11,5 @@ public class Constants {
     public static String MESSAGE = "message";
     public static String ERROR = "error";
     public static String INFO = "info";
+    public static String STATE_MESSAGE = "stateMessage";
 }

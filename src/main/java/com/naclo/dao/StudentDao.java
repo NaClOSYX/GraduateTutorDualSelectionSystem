@@ -1,21 +1,24 @@
 package com.naclo.dao;
 
 import com.naclo.pojo.Student;
-import com.naclo.pojo.User;
 
 import java.sql.Connection;
 import java.util.List;
 
 
 public interface StudentDao {
+
+    //获取所有学生
+    List<Student> queryAllStudents(Connection connection);
+
     //根据id查询学生
     Student queryStudentById(Connection connection, String id);
 
     //根据专业查询学生
     List<Student> queryStudentByMajor(Connection connection, String major);
 
-    //获取所有学生
-    List<Student> queryAllStudents(Connection connection);
+    //根据姓名查询学生
+    List<Student> queryStudentByName(Connection connection, String name);
 
     //获取所有学生分页
     List<Student> queryAllStudentsLimit(Connection connection, int startIndex, int pageSize);

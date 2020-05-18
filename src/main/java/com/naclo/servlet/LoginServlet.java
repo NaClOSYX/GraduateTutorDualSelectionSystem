@@ -46,7 +46,7 @@ public class LoginServlet extends HttpServlet {
                 if (user.getRole().equals("学生")) {
                     session.setAttribute(Constants.USER_ROLE, Constants.ROLE_STUDENT);
                     resp.sendRedirect("student/StudentIndex.jsp");
-                } else if (user.getRole().equals("教师")) {
+                } else if (user.getRole().equals("导师")) {
                     session.setAttribute(Constants.USER_ROLE, Constants.ROLE_TEACHER);
                     resp.sendRedirect("teacher/TeacherIndex.jsp");
                 } else if (user.getRole().equals("管理员")) {

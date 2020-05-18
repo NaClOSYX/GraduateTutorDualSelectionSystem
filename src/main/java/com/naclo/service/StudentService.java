@@ -6,14 +6,18 @@ import java.util.List;
 
 
 public interface StudentService {
+    //获取所有学生
+    List<Student> queryAllStudents();
+
     //根据id查询学生
     Student queryStudentById(String id);
 
     //根据专业查询学生
     List<Student> queryStudentByMajor(String major);
 
-    //获取所有学生
-    List<Student> queryAllStudents();
+    //根据姓名查询学生
+    List<Student> queryStudentByName(String name);
+
 
     //获取所有学生分页
     List<Student> queryAllStudentsLimit(int startIndex, int pageSize);

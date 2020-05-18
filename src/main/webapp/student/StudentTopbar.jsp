@@ -7,7 +7,7 @@
 <body>
 <!-- 顶部导航栏 -->
 <nav class="navbar navbar-dark fixed-top bg-dark flex-md-nowrap p-0 shadow">
-    <a class="navbar-brand col-sm-3 col-md-2 mr-0" href="StudentIndex.jsp">上海电力大学研究生导师双选系统 学生主页</a>
+    <a class="navbar-brand mr-0" href="StudentIndex.jsp">&nbsp;上海电力大学研究生导师双选系统</a>
     <a href="${pageContext.request.contextPath}/">首页</a>
     <ul class="navbar-nav px-3">
         <li class="nav-item text-nowrap">

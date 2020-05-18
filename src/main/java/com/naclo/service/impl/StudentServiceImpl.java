@@ -14,6 +14,14 @@ public class StudentServiceImpl implements StudentService {
     StudentDao studentDao = new StudentDaoImpl();
 
     @Override
+    public List<Student> queryAllStudents() {
+        Connection connection = DBUtil.getConnection();
+        List<Student> studentList = studentDao.queryAllStudents(connection);
+        DBUtil.closeResource(connection, null, null);
+        return studentList;
+    }
+
+    @Override
     public Student queryStudentById(String id) {
         Connection connection = DBUtil.getConnection();
         Student student = studentDao.queryStudentById(connection, id);
@@ -30,12 +38,13 @@ public class StudentServiceImpl implements StudentService {
     }
 
     @Override
-    public List<Student> queryAllStudents() {
+    public List<Student> queryStudentByName(String name) {
         Connection connection = DBUtil.getConnection();
-        List<Student> studentList = studentDao.queryAllStudents(connection);
+        List<Student> studentList = studentDao.queryStudentByName(connection, name);
         DBUtil.closeResource(connection, null, null);
         return studentList;
     }
+
 
     @Override
     public List<Student> queryAllStudentsLimit(int startIndex, int pageSize) {

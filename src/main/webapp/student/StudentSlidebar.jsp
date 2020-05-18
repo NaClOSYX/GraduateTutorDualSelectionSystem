@@ -14,16 +14,27 @@
             <div class="sidebar-sticky">
                 <ul class="nav flex-column">
                     <li class="nav-item">
-
                         <%
                             if (pageTitle.equals("修改密码")) {
                                 out.print("<a class=\"nav-link active\" href=\"StudentUpdatePassword.jsp\">");
                             } else
                                 out.print("<a class=\"nav-link\" href=\"StudentUpdatePassword.jsp\">");
                         %>
-                        <%-- <a class="nav-link" href="AdminStudentList.jsp">--%>
                         <span data-feather="file"></span>
                         修改密码
+                        </a>
+                    </li>
+                    <li class="nav-item">
+
+                        <%
+                            if (pageTitle.equals("选择导师")) {
+                                out.print("<a class=\"nav-link active\" href=\"StudentChooseTeacher.jsp\">");
+                            } else
+                                out.print("<a class=\"nav-link\" href=\"StudentChooseTeacher.jsp\">");
+                        %>
+                        <%-- <a class="nav-link" href="AdminStudentList.jsp">--%>
+                        <span data-feather="file"></span>
+                        选择导师
                         </a>
                     </li>
                 </ul>

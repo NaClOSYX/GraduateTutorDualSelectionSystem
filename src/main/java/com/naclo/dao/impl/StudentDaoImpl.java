@@ -15,6 +15,31 @@ import java.util.List;
 
 public class StudentDaoImpl implements StudentDao {
     @Override
+    public List<Student> queryAllStudents(Connection connection) {
+        List<Student> studentList = new ArrayList<>();
+        ResultSet rs = null;
+        PreparedStatement pstm = null;
+        if (connection != null) {
+            String sql = "select * from student";
+            try {
+                rs = DBUtil.query(connection, sql, pstm, new Object[]{}, rs);
+                while (rs.next()) {
+                    Student student = new Student();
+                    student.setStudentId(rs.getString(1));
+                    student.setStudentName(rs.getString(2));
+                    student.setStudentPassword(rs.getString(3));
+                    student.setStudentMajor(rs.getString(4));
+                    studentList.add(student);
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        DBUtil.closeResource(null, pstm, rs);
+        return studentList;
+    }
+
+    @Override
     public Student queryStudentById(Connection connection, String id) {
         Student student = new Student();
         ResultSet rs = null;
@@ -37,6 +62,7 @@ public class StudentDaoImpl implements StudentDao {
         DBUtil.closeResource(null, pstm, rs);
         return student;
     }
+
 
     @Override
     public List<Student> queryStudentByMajor(Connection connection, String major) {
@@ -65,14 +91,16 @@ public class StudentDaoImpl implements StudentDao {
     }
 
     @Override
-    public List<Student> queryAllStudents(Connection connection) {
+    public List<Student> queryStudentByName(Connection connection, String name) {
         List<Student> studentList = new ArrayList<>();
         ResultSet rs = null;
         PreparedStatement pstm = null;
         if (connection != null) {
-            String sql = "select * from student";
+            String sql = "select * from student where studentName like ?";
+            name = "%" + name + "%";
+            Object[] params = {name};
             try {
-                rs = DBUtil.query(connection, sql, pstm, new Object[]{}, rs);
+                rs = DBUtil.query(connection, sql, pstm, params, rs);
                 while (rs.next()) {
                     Student student = new Student();
                     student.setStudentId(rs.getString(1));
@@ -88,6 +116,7 @@ public class StudentDaoImpl implements StudentDao {
         DBUtil.closeResource(null, pstm, rs);
         return studentList;
     }
+
 
     @Override
     public List<Student> queryAllStudentsLimit(Connection connection, int startIndex, int pageSize) {
@@ -124,9 +153,9 @@ public class StudentDaoImpl implements StudentDao {
         int flag = 0;
         if (connection != null) {
             String sql = "insert into student values(?,?,?,?);";
-            Object[] paramas = {student.getStudentId(), student.getStudentName(), password, student.getStudentMajor()};
+            Object[] params = {student.getStudentId(), student.getStudentName(), password, student.getStudentMajor()};
             try {
-                flag = DBUtil.execute(connection, sql, pstm, paramas);
+                flag = DBUtil.execute(connection, sql, pstm, params);
             } catch (SQLException e) {
                 e.printStackTrace();
             }

@@ -16,12 +16,34 @@
                     <li class="nav-item">
 
                         <%
+                            if (pageTitle.equals("修改密码")) {
+                                out.print("<a class=\"nav-link active\" href=\"TeacherUpdatePassword.jsp\">");
+                            } else
+                                out.print("<a class=\"nav-link\" href=\"TeacherUpdatePassword.jsp\">");
+                        %>
+                        <span data-feather="file"></span>
+                        修改密码
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+    </div>
+</div>
+<%--<div class="container-fluid">
+    <div class="row">
+        <nav class="col-md-2 d-none d-md-block bg-light sidebar">
+            <div class="sidebar-sticky">
+                <ul class="nav flex-column">
+                    <li class="nav-item">
+
+                        <%
                             if (pageTitle.equals("管理学生")) {
                                 out.print("<a class=\"nav-link active\" href=\"AdminStudentList.jsp\">");
                             } else
                                 out.print("<a class=\"nav-link\" href=\"AdminStudentList.jsp\">");
                         %>
-                        <%-- <a class="nav-link" href="AdminStudentList.jsp">--%>
+                        &lt;%&ndash; <a class="nav-link" href="AdminStudentList.jsp">&ndash;%&gt;
                         <span data-feather="file"></span>
                         管理学生
                         </a>
@@ -33,7 +55,7 @@
                             } else
                                 out.print("<a class=\"nav-link\" href=\"AdminTeacherList.jsp\">");
                         %>
-                        <%--<a class="nav-link" href="AdminTeacherList.jsp">--%>
+                        &lt;%&ndash;<a class="nav-link" href="AdminTeacherList.jsp">&ndash;%&gt;
                         <span data-feather="file"></span>
                         管理老师
                         </a>
@@ -45,7 +67,7 @@
                             } else
                                 out.print("<a class=\"nav-link\" href=\"AdminAdminList.jsp\">");
                         %>
-                        <%--<a class="nav-link" href="AdminAdminList.jsp">--%>
+                        &lt;%&ndash;<a class="nav-link" href="AdminAdminList.jsp">&ndash;%&gt;
                         <span data-feather="file"></span>
                         管理管理员
                         </a>
@@ -66,6 +88,6 @@
             </div>
         </nav>
     </div>
-</div>
+</div>--%>
 </body>
 </html>
