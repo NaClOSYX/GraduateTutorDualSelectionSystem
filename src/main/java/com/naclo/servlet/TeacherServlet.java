@@ -18,7 +18,7 @@ public class TeacherServlet extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String method = req.getParameter("method");
 
-        if (method.equals("")) {
+        if ("".equals(method)) {
 
         }
     }

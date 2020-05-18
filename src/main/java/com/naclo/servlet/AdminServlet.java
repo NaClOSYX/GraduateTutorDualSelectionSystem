@@ -42,37 +42,37 @@ public class AdminServlet extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String method = req.getParameter("method");
 
-        if (method.equals("getAllStudents")) {//获取所有学生
+        if ("getAllStudents".equals(method)) {//获取所有学生
             getAllStudents(req, resp);
-        } else if (method.equals("deleteStudentData")) {//删除学生数据
+        } else if ("deleteStudentData".equals(method)) {//删除学生数据
             deleteStudentData(req, resp);
-        } else if (method.equals("updateStudentData")) {//更新学生数据
+        } else if ("updateStudentData".equals(method)) {//更新学生数据
             updateStudentData(req, resp);
-        } else if (method.equals("addStudentData")) {//增加学生数据
+        } else if ("addStudentData".equals(method)) {//增加学生数据
             addStudentData(req, resp);
-        } else if (method.equals("resetStudentPassword")) {//重置学生密码
+        } else if ("resetStudentPassword".equals(method)) {//重置学生密码
             resetStudentPassword(req, resp);
-        } else if (method.equals("exportStudentList")) {//导入学生名单
+        } else if ("exportStudentList".equals(method)) {//导入学生名单
             exportStudentList(req, resp);
-        } else if (method.equals("importStudentList")) {//导出学生名单
+        } else if ("importStudentList".equals(method)) {//导出学生名单
             importStudentList(req, resp);
-        } else if (method.equals("validateStudentId")) {//验证学号是否存在
+        } else if ("validateStudentId".equals(method)) {//验证学号是否存在
             validateStudentId(req, resp);
-        } else if (method.equals("getStudentById")) {//根据学号获取学生
+        } else if ("getStudentById".equals(method)) {//根据学号获取学生
             getStudentById(req, resp);
-        } else if (method.equals("getAllMajors")) {//获取所有专业
+        } else if ("getAllMajors".equals(method)) {//获取所有专业
             getAllMajors(req, resp);
-        } else if (method.equals("getAllTeachers")) {//获取所有老师
+        } else if ("getAllTeachers".equals(method)) {//获取所有老师
             getAllTeachers(req, resp);
-        } else if (method.equals("deleteTeacherData")) {//删除老师数据
+        } else if ("deleteTeacherData".equals(method)) {//删除老师数据
             deleteTeacherData(req, resp);
-        } else if (method.equals("updateTeacherData")) {//删除老师数据
+        } else if ("updateTeacherData".equals(method)) {//删除老师数据
             updateTeacherData(req, resp);
-        } else if (method.equals("addTeacherData")) {//删除老师数据
+        } else if ("addTeacherData".equals(method)) {//删除老师数据
             addTeacherData(req, resp);
-        } else if (method.equals("resetTeacherPassword")) {//删除老师数据
+        } else if ("resetTeacherPassword".equals(method)) {//删除老师数据
             resetTeacherPassword(req, resp);
-        } else if (method.equals("validateTeacherId")) {//验证学号是否存在
+        } else if ("validateTeacherId".equals(method)) {//验证学号是否存在
             validateTeacherId(req, resp);
         }
     }

@@ -43,13 +43,13 @@ public class LoginServlet extends HttpServlet {
                 logger.info(userId + " login");
                 session.setAttribute(Constants.USER_SESSION, userId);
                 session.setAttribute(Constants.USER_MAJOR, user.getMajor());
-                if (user.getRole().equals("学生")) {
+                if ("学生".equals(user.getRole())) {
                     session.setAttribute(Constants.USER_ROLE, Constants.ROLE_STUDENT);
                     resp.sendRedirect("student/StudentIndex.jsp");
-                } else if (user.getRole().equals("导师")) {
+                } else if ("导师".equals(user.getRole())) {
                     session.setAttribute(Constants.USER_ROLE, Constants.ROLE_TEACHER);
                     resp.sendRedirect("teacher/TeacherIndex.jsp");
-                } else if (user.getRole().equals("管理员")) {
+                } else if ("管理员".equals(user.getRole())) {
                     session.setAttribute(Constants.USER_ROLE, Constants.ROLE_ADMIN);
                     resp.sendRedirect("admin/AdminIndex.jsp");
                 }

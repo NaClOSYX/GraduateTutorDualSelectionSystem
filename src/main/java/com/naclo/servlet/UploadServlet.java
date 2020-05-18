@@ -27,6 +27,7 @@ public class UploadServlet extends HttpServlet {
     /**
      * 上传数据及保存文件
      */
+    @Override
     protected void doPost(HttpServletRequest request,
                           HttpServletResponse response) throws ServletException, IOException {
         // 检测是否为多媒体上传

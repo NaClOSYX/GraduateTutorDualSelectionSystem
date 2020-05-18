@@ -11,10 +11,12 @@ public class CharacterEncodingFilter implements Filter {
     private Logger logger = Logger.getLogger(this.getClass());
 
     //初始化：web服务器启动，就以及初始化了，随时等待过滤对象出现！
+    @Override
     public void init(FilterConfig filterConfig) throws ServletException {
         //logger.info("CharacterEncodingFilter初始化");
     }
 
+    @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
         request.setCharacterEncoding("utf-8");
         response.setCharacterEncoding("utf-8");
@@ -26,6 +28,7 @@ public class CharacterEncodingFilter implements Filter {
     }
 
     //销毁：web服务器关闭的时候，过滤会销毁
+    @Override
     public void destroy() {
         //logger.info("CharacterEncodingFilter销毁");
     }

@@ -129,7 +129,7 @@ public class TeacherDaoImpl implements TeacherDao {
         PreparedStatement pstm = null;
         if (connection != null) {
             String sql = "select * from teacher limit ?,?";
-            Object params[] = new Object[]{start, end};
+            Object[] params = new Object[]{start, end};
             try {
                 rs = DBUtil.query(connection, sql, pstm, params, rs);
                 while (rs.next()) {

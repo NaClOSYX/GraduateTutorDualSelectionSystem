@@ -2,7 +2,6 @@ package com.naclo.dao;
 
 
 import com.naclo.pojo.Major;
-import com.naclo.pojo.Student;
 
 import java.sql.Connection;
 import java.util.List;

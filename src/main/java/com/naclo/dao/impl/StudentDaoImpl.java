@@ -127,7 +127,7 @@ public class StudentDaoImpl implements StudentDao {
         PreparedStatement pstm = null;
         if (connection != null) {
             String sql = "select * from student limit ?,? ";
-            Object params[] = new Object[]{start, end};
+            Object[] params = new Object[]{start, end};
             try {
                 rs = DBUtil.query(connection, sql, pstm, params, rs);
                 while (rs.next()) {

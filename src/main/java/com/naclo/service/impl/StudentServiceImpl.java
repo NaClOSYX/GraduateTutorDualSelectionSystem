@@ -59,10 +59,11 @@ public class StudentServiceImpl implements StudentService {
         Connection connection = DBUtil.getConnection();
         int i = studentDao.insertStudent(connection, student);
         DBUtil.closeResource(connection, null, null);
-        if (i > 0)
+        if (i > 0) {
             return true;
-        else
+        } else {
             return false;
+        }
     }
 
     @Override
@@ -70,10 +71,11 @@ public class StudentServiceImpl implements StudentService {
         Connection connection = DBUtil.getConnection();
         int i = studentDao.updateStudentPasswordById(connection, id, newPwd);
         DBUtil.closeResource(connection, null, null);
-        if (i > 0)
+        if (i > 0) {
             return true;
-        else
+        } else {
             return false;
+        }
     }
 
     @Override
@@ -81,10 +83,11 @@ public class StudentServiceImpl implements StudentService {
         Connection connection = DBUtil.getConnection();
         int i = studentDao.updateStudentById(connection, student);
         DBUtil.closeResource(connection, null, null);
-        if (i > 0)
+        if (i > 0) {
             return true;
-        else
+        } else {
             return false;
+        }
     }
 
     @Override
@@ -92,10 +95,11 @@ public class StudentServiceImpl implements StudentService {
         Connection connection = DBUtil.getConnection();
         int i = studentDao.deleteStudentById(connection, id);
         DBUtil.closeResource(connection, null, null);
-        if (i > 0)
+        if (i > 0) {
             return true;
-        else
+        } else {
             return false;
+        }
     }
 }
 

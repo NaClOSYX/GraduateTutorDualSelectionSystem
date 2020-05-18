@@ -58,10 +58,11 @@ public class TeacherServiceImpl implements TeacherService {
         Connection connection = DBUtil.getConnection();
         int i = teacherDao.insertTeacher(connection, teacher);
         DBUtil.closeResource(connection, null, null);
-        if (i > 0)
+        if (i > 0) {
             return true;
-        else
+        } else {
             return false;
+        }
     }
 
     @Override
@@ -69,10 +70,11 @@ public class TeacherServiceImpl implements TeacherService {
         Connection connection = DBUtil.getConnection();
         int i = teacherDao.updateTeacherPasswordById(connection, id, newPwd);
         DBUtil.closeResource(connection, null, null);
-        if (i > 0)
+        if (i > 0) {
             return true;
-        else
+        } else {
             return false;
+        }
     }
 
     @Override
@@ -80,10 +82,11 @@ public class TeacherServiceImpl implements TeacherService {
         Connection connection = DBUtil.getConnection();
         int i = teacherDao.updateTeacherById(connection, teacher);
         DBUtil.closeResource(connection, null, null);
-        if (i > 0)
+        if (i > 0) {
             return true;
-        else
+        } else {
             return false;
+        }
     }
 
     @Override
@@ -91,9 +94,10 @@ public class TeacherServiceImpl implements TeacherService {
         Connection connection = DBUtil.getConnection();
         int i = teacherDao.deleteTeacherById(connection, id);
         DBUtil.closeResource(connection, null, null);
-        if (i > 0)
+        if (i > 0) {
             return true;
-        else
+        } else {
             return false;
+        }
     }
 }

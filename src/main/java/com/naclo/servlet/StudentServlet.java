@@ -26,9 +26,9 @@ public class StudentServlet extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String method = req.getParameter("method");
 
-        if (method.equals("updatePassword")) {//更新密码
+        if ("updatePassword".equals(method)) {//更新密码
             updatePassword(req, resp);
-        } else if (method.equals("validateOldPassword")) {//验证旧密码
+        } else if ("validateOldPassword".equals(method)) {//验证旧密码
             validateOldPassword(req, resp);
         }
     }
