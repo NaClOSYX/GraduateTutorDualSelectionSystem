@@ -3,8 +3,11 @@ package com.naclo.servlet;
 import com.alibaba.fastjson.JSONArray;
 import com.mysql.cj.util.StringUtils;
 import com.naclo.pojo.Student;
+import com.naclo.pojo.Teacher;
 import com.naclo.service.StudentService;
+import com.naclo.service.TeacherService;
 import com.naclo.service.impl.StudentServiceImpl;
+import com.naclo.service.impl.TeacherServiceImpl;
 import com.naclo.utils.Constants;
 import com.naclo.utils.MD5Utils;
 import org.apache.log4j.Logger;
@@ -13,14 +16,17 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class StudentServlet extends HttpServlet {
     Logger logger = Logger.getLogger(this.getClass());
     StudentService studentService = new StudentServiceImpl();
+    TeacherService teacherService = new TeacherServiceImpl();
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -30,6 +36,8 @@ public class StudentServlet extends HttpServlet {
             updatePassword(req, resp);
         } else if ("validateOldPassword".equals(method)) {//验证旧密码
             validateOldPassword(req, resp);
+        } else if ("getTeacherList".equals(method)) {//验证旧密码
+            getTeacherList(req, resp);
         }
     }
 
@@ -75,5 +83,13 @@ public class StudentServlet extends HttpServlet {
         outPrintWriter.write(JSONArray.toJSONString(resultMap));
         outPrintWriter.flush();
         outPrintWriter.close();
+    }
+
+    public void getTeacherList(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        HttpSession session = req.getSession();
+        String studentMajor = (String) (session.getAttribute(Constants.USER_MAJOR));
+        List<Teacher> teacherList = teacherService.queryTeacherByMajor(studentMajor);
+
+
     }
 }

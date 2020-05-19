@@ -20,4 +20,12 @@ public class MajorServiceImpl implements MajorService {
         DBUtil.closeResource(connection, null, null);
         return majorList;
     }
+
+    @Override
+    public List<Major> queryMajorByName(String name) {
+        Connection connection = DBUtil.getConnection();
+        List<Major> majorList = majorDao.queryMajorByName(connection, name);
+        DBUtil.closeResource(connection, null, null);
+        return majorList;
+    }
 }

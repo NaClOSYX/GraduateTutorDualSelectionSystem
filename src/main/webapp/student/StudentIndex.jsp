@@ -39,15 +39,16 @@
                 <%=session.getAttribute(Constants.USER_SESSION).toString()%>
             </b>
             登陆
-                <%
+            <%
                 StudentService studentService = new StudentServiceImpl();
                 Student student = studentService.queryStudentById(session.getAttribute(Constants.USER_SESSION).toString());
-                if (student.getStudentPassword().equals(MD5Utils.stringToMD5(student.getStudentId()))){
-                    out.print(",请<a href=\"StudentUpdatePassword.jsp\">修改密码</a></h1>");
-                }else{
+                if (student.getStudentPassword().equals(MD5Utils.stringToMD5(student.getStudentId()))) {
+                    out.print(",请<a href=\"StudentUpdatePassword.jsp\">修改密码</a>。");
+                } else {
                     out.print("。");
                 }
             %>
+        </h1>
     </div>
 </main>
 

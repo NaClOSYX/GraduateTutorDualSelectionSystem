@@ -1,4 +1,5 @@
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page import="com.naclo.utils.Constants" %>
+<%@ page contentType="text/html;charset=UTF-8" language="java" pageEncoding="UTF-8" %>
 <html>
 <head>
     <meta charset="UTF-8">
@@ -7,6 +8,7 @@
 <body>
 <%
     String pageTitle = request.getParameter("pageTitle");
+    String adminMajor = (String) (session.getAttribute(Constants.USER_MAJOR));
 %>
 <div class="container-fluid">
     <div class="row">
@@ -20,7 +22,6 @@
                             } else
                                 out.print("<a class=\"nav-link\" href=\"AdminStudentList.jsp\">");
                         %>
-                        <%-- <a class="nav-link" href="AdminStudentList.jsp">--%>
                         <span data-feather="file"></span>
                         管理学生
                         </a>
@@ -32,34 +33,21 @@
                             } else
                                 out.print("<a class=\"nav-link\" href=\"AdminTeacherList.jsp\">");
                         %>
-                        <%--<a class="nav-link" href="AdminTeacherList.jsp">--%>
                         <span data-feather="file"></span>
                         管理老师
                         </a>
                     </li>
-                    <li class="nav-item">
-                        <%
+                    <%
+                        if ("ALL".equals(adminMajor)) {
+                            out.print("<li class=\"nav-item\">");
                             if (pageTitle.equals("管理管理员")) {
                                 out.print("<a class=\"nav-link active\" href=\"AdminAdminList.jsp\">");
-                            } else
+                            } else {
                                 out.print("<a class=\"nav-link\" href=\"AdminAdminList.jsp\">");
-                        %>
-                        <%--<a class="nav-link" href="AdminAdminList.jsp">--%>
-                        <span data-feather="file"></span>
-                        管理管理员
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="AdminAdminList.jsp">
-                            <span data-feather="file"></span>
-                            <%
-                                if (session.getAttribute("username") != null) {
-                                    String username = session.getAttribute("username").toString();
-                                    out.print(username);
-                                }
-                            %>
-                        </a>
-                    </li>
+                            }
+                            out.print("<span data-feather=\"file\"></span>管理管理员</a></li>");
+                        }
+                    %>
                 </ul>
             </div>
         </nav>

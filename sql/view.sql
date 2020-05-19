@@ -11,3 +11,14 @@ FROM admin;
 
 SELECT *
 from user;
+
+
+DROP VIEW IF EXISTS studentTeacherTable;
+create view studentTeacherTable AS
+select I.majorName majorName, S.studentName studentName, T.teacherName teacherName
+from student S,
+     teacher T,
+     idea I
+where I.studentId = S.studentId
+  and I.teacherId = T.teacherId
+  and I.state = 1;

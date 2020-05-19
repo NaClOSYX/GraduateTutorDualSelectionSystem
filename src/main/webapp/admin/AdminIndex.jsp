@@ -1,5 +1,5 @@
 <%@ page import="com.naclo.utils.Constants" %>
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page contentType="text/html;charset=UTF-8" language="java" pageEncoding="UTF-8" %>
 <!DOCTYPE HTML>
 <html>
 <head>
@@ -29,11 +29,21 @@
 
 <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4">
     <div class="panel-body" style="padding-bottom:0px;">
-        <h1>欢迎管理员
-            <b>
-                <%=session.getAttribute(Constants.USER_SESSION).toString()%>
-            </b>
-            登陆。
+        <h1>
+            <%
+                out.print("欢迎");
+                String major = (String) (session.getAttribute(Constants.USER_MAJOR));
+                String username = (String) (session.getAttribute(Constants.USER_SESSION));
+                if (major != null && (!major.equals(""))) {
+                    if ("ALL".equals(major)) {
+                        out.print("研究生院管理员");
+                    } else {
+                        out.print(major);
+                        out.print("专业管理员");
+                    }
+                }
+                out.print("<b>" + username + "</b>登陆。");
+            %>
         </h1>
     </div>
 </main>

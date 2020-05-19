@@ -1,8 +1,9 @@
 package com.naclo.utils;
 
-
+//常量工具类
 public class Constants {
-    public static String USER_SESSION = "username";
+    public static String USER_SESSION = "userId";
+    public static String USER_NAME = "userName";
     public static String USER_ROLE = "userRole";
     public static String USER_MAJOR = "userMajor";
     public static String ROLE_ADMIN = "roleAdmin";

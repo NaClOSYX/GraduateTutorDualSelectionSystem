@@ -56,6 +56,5 @@
             return true;
         }
     }
-
 </script>
 

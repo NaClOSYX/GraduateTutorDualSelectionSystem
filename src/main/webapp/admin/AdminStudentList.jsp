@@ -35,7 +35,14 @@
 <jsp:include page="AdminSlidebar.jsp">
     <jsp:param name="pageTitle" value="管理学生"/>
 </jsp:include>
-
+<%
+    MajorService majorService = new MajorServiceImpl();
+    List<Major> majorList = majorService.queryAllMajors();
+    String adminMajor = (String) (session.getAttribute(Constants.USER_MAJOR));
+    if (!"ALL".equals(adminMajor)) {
+        majorList = majorService.queryMajorByName(adminMajor);
+    }
+%>
 <%--main--%>
 <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4">
     <div class="panel-body" style="padding-bottom:0px;">
@@ -92,22 +99,20 @@
                             <div>
                                 <select class="custom-select form-control" style="width: 50%;float: left"
                                         id="addStudentModelStudentMajor" name="studentMajor">
-                                    <option value="请选择专业">请选择专业</option>
                                     <%
-                                        MajorService majorService = new MajorServiceImpl();
-                                        List<Major> majorList = majorService.queryAllMajors();
                                         for (Major major : majorList) {
                                             String majorName = major.getMajorName();
-                                            if (!"ALL".equals(majorName))
-                                                out.print("<option value='" + majorName + "'" + ">" + majorName + "</option>");
+                                            if ("ALL".equals(majorName)) {
+                                                out.print("<option value=\"请选择专业\">请选择专业</option>");
+                                            } else {
+                                                out.println("<option value='" + majorName + "'" + ">" + majorName + "</option>");
+                                            }
                                         }
                                     %>
                                 </select>
                                 <font color="red" style="float:none;"></font>
                             </div>
                             <br/><br/>
-
-
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-secondary" data-dismiss="modal">关闭</button>
                                 <button type="submit" class="btn btn-primary" id="confirmAddStudent">新增</button>
@@ -150,22 +155,20 @@
                             <br/>
                             <div>
                                 <label for="updateStudentModelStudentMajor" style="float: left"><h4>专业：</h4></label>
-                                <%--  <input type="text" class="form-control" placeholder="请输入专业" name="studentMajor"
-                                         id="updateStudentModelStudentMajor"
-                                         required="" style="width: 50%">--%>
                                 <select class="custom-select form-control" style="width: 50%;float: left"
                                         id="updateStudentModelStudentMajor" name="studentMajor">
-                                    <option value="请选择专业">请选择专业</option>
                                     <%
                                         for (Major major : majorList) {
                                             String majorName = major.getMajorName();
-                                            if (!"ALL".equals(majorName))
-                                                out.print("<option value='" + majorName + "'" + ">" + majorName + "</option>");
+                                            if ("ALL".equals(majorName)) {
+                                                out.print("<option value=\"请选择专业\">请选择专业</option>");
+                                            } else {
+                                                out.println("<option value='" + majorName + "'" + ">" + majorName + "</option>");
+                                            }
                                         }
                                     %>
                                 </select>
                                 <font color="red" style="float:none;"></font>
-
                             </div>
                             <br/>
                             <div class="modal-footer">
@@ -177,8 +180,6 @@
                 </div>
             </div>
         </div>
-        <%----%>
-
 </main>
 
 <!-- Copyright -->
@@ -249,6 +250,7 @@
         }, {
             title: '专业',
             field: 'studentMajor',
+            sortable: true,
             width: 300
         }, {
             title: '操作',
@@ -355,7 +357,7 @@
                 newStudentName.attr("validateStatus") == "true" &&
                 newStudentMajor.attr("validateStatus") == "true") {
                 if (confirm("确定要增加学生吗？")) {
-                    $("#studentForm").submit();
+                    $("#addStudentModel").submit();
                 }
             } else {
                 return false;

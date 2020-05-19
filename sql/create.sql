@@ -7,6 +7,7 @@ CREATE TABLE student
     studentPassword varchar(100),
     studentMajor    varchar(30)
 );
+
 #教师表
 DROP TABLE IF EXISTS teacher;
 CREATE TABLE teacher
@@ -18,7 +19,7 @@ CREATE TABLE teacher
     teacherIntroduce varchar(255)
 );
 
-#管理员表，major为0的是研究室院管理员
+#管理员表，major为ALL的是研究生院管理员
 DROP TABLE IF EXISTS admin;
 CREATE TABLE admin
 (
@@ -34,4 +35,18 @@ CREATE TABLE major
     majorId    int(2) PRIMARY KEY,
     majorName  varchar(30),
     studentMax int(2)
+);
+
+#志愿表
+DROP TABLE IF EXISTS idea;
+CREATE TABLE idea
+(
+    ideaId    int(10) auto_increment primary key,
+    majorName varchar(30),
+    studentId varchar(10),
+    teacherId varchar(10),
+    time      datetime,
+    state     int(1),
+    foreign key (studentId) references student (studentId),
+    foreign key (teacherId) references teacher (teacherId)
 );

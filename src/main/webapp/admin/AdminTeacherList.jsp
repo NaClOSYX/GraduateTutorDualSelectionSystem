@@ -3,7 +3,7 @@
 <%@ page import="com.naclo.service.impl.MajorServiceImpl" %>
 <%@ page import="java.util.List" %>
 <%@ page import="com.naclo.utils.Constants" %>
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page contentType="text/html;charset=UTF-8" language="java" pageEncoding="UTF-8" %>
 <!DOCTYPE HTML>
 <html>
 <head>

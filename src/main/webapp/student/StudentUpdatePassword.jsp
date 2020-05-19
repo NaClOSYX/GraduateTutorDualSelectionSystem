@@ -20,7 +20,6 @@
     <script src="https://cdn.bootcdn.net/ajax/libs/bootstrap-table/1.16.0/bootstrap-table.min.js"></script>
 
     <link href="../css/dashboard.css" rel="stylesheet">
-    \
 
     <script src="../js/common.js" charset="UTF-8"></script>
     <script src="../js/StudentUpdatePassword.js" charset="UTF-8"></script>
@@ -75,7 +74,6 @@
                     </div>
                 </div>
             </div>
-
         </fieldset>
     </div>
 </main>

@@ -43,3 +43,10 @@ Insert into major
 values (8, '计算机技术', 0);
 Insert into major
 values (9, '软件工程', 0);
+
+
+
+insert into idea
+values (null, '软件工程', '20171422', '1234567890', now(), 1);
+insert into idea
+values (null, '软件工程', '20171422', '2222222222', now(), 2);

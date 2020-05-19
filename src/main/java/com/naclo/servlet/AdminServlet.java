@@ -27,6 +27,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -83,7 +84,13 @@ public class AdminServlet extends HttpServlet {
     }
 
     public void getAllStudents(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        List<Student> studentList = studentService.queryAllStudents();
+        List<Student> studentList = new ArrayList<>();
+        String major = (String) (req.getSession().getAttribute(Constants.USER_MAJOR));
+        if ("ALL".equals(major)) {
+            studentList = studentService.queryAllStudents();
+        } else {
+            studentList = studentService.queryStudentByMajor(major);
+        }
         resp.setContentType("application/json");
         PrintWriter outPrintWriter = resp.getWriter();
         outPrintWriter.write(JSONArray.toJSONString(studentList));

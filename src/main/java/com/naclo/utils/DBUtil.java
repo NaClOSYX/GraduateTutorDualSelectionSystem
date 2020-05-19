@@ -11,11 +11,11 @@ import java.util.Properties;
 
 //数据库操作工具类
 public class DBUtil {
-    private Logger logger = Logger.getLogger(this.getClass());
     private static String driver = null;
     private static String url = null;
     private static String username = null;
     private static String password = null;
+    private static Logger logger = Logger.getLogger(DBUtil.class);
 
     static {
         Properties properties = new Properties();
@@ -48,10 +48,9 @@ public class DBUtil {
     public static ResultSet query(Connection connection, String sql, PreparedStatement preparedStatement, Object[] params, ResultSet resultSet) throws SQLException {
         preparedStatement = connection.prepareStatement(sql);
         for (int i = 0; i < params.length; i++) {
-            //setObject,占位符从1开始，但是我们的数组是从0开始
             preparedStatement.setObject(i + 1, params[i]);
         }
-        System.out.println(preparedStatement.toString());
+        logger.info(preparedStatement.toString());
         resultSet = preparedStatement.executeQuery();
         return resultSet;
     }
@@ -60,10 +59,9 @@ public class DBUtil {
     public static int execute(Connection connection, String sql, PreparedStatement preparedStatement, Object[] params) throws SQLException {
         preparedStatement = connection.prepareStatement(sql);
         for (int i = 0; i < params.length; i++) {
-            //setObject,占位符从1开始，但是我们的数组是从0开始
             preparedStatement.setObject(i + 1, params[i]);
         }
-        //System.out.println(preparedStatement.toString());
+        logger.info(preparedStatement.toString());
         int updateRows = preparedStatement.executeUpdate();
         closeResource(connection, preparedStatement, null);
         return updateRows;
@@ -72,11 +70,9 @@ public class DBUtil {
     //释放资源
     public static boolean closeResource(Connection connection, PreparedStatement preparedStatement, ResultSet resultSet) {
         boolean flag = true;
-
         if (resultSet != null) {
             try {
                 resultSet.close();
-                //GC回收
                 resultSet = null;
             } catch (SQLException e) {
                 e.printStackTrace();
@@ -86,34 +82,30 @@ public class DBUtil {
         if (preparedStatement != null) {
             try {
                 preparedStatement.close();
-                //GC回收
                 preparedStatement = null;
             } catch (SQLException e) {
                 e.printStackTrace();
                 flag = false;
             }
         }
-
         if (connection != null) {
             try {
                 connection.close();
-                //GC回收
                 connection = null;
             } catch (SQLException e) {
                 e.printStackTrace();
                 flag = false;
             }
         }
-
         return flag;
     }
 
 
     //测试db.properties能否读取到
     public static void main(String[] args) {
-        System.out.println(driver);
-        System.out.println(url);
-        System.out.println(username);
-        System.out.println(password);
+        System.out.println("driver = " + driver);
+        System.out.println("url = " + url);
+        System.out.println("username = " + username);
+        System.out.println("password = " + password);
     }
 }

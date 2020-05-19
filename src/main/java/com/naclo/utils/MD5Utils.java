@@ -4,6 +4,7 @@ import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
+//MD5加密工具类
 public class MD5Utils {
     public static String stringToMD5(String plainText) {
         byte[] secretBytes = null;
