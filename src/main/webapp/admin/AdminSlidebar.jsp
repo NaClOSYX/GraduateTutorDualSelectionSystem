@@ -48,6 +48,17 @@
                             out.print("<span data-feather=\"file\"></span>管理管理员</a></li>");
                         }
                     %>
+                    <li class="nav-item">
+                        <%
+                            if (pageTitle.equals("管理志愿")) {
+                                out.print("<a class=\"nav-link active\" href=\"AdminIdeaList.jsp\">");
+                            } else
+                                out.print("<a class=\"nav-link\" href=\"AdminIdeaList.jsp\">");
+                        %>
+                        <span data-feather="file"></span>
+                        管理志愿
+                        </a>
+                    </li>
                 </ul>
             </div>
         </nav>

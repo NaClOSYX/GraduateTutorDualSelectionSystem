@@ -89,7 +89,10 @@ public class StudentServlet extends HttpServlet {
         HttpSession session = req.getSession();
         String studentMajor = (String) (session.getAttribute(Constants.USER_MAJOR));
         List<Teacher> teacherList = teacherService.queryTeacherByMajor(studentMajor);
-
-
+        resp.setContentType("application/json");
+        PrintWriter outPrintWriter = resp.getWriter();
+        outPrintWriter.write(JSONArray.toJSONString(teacherList));
+        outPrintWriter.flush();
+        outPrintWriter.close();
     }
 }

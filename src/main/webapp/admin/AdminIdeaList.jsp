@@ -28,25 +28,21 @@
 <jsp:include page="AdminTopbar.jsp"></jsp:include>
 <!--slidebar-->
 <jsp:include page="AdminSlidebar.jsp">
-    <jsp:param name="pageTitle" value="管理管理员"/>
+    <jsp:param name="pageTitle" value="管理志愿"/>
 </jsp:include>
 
 <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4">
     <div class="panel-body" style="padding-bottom:0px;">
+        <%--toolbar--%>
         <div id="toolbar" class="btn-group">
-            <button id="btn_add" type="button" class="btn btn-default">
-                <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>新增
-            </button>
-            <button id="btn_import" type="button" class="btn btn-default">
-                <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>导入
-            </button>
-            <button id="btn_export" type="button" class="btn btn-default">
-                <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>导出
+            <button id="btn_export" type="button" class="btn btn-primary">
+                <a href="/admin/admin.do?method=exportIdeaList" style="color: white">导出
+                </a>
             </button>
         </div>
 
         <%--table--%>
-        <table id="adminTable"></table>
+        <table id="ideaTable"></table>
     </div>
 
 </main>
@@ -64,19 +60,19 @@
     }
     session.setAttribute(Constants.STATE_MESSAGE, "");
 %>
-    $('#adminTable').bootstrapTable({
+    $('#ideaTable').bootstrapTable({
         ajax: function (request) {//使用ajax请求
             $.ajax({
                 type: "GET",
                 url: '/admin/admin.do',
                 contentType: 'application/json;charset=utf-8',
                 dataType: 'json',
-                data: {method: "getAllAdmins"},
+                data: {method: "getIdeaTableList"},
                 success: function (res) {
                     request.success({
                         row: res,
                     });
-                    $('#adminTable').bootstrapTable('load', res);
+                    $('#ideaTable').bootstrapTable('load', res);
                 },
                 error: function (error) {
                     console.log(error);
@@ -91,7 +87,7 @@
         sidePagination: 'client',        //server:服务器端分页|client：前端分页
         //queryParams: 'queryParams',    //传递参数
         search: true,                    //是否显示表格搜索
-        sortName: "adminId",           //定义要排序的列
+        sortName: "studentId",           //定义要排序的列
         sortOrder: "asc",                //排序方式
         pageSize: 10,                    //单页记录数
         clickToSelect: true,             //是否启用点击选中行
@@ -102,32 +98,38 @@
         showColumns: true,               //是否显示所有的列
         switchable: false,               //禁用可切换的列项
         height: $(window).height() - 70,   //行高，如果没有设置height属性，表格自动根据记录条数觉得表格高度
-        uniqueId: "adminId",           //每一行的唯一标识，一般为主键列
+        uniqueId: "studentId",           //每一行的唯一标识，一般为主键列
         columns: [{
             checkbox: true
         }, {
-            title: '用户名',
-            field: 'adminId',
+            title: '学号',
+            field: 'studentId',
             sortable: true,
-            width: 300
+            width: 150
+        }, {
+            title: '姓名',
+            field: 'studentName',
+            sortable: true,
+            width: 150
         }, {
             title: '专业',
-            field: 'adminMajor',
+            field: 'majorName',
             sortable: true,
-            width: 300
+            width: 150
         }, {
-            title: '操作',
-            field: 'publicationTime',
-            formatter: operation,//对资源进行操作
+            title: '志愿1',
+            field: 'teacherName1',
+            width: 150
+        }, {
+            title: '志愿2',
+            field: 'teacherName2',
+            width: 150
+        }, {
+            title: '志愿3',
+            field: 'teacherName3',
+            width: 150
         }]
     });
-
-    function operation(value, row, index) {
-        var htm = "<a onClick='return confirm(\"确定删除?\");' href='/admin/admin.do?method=deleteAdminData&adminId=" + row["adminId"] + "'>删除</a> " +
-            "<a style='color: dodgerblue' data-toggle='modal' data-target='#updateAdminModel' onclick='values(" + row["adminId"] + ")'>修改</a> " +
-            "<a onClick='return confirm(\"确定重置?\");' href='/admin/admin.do?method=resetAdminPassword&adminId=" + row["adminId"] + "'>密码重置</a>";
-        return htm;
-    }
 </script>
 
 </html>

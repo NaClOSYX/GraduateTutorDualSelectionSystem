@@ -1,36 +1,37 @@
-package com.naclo.pojo;
+package com.naclo.listener;
 
 import com.alibaba.excel.context.AnalysisContext;
 import com.alibaba.excel.event.AnalysisEventListener;
 import com.alibaba.fastjson.JSON;
-import com.naclo.service.StudentService;
-import com.naclo.service.impl.StudentServiceImpl;
+import com.naclo.pojo.Teacher;
+import com.naclo.service.TeacherService;
+import com.naclo.service.impl.TeacherServiceImpl;
 import org.apache.log4j.Logger;
 
 import java.util.ArrayList;
 import java.util.List;
 
 
-public class StudentListener extends AnalysisEventListener<Student> {
+public class TeacherListener extends AnalysisEventListener<Teacher> {
     Logger logger = Logger.getLogger(this.getClass());
-    List<Student> studentList = new ArrayList<Student>();
+    List<Teacher> teacherList = new ArrayList<Teacher>();
 
     //每隔5条存储数据库，实际使用中可以3000条，然后清理list ，方便内存回收
     private static final int BATCH_COUNT = 5;
-    private StudentService studentService;
+    private TeacherService teacherService;
 
-    public StudentListener() {
-        studentService = new StudentServiceImpl();
+    public TeacherListener() {
+        teacherService = new TeacherServiceImpl();
     }
 
     @Override
-    public void invoke(Student student, AnalysisContext context) {
-        logger.info(JSON.toJSONString(student));
-        studentList.add(student);
-        if (studentList.size() >= BATCH_COUNT) {
+    public void invoke(Teacher teacher, AnalysisContext context) {
+        logger.info(JSON.toJSONString(teacher));
+        teacherList.add(teacher);
+        if (teacherList.size() >= BATCH_COUNT) {
             saveData();
             // 存储完成清理 list
-            studentList.clear();
+            teacherList.clear();
         }
     }
 
@@ -42,9 +43,9 @@ public class StudentListener extends AnalysisEventListener<Student> {
     }
 
     private void saveData() {
-        logger.info(studentList.size());
-        for (Student student : studentList) {
-            studentService.insertStudent(student);
+        logger.info(teacherList.size());
+        for (Teacher teacher : teacherList) {
+            teacherService.insertTeacher(teacher);
         }
         logger.info("存储数据库成功！");
     }
