@@ -13,7 +13,7 @@ public interface AdminService {
     List<Admin> queryAllAdminsExceptAll();
 
     //根据id查询管理员
-    List<Admin> queryAdminsByAdminId(String adminId);
+    Admin queryAdminsByAdminId(String adminId);
 
     //根据id查询管理员
     List<Admin> queryAdminsByMajor(String major);

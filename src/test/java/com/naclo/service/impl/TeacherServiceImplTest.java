@@ -5,6 +5,8 @@ import com.naclo.pojo.Teacher;
 import com.naclo.service.TeacherService;
 import org.junit.jupiter.api.Test;
 
+import java.util.Map;
+
 class TeacherServiceImplTest {
     TeacherService teacherService = new TeacherServiceImpl();
 
@@ -22,6 +24,14 @@ class TeacherServiceImplTest {
     @Test
     void queryTeacherByMajorTest() {
         teacherService.queryTeacherByMajor("软件工程").forEach(System.out::println);
+    }
+
+    @Test
+    void queryTeachersMapByMajorTest() {
+        Map<String, String> teacherMap = teacherService.queryTeachersMapByMajor("ALL");
+        for (String key : teacherMap.keySet()) {
+            System.out.println(key + "--" + teacherMap.get(key));
+        }
     }
 
     @Test

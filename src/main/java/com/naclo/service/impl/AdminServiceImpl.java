@@ -30,11 +30,11 @@ public class AdminServiceImpl implements AdminService {
     }
 
     @Override
-    public List<Admin> queryAdminsByAdminId(String adminId) {
+    public Admin queryAdminsByAdminId(String adminId) {
         Connection connection = DBUtil.getConnection();
-        List<Admin> adminList = adminDao.queryAdminsByAdminId(connection, adminId);
+        Admin admin = adminDao.queryAdminsByAdminId(connection, adminId);
         DBUtil.closeResource(connection, null, null);
-        return adminList;
+        return admin;
     }
 
     @Override

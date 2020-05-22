@@ -64,8 +64,8 @@ public class AdminDaoImpl implements AdminDao {
     }
 
     @Override
-    public List<Admin> queryAdminsByAdminId(Connection connection, String adminId) {
-        List<Admin> adminList = new ArrayList<>();
+    public Admin queryAdminsByAdminId(Connection connection, String adminId) {
+        Admin admin = new Admin();
         ResultSet rs = null;
         PreparedStatement pstm = null;
         if (connection != null) {
@@ -74,18 +74,16 @@ public class AdminDaoImpl implements AdminDao {
             try {
                 rs = DBUtil.query(connection, sql, pstm, params, rs);
                 while (rs.next()) {
-                    Admin admin = new Admin();
                     admin.setAdminId(rs.getString(1));
                     admin.setAdminPassword(rs.getString(2));
                     admin.setAdminMajor(rs.getString(3));
-                    adminList.add(admin);
                 }
             } catch (SQLException e) {
                 e.printStackTrace();
             }
         }
         DBUtil.closeResource(null, pstm, rs);
-        return adminList;
+        return admin;
     }
 
     @Override

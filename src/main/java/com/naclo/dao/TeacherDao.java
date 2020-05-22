@@ -5,6 +5,7 @@ import com.naclo.pojo.Teacher;
 
 import java.sql.Connection;
 import java.util.List;
+import java.util.Map;
 
 public interface TeacherDao {
     //获取所有导师
@@ -15,6 +16,9 @@ public interface TeacherDao {
 
     //根据专业查询导师
     List<Teacher> queryTeacherByMajor(Connection connection, String major);
+
+    //获取所有导师Map
+    Map<String, String> queryTeachersMapByMajor(Connection connection, String major);
 
     //根据姓名查询导师
     List<Teacher> queryTeacherByName(Connection connection, String name);

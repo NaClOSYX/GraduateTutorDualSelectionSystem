@@ -14,7 +14,7 @@ public interface AdminDao {
     List<Admin> queryAllAdminsExceptAll(Connection connection);
 
     //根据id查询管理员
-    List<Admin> queryAdminsByAdminId(Connection connection, String adminId);
+    Admin queryAdminsByAdminId(Connection connection, String adminId);
 
     //根据id查询管理员
     List<Admin> queryAdminsByMajor(Connection connection, String major);

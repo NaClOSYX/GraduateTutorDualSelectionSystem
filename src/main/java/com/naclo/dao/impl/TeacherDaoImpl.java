@@ -10,7 +10,9 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 
 public class TeacherDaoImpl implements TeacherDao {
@@ -90,6 +92,35 @@ public class TeacherDaoImpl implements TeacherDao {
         }
         DBUtil.closeResource(null, pstm, rs);
         return teacherList;
+    }
+
+    @Override
+    public Map<String, String> queryTeachersMapByMajor(Connection connection, String major) {
+        Map<String, String> teacherMap = new HashMap<>();
+        ResultSet rs = null;
+        PreparedStatement pstm = null;
+        Object[] params = new Object[]{};
+        if (connection != null) {
+            String sql = null;
+            if ("ALL".equals(major)) {
+                sql = "select * from teacher";
+            } else {
+                sql = "select * from teacher where teacherMajor = ?";
+                params = new Object[]{major};
+            }
+            try {
+                rs = DBUtil.query(connection, sql, pstm, params, rs);
+                while (rs.next()) {
+                    String teacherId = rs.getString(1);
+                    String teacherName = rs.getString(2);
+                    teacherMap.put(teacherId, teacherName);
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        DBUtil.closeResource(null, pstm, rs);
+        return teacherMap;
     }
 
     @Override

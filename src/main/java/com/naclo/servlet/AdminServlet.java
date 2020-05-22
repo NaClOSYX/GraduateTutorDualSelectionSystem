@@ -3,6 +3,7 @@ package com.naclo.servlet;
 import com.alibaba.excel.EasyExcel;
 import com.alibaba.fastjson.JSONArray;
 import com.mysql.cj.util.StringUtils;
+import com.naclo.listener.AdminListener;
 import com.naclo.listener.StudentListener;
 import com.naclo.listener.TeacherListener;
 import com.naclo.pojo.*;
@@ -90,6 +91,10 @@ public class AdminServlet extends HttpServlet {
             resetAdminPassword(req, resp);
         } else if ("exportAdminList".equals(method)) {//导出管理员名单
             exportAdminList(req, resp);
+        } else if ("importAdminList".equals(method)) {//导入管理员名单
+            importAdminList(req, resp);
+        } else if ("validateAdminId".equals(method)) {//验证工号是否存在
+            validateAdminId(req, resp);
         } else if ("getIdeaTableList".equals(method)) {//获取志愿表
             getIdeaTableList(req, resp);
         } else if ("exportIdeaList".equals(method)) {//导出志愿表
@@ -402,64 +407,38 @@ public class AdminServlet extends HttpServlet {
     }
 
     public void importTeacherList(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        // 上传文件存储目录
         String UPLOAD_DIRECTORY = "upload";
-
-        // 上传配置
         int MEMORY_THRESHOLD = 1024 * 1024 * 3;  // 3MB
         int MAX_FILE_SIZE = 1024 * 1024 * 40; // 40MB
         int MAX_REQUEST_SIZE = 1024 * 1024 * 50; // 50MB
-        // 检测是否为多媒体上传
         if (!ServletFileUpload.isMultipartContent(req)) {
-            // 如果不是则停止
             PrintWriter writer = resp.getWriter();
             writer.println("Error: 表单必须包含 enctype=multipart/form-data");
             writer.flush();
             return;
         }
-
-        // 配置上传参数
         DiskFileItemFactory factory = new DiskFileItemFactory();
-        // 设置内存临界值 - 超过后将产生临时文件并存储于临时目录中
         factory.setSizeThreshold(MEMORY_THRESHOLD);
-        // 设置临时存储目录
         factory.setRepository(new File(System.getProperty("java.io.tmpdir")));
-
         ServletFileUpload upload = new ServletFileUpload(factory);
-
-        // 设置最大文件上传值
         upload.setFileSizeMax(MAX_FILE_SIZE);
-
-        // 设置最大请求值 (包含文件和表单数据)
         upload.setSizeMax(MAX_REQUEST_SIZE);
-
-        // 中文处理
         upload.setHeaderEncoding("UTF-8");
-
-        // 构造临时路径来存储上传的文件
-        // 这个路径相对当前应用的目录
         String uploadPath = getServletContext().getRealPath("/") + File.separator + UPLOAD_DIRECTORY;
-
-        // 如果目录不存在则创建
         File uploadDir = new File(uploadPath);
         if (!uploadDir.exists()) {
             uploadDir.mkdir();
         }
         try {
-            // 解析请求的内容提取文件数据
             @SuppressWarnings("unchecked")
             List<FileItem> formItems = upload.parseRequest(req);
             if (formItems != null && formItems.size() > 0) {
-                // 迭代表单数据
                 for (FileItem item : formItems) {
-                    // 处理不在表单中的字段
                     if (!item.isFormField()) {
                         String fileName = new File(item.getName()).getName();
                         String filePath = uploadPath + File.separator + fileName;
                         File storeFile = new File(filePath);
-                        // 在控制台输出文件的上传路径
                         logger.info(filePath);
-                        // 保存文件到硬盘
                         item.write(storeFile);
                         EasyExcel.read(storeFile, Teacher.class, new TeacherListener()).sheet().doRead();
                         File delFile = new File(filePath);
@@ -582,11 +561,7 @@ public class AdminServlet extends HttpServlet {
     public void exportAdminList(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         List<Admin> adminList = new ArrayList<>();
         String major = (String) (req.getSession().getAttribute(Constants.USER_MAJOR));
-        if ("ALL".equals(major)) {
-            adminList = adminService.queryAllAdmins();
-        } else {
-            adminList = adminService.queryAllAdmins();
-        }
+        adminList = adminService.queryAllAdmins();
         ServletOutputStream outputStream = resp.getOutputStream();
         resp.reset();
         resp.setHeader("Content-disposition", "attachment; filename=" + "admin.xlsx");
@@ -594,6 +569,78 @@ public class AdminServlet extends HttpServlet {
         EasyExcel.write(outputStream, Admin.class).sheet("管理员列表").doWrite(adminList);
         outputStream.flush();
         outputStream.close();
+    }
+
+    public void importAdminList(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        String UPLOAD_DIRECTORY = "upload";
+        int MEMORY_THRESHOLD = 1024 * 1024 * 3;  // 3MB
+        int MAX_FILE_SIZE = 1024 * 1024 * 40; // 40MB
+        int MAX_REQUEST_SIZE = 1024 * 1024 * 50; // 50MB
+        if (!ServletFileUpload.isMultipartContent(req)) {
+            PrintWriter writer = resp.getWriter();
+            writer.println("Error: 表单必须包含 enctype=multipart/form-data");
+            writer.flush();
+            return;
+        }
+        DiskFileItemFactory factory = new DiskFileItemFactory();
+        factory.setSizeThreshold(MEMORY_THRESHOLD);
+        factory.setRepository(new File(System.getProperty("java.io.tmpdir")));
+        ServletFileUpload upload = new ServletFileUpload(factory);
+        upload.setFileSizeMax(MAX_FILE_SIZE);
+        upload.setSizeMax(MAX_REQUEST_SIZE);
+        upload.setHeaderEncoding("UTF-8");
+        String uploadPath = getServletContext().getRealPath("/") + File.separator + UPLOAD_DIRECTORY;
+        File uploadDir = new File(uploadPath);
+        if (!uploadDir.exists()) {
+            uploadDir.mkdir();
+        }
+        try {
+            @SuppressWarnings("unchecked")
+            List<FileItem> formItems = upload.parseRequest(req);
+            if (formItems != null && formItems.size() > 0) {
+                for (FileItem item : formItems) {
+                    if (!item.isFormField()) {
+                        String fileName = new File(item.getName()).getName();
+                        String filePath = uploadPath + File.separator + fileName;
+                        File storeFile = new File(filePath);
+                        logger.info(filePath);
+                        item.write(storeFile);
+                        EasyExcel.read(storeFile, Admin.class, new AdminListener()).sheet().doRead();
+                        File delFile = new File(filePath);
+                        delFile.delete();
+                    }
+                }
+            }
+        } catch (Exception ex) {
+            req.setAttribute("message",
+                    "错误信息: " + ex.getMessage());
+        }
+        resp.sendRedirect(req.getHeader("Referer"));
+    }
+
+    public void validateAdminId(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        System.out.println("validateAdminId");
+        String adminId = req.getParameter("adminId");
+        System.out.println(adminId);
+        Map<String, String> resultMap = new HashMap<String, String>();
+
+        if (StringUtils.isNullOrEmpty(adminId)) {//用户名输入为空
+            resultMap.put("result", "error");
+        } else {
+            Admin admin = adminService.queryAdminsByAdminId(adminId);
+            System.out.println(admin);
+            if (StringUtils.isNullOrEmpty(admin.getAdminId())) {//用户名不存在
+                resultMap.put("result", "true");
+            } else {//用户名存在
+                resultMap.put("result", "false");
+            }
+        }
+        resp.setContentType("application/json");
+        PrintWriter outPrintWriter = resp.getWriter();
+        outPrintWriter.write(JSONArray.toJSONString(resultMap));
+        System.out.println(JSONArray.toJSONString(resultMap));
+        outPrintWriter.flush();
+        outPrintWriter.close();
     }
 
     public void getIdeaTableList(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -618,6 +665,7 @@ public class AdminServlet extends HttpServlet {
             ideaTableList = ideaTableService.queryStudentIdeasByMajor("ALL");
         } else {
             ideaTableList = ideaTableService.queryStudentIdeasByMajor(major);
+
         }
         ServletOutputStream outputStream = resp.getOutputStream();
         resp.reset();

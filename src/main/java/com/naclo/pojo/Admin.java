@@ -13,6 +13,6 @@ public class Admin {
     String adminId;
     @ExcelProperty(value = "管理员密码", index = 1)
     String adminPassword;
-    @ExcelProperty(value = "管理员专业", index = 0)
+    @ExcelProperty(value = "管理员专业", index = 2)
     String adminMajor;
 }

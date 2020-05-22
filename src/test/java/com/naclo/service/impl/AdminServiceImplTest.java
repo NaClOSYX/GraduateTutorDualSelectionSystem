@@ -20,7 +20,7 @@ public class AdminServiceImplTest {
 
     @Test
     void queryAdminsByAdminIdTest() {
-        adminService.queryAdminsByAdminId("admin").forEach(System.out::println);
+        System.out.println(adminService.queryAdminsByAdminId("admin"));
     }
 
     @Test

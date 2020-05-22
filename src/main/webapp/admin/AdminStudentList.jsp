@@ -60,7 +60,7 @@
             </button>
             <form name="uploadFileForm" id="uploadFileForm" method="post" enctype="multipart/form-data"
                   action="/admin/admin.do?method=importStudentList">
-                <input type="file" name="uploadFile" id="btn_file" hidden onchange="submitForm()">
+                <input type="file" name="uploadFile" id="btnFileUpload" hidden onchange="submitForm()">
             </form>
         </div>
 
@@ -268,8 +268,8 @@
 
 
     //打开上传文件窗口
-    function F_Open_dialog() {
-        $('#btn_file').click();
+    function openUploadDialog() {
+        $('#btnFileUpload').click();
     };
 
     //选中文件自动上传
@@ -315,7 +315,7 @@
             }
         });
         newStudentMajor.on("focus", function () {
-            validateTip(newStudentMajor.next(), {"color": "#666666"}, "* 请输入专业", false);
+            validateTip(newStudentMajor.next(), {"color": "#666666"}, "* 请选择专业", false);
         }).on("blur", function () {
             if (newStudentMajor.val() == "请选择专业") {
                 validateTip(newStudentMajor.next(), {"color": "red"}, imgNo + " 请选择专业", false);

@@ -34,7 +34,14 @@
 <jsp:include page="AdminSlidebar.jsp">
     <jsp:param name="pageTitle" value="管理老师"/>
 </jsp:include>
-
+<%
+    MajorService majorService = new MajorServiceImpl();
+    List<Major> majorList = majorService.queryAllMajors();
+    String adminMajor = (String) (session.getAttribute(Constants.USER_MAJOR));
+    if (!"ALL".equals(adminMajor)) {
+        majorList = majorService.queryMajorByName(adminMajor);
+    }
+%>
 <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4">
     <div class="panel-body" style="padding-bottom:0px;">
         <%--toolbar--%>
@@ -42,7 +49,7 @@
             <button id="btn_add" type="button" class="btn btn-primary" data-toggle="modal"
                     data-target="#addTeacherModel">新增
             </button>
-            <button id="btn_import" type="button" onclick="F_Open_dialog()" class="btn btn-primary">导入
+            <button id="btn_import" type="button" onclick="openUploadDialog()" class="btn btn-primary">导入
             </button>
             <button id="btn_export" type="button" class="btn btn-primary">
                 <a href="/admin/admin.do?method=exportTeacherList" style="color: white">导出
@@ -50,7 +57,7 @@
             </button>
             <form name="uploadFileForm" id="uploadFileForm" method="post" enctype="multipart/form-data"
                   action="/admin/admin.do?method=importTeacherList">
-                <input type="file" name="uploadFile" id="btn_file" hidden onchange="submitForm()">
+                <input type="file" name="uploadFile" id="btnFileUpload" hidden onchange="submitForm()">
             </form>
         </div>
 
@@ -89,10 +96,7 @@
                             <div>
                                 <select class="custom-select form-control" style="width: 50%;float: left"
                                         id="addTeacherModelTeacherMajor" name="teacherMajor">
-                                    <option value="请选择专业">请选择专业</option>
                                     <%
-                                        MajorService majorService = new MajorServiceImpl();
-                                        List<Major> majorList = majorService.queryAllMajors();
                                         for (Major major : majorList) {
                                             String majorName = major.getMajorName();
                                             if (!"ALL".equals(majorName))
@@ -107,12 +111,74 @@
                                 <input type="text" class="form-control" placeholder="请输入简介" name="teacherIntroduce"
                                        id="addTeacherModelTeacherIntroduce"
                                        required="" style="width: 50%;float: left">
+
+                                <font color="red" style="float:none;"></font>
+                            </div>
+
+                            <br/><br/><br/>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">关闭</button>
+                                <button type="submit" class="btn btn-primary" id="confirmAddTeacher">新增</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <%--模态框 修改导师--%>
+        <div class="modal fade" id="updateTeacherModel" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+             aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="updateTeacherModelTitle">修改导师</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form action="/admin/admin.do" method="get" id="updateTeacherModelForm"
+                              name="updateTeacherModelForm">
+                            <input name="method" type="hidden" value="updateTeacherData"><br>
+                            <div class="info">${message}</div>
+                            <div>
+                                <input type="text" class="form-control" placeholder="请输入工号" name="teacherId"
+                                       id="updateTeacherModelTeacherId"
+                                       required="" style="width: 50%;float: left">
+                                <font color="red" style="float:none;"></font>
+                            </div>
+                            <br/><br/>
+                            <div>
+                                <input type="text" class="form-control" placeholder="请输入姓名" name="teacherName"
+                                       id="updateTeacherModelTeacherName"
+                                       required="" style="width: 50%;float: left">
+                                <font color="red" style="float:none;"></font>
+                            </div>
+                            <br/><br/>
+                            <div>
+                                <select class="custom-select form-control" style="width: 50%;float: left"
+                                        id="updateTeacherModelTeacherMajor" name="teacherMajor">
+                                    <%
+                                        for (Major major : majorList) {
+                                            String majorName = major.getMajorName();
+                                            if (!"ALL".equals(majorName))
+                                                out.print("<option value='" + majorName + "'" + ">" + majorName + "</option>");
+                                        }
+                                    %>
+                                </select>
+                                <font color="red" style="float:none;"></font>
+                            </div>
+                            <br/><br/>
+                            <div>
+                                <input type="text" class="form-control" placeholder="请输入简介" name="teacherIntroduce"
+                                       id="updateTeacherModelTeacherIntroduce"
+                                       required="" style="width: 50%;float: left">
                                 <font color="red" style="float:none;"></font>
                             </div>
                             <br/><br/><br/>
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-secondary" data-dismiss="modal">关闭</button>
-                                <button type="submit" class="btn btn-primary" id="confirmAddTeacher">新增</button>
+                                <button type="submit" class="btn btn-primary" id="confirmUpdateTeacher">修改</button>
                             </div>
                         </form>
                     </div>
@@ -212,7 +278,34 @@
         return htm;
     }
 
+    //打开上传文件窗口
+    function openUploadDialog() {
+        $('#btnFileUpload').click();
+    };
 
+    //选中文件自动上传
+    function submitForm() {
+        $("#uploadFileForm").submit();
+    };
+
+    function values(id) {
+        console.log(id);
+        //document.getElementById('updateStudentModelStudentId').value = id;
+        $.ajax({
+            type: "POST",
+            url: "/admin/admin.do",
+            data: {method: "getTeacherById", teacherId: id},
+            success: function (data) {
+                document.getElementById('updateTeacherModelTeacherId').value = data.teacherId;
+                document.getElementById('updateTeacherModelTeacherName').value = data.teacherName
+                document.getElementById('updateTeacherModelTeacherMajor').value = data.teacherMajor;
+                document.getElementById('updateTeacherModelTeacherIntroduce').value = data.teacherIntroduce;
+            },
+            error: function (data) {
+                //请求出错
+            }
+        })
+    };
     //验证输入的新导师是否符合格式
     $(function () {
         var newTeacherId = $('#addTeacherModelTeacherId');

@@ -8,6 +8,7 @@ import com.naclo.utils.DBUtil;
 
 import java.sql.Connection;
 import java.util.List;
+import java.util.Map;
 
 
 public class TeacherServiceImpl implements TeacherService {
@@ -35,6 +36,14 @@ public class TeacherServiceImpl implements TeacherService {
         List<Teacher> teacherList = teacherDao.queryTeacherByMajor(connection, major);
         DBUtil.closeResource(connection, null, null);
         return teacherList;
+    }
+
+    @Override
+    public Map<String, String> queryTeachersMapByMajor(String major) {
+        Connection connection = DBUtil.getConnection();
+        Map<String, String> teacherMap = teacherDao.queryTeachersMapByMajor(connection, major);
+        DBUtil.closeResource(connection, null, null);
+        return teacherMap;
     }
 
     @Override
