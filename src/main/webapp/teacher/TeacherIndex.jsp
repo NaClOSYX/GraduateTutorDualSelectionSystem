@@ -1,4 +1,7 @@
+<%@ page import="com.naclo.pojo.Teacher" %>
+<%@ page import="com.naclo.service.impl.TeacherServiceImpl" %>
 <%@ page import="com.naclo.utils.Constants" %>
+<%@ page import="com.naclo.utils.MD5Utils" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <!DOCTYPE HTML>
 <html>
@@ -26,10 +29,26 @@
 <jsp:include page="TeacherSlidebar.jsp">
     <jsp:param name="pageTitle" value="主页"/>
 </jsp:include>
-
+<%
+    String teacherId = session.getAttribute(Constants.USER_SESSION).toString();
+    TeacherServiceImpl teacherService = new TeacherServiceImpl();
+    Teacher teacher = teacherService.queryTeacherById(teacherId);
+%>
 <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4">
     <div class="panel-body" style="padding-bottom:0px;">
-
+        <h1>欢迎导师
+            <b>
+                <%=teacher.getTeacherName()%>
+            </b>
+            登陆
+            <%
+                if (teacher.getTeacherPassword().equals(MD5Utils.stringToMD5(teacher.getTeacherId()))) {
+                    out.print(",请<a href=\"TeacherUpdatePassword.jsp\">修改密码</a>。");
+                } else {
+                    out.print("。");
+                }
+            %>
+        </h1>
     </div>
 </main>
 

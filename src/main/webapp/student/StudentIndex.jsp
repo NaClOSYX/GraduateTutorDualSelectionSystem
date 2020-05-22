@@ -31,17 +31,19 @@
 <jsp:include page="StudentSlidebar.jsp">
     <jsp:param name="pageTitle" value="主页"/>
 </jsp:include>
-
+<%
+    String studentId = session.getAttribute(Constants.USER_SESSION).toString();
+    StudentService studentService = new StudentServiceImpl();
+    Student student = studentService.queryStudentById(studentId);
+%>
 <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4">
     <div class="panel-body" style="padding-bottom:0px;">
         <h1>欢迎学生
             <b>
-                <%=session.getAttribute(Constants.USER_SESSION).toString()%>
+                <%=student.getStudentName()%>
             </b>
             登陆
             <%
-                StudentService studentService = new StudentServiceImpl();
-                Student student = studentService.queryStudentById(session.getAttribute(Constants.USER_SESSION).toString());
                 if (student.getStudentPassword().equals(MD5Utils.stringToMD5(student.getStudentId()))) {
                     out.print(",请<a href=\"StudentUpdatePassword.jsp\">修改密码</a>。");
                 } else {
