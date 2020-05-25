@@ -48,6 +48,17 @@
                             out.print("<span data-feather=\"file\"></span>管理管理员</a></li>");
                         }
                     %>
+                    <%
+                        if ("ALL".equals(adminMajor)) {
+                            out.print("<li class=\"nav-item\">");
+                            if (pageTitle.equals("管理专业")) {
+                                out.print("<a class=\"nav-link active\" href=\"AdminMajorList.jsp\">");
+                            } else {
+                                out.print("<a class=\"nav-link\" href=\"AdminMajorList.jsp\">");
+                            }
+                            out.print("<span data-feather=\"file\"></span>管理专业</a></li>");
+                        }
+                    %>
                     <li class="nav-item">
                         <%
                             if (pageTitle.equals("管理志愿")) {

@@ -22,10 +22,62 @@ public class MajorServiceImpl implements MajorService {
     }
 
     @Override
+    public List<Major> queryAllMajorsExceptALL() {
+        Connection connection = DBUtil.getConnection();
+        List<Major> majorList = majorDao.queryAllMajorsExceptALL(connection);
+        DBUtil.closeResource(connection, null, null);
+        return majorList;
+    }
+
+    @Override
     public List<Major> queryMajorByName(String name) {
         Connection connection = DBUtil.getConnection();
         List<Major> majorList = majorDao.queryMajorByName(connection, name);
         DBUtil.closeResource(connection, null, null);
         return majorList;
+    }
+
+    @Override
+    public Major queryMajorById(int id) {
+        Connection connection = DBUtil.getConnection();
+        Major major = majorDao.queryMajorById(connection, id);
+        DBUtil.closeResource(connection, null, null);
+        return major;
+    }
+
+    @Override
+    public boolean insertMajor(Major major) {
+        Connection connection = DBUtil.getConnection();
+        int i = majorDao.insertMajor(connection, major);
+        DBUtil.closeResource(connection, null, null);
+        if (i > 0) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    @Override
+    public boolean updateMajor(Major major) {
+        Connection connection = DBUtil.getConnection();
+        int i = majorDao.updateMajor(connection, major);
+        DBUtil.closeResource(connection, null, null);
+        if (i > 0) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    @Override
+    public boolean deleteMajorById(int id) {
+        Connection connection = DBUtil.getConnection();
+        int i = majorDao.deleteMajorById(connection, id);
+        DBUtil.closeResource(connection, null, null);
+        if (i > 0) {
+            return true;
+        } else {
+            return false;
+        }
     }
 }

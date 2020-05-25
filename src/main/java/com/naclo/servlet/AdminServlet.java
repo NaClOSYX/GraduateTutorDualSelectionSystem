@@ -59,8 +59,6 @@ public class AdminServlet extends HttpServlet {
             validateStudentId(req, resp);
         } else if ("getStudentById".equals(method)) {//根据学号获取学生
             getStudentById(req, resp);
-        } else if ("getAllMajors".equals(method)) {//获取所有专业
-            getAllMajors(req, resp);
         } else if ("getAllTeachers".equals(method)) {//获取所有导师
             getAllTeachers(req, resp);
         } else if ("deleteTeacherData".equals(method)) {//删除导师数据
@@ -95,6 +93,20 @@ public class AdminServlet extends HttpServlet {
             importAdminList(req, resp);
         } else if ("validateAdminId".equals(method)) {//验证工号是否存在
             validateAdminId(req, resp);
+        } else if ("getAllMajors".equals(method)) {//获取所有专业
+            getAllMajors(req, resp);
+        } else if ("getAllMajorsExceptALL".equals(method)) {//获取所有专业
+            getAllMajorsExceptALL(req, resp);
+        } else if ("addMajorData".equals(method)) {//增加专业数据
+            addMajorData(req, resp);
+        } else if ("deleteMajorData".equals(method)) {//删除专业数据
+            deleteMajorData(req, resp);
+        } else if ("updateMajorData".equals(method)) {//修改专业数据
+            updateMajorData(req, resp);
+        } else if ("validateMajorName".equals(method)) {//验证专业名是否存在
+            validateMajorName(req, resp);
+        } else if ("getMajorById".equals(method)) {//根据编号获取专业
+            getMajorById(req, resp);
         } else if ("getIdeaTableList".equals(method)) {//获取志愿表
             getIdeaTableList(req, resp);
         } else if ("exportIdeaList".equals(method)) {//导出志愿表
@@ -303,15 +315,6 @@ public class AdminServlet extends HttpServlet {
         resp.setContentType("application/json");
         PrintWriter outPrintWriter = resp.getWriter();
         outPrintWriter.write(JSONArray.toJSONString(student));
-        outPrintWriter.flush();
-        outPrintWriter.close();
-    }
-
-    public void getAllMajors(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        List<Major> majorList = majorService.queryAllMajors();
-        resp.setContentType("application/json");
-        PrintWriter outPrintWriter = resp.getWriter();
-        outPrintWriter.write(JSONArray.toJSONString(majorList));
         outPrintWriter.flush();
         outPrintWriter.close();
     }
@@ -642,6 +645,98 @@ public class AdminServlet extends HttpServlet {
         outPrintWriter.flush();
         outPrintWriter.close();
     }
+
+    public void getAllMajors(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        List<Major> majorList = majorService.queryAllMajors();
+        resp.setContentType("application/json");
+        PrintWriter outPrintWriter = resp.getWriter();
+        outPrintWriter.write(JSONArray.toJSONString(majorList));
+        outPrintWriter.flush();
+        outPrintWriter.close();
+    }
+
+    public void getAllMajorsExceptALL(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        List<Major> majorList = majorService.queryAllMajorsExceptALL();
+        resp.setContentType("application/json");
+        PrintWriter outPrintWriter = resp.getWriter();
+        outPrintWriter.write(JSONArray.toJSONString(majorList));
+        outPrintWriter.flush();
+        outPrintWriter.close();
+    }
+
+    public void addMajorData(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        String majorName = req.getParameter("majorName");
+        int studentMax = Integer.parseInt(req.getParameter("studentMax"));
+        boolean flag = false;
+        Major major = new Major(0, majorName, studentMax);
+        flag = majorService.insertMajor(major);
+        if (flag) {
+            req.getSession().setAttribute(Constants.STATE_MESSAGE, "插入专业成功");
+            resp.sendRedirect(req.getContextPath() + "/admin/AdminMajorList.jsp");
+        } else {
+            resp.sendRedirect(req.getContextPath() + "/error/error.jsp");
+        }
+    }
+
+    public void updateMajorData(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        int majorId = Integer.parseInt(req.getParameter("majorId"));
+        String majorName = req.getParameter("majorName");
+        int studentMax = Integer.parseInt(req.getParameter("studentMax"));
+        boolean flag = false;
+        Major major = new Major(majorId, majorName, studentMax);
+        flag = majorService.updateMajor(major);
+        if (flag) {
+            req.getSession().setAttribute(Constants.STATE_MESSAGE, "信息修改成功");
+            resp.sendRedirect(req.getContextPath() + "/admin/AdminMajorList.jsp");
+        } else {
+            resp.sendRedirect(req.getContextPath() + "/error/error.jsp");
+        }
+    }
+
+    public void deleteMajorData(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        int majorId = Integer.parseInt(req.getParameter("majorId"));
+        boolean flag = false;
+        flag = majorService.deleteMajorById(majorId);
+        if (flag) {
+            req.getSession().setAttribute(Constants.STATE_MESSAGE, "删除专业成功");
+            resp.sendRedirect(req.getContextPath() + "/admin/AdminMajorList.jsp");
+        } else {
+            resp.sendRedirect(req.getContextPath() + "/error/error.jsp");
+        }
+    }
+
+    public void validateMajorName(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        String majorName = req.getParameter("majorName");
+        Map<String, String> resultMap = new HashMap<String, String>();
+
+        if (StringUtils.isNullOrEmpty(majorName)) {//专业输入为空
+            resultMap.put("result", "error");
+        } else {
+            List<Major> majorList = majorService.queryMajorByName(majorName);
+            if (majorList.size() == 0) {//专业不存在
+                resultMap.put("result", "true");
+            } else {//专业存在
+                resultMap.put("result", "false");
+            }
+        }
+        resp.setContentType("application/json");
+        PrintWriter outPrintWriter = resp.getWriter();
+        outPrintWriter.write(JSONArray.toJSONString(resultMap));
+        System.out.println(JSONArray.toJSONString(resultMap));
+        outPrintWriter.flush();
+        outPrintWriter.close();
+    }
+
+    public void getMajorById(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        int majorId = Integer.parseInt(req.getParameter("majorId"));
+        Major major = majorService.queryMajorById(majorId);
+        resp.setContentType("application/json");
+        PrintWriter outPrintWriter = resp.getWriter();
+        outPrintWriter.write(JSONArray.toJSONString(major));
+        outPrintWriter.flush();
+        outPrintWriter.close();
+    }
+
 
     public void getIdeaTableList(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         List<IdeaTable> ideaTableList = new ArrayList<>();

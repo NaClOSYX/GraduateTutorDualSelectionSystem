@@ -11,7 +11,7 @@
 
     <name>GraduateTutorDualSelectionSystem Maven Webapp</name>
     <!-- FIXME change it to the project's website -->
-    <url>http://www.example.com</url>
+    <url>http://www.naclo.com</url>
 
     <properties>
         <!-- 文件拷贝时的编码 -->
@@ -28,17 +28,13 @@
         <jsp.version>2.2.1-b03</jsp.version>
         <jstl.version>1.2</jstl.version>
         <taglibs.version>1.1.2</taglibs.version>
-        <!--<mysql.version>8.0.19</mysql.version>-->
         <mysql.version>8.0.20</mysql.version>
-        <!--<junit.version>5.5.2</junit.version>-->
-        <!--<junit.version>5.6.2</junit.version>-->
         <junit.version>5.7.0-M1</junit.version>
         <lombok.version>1.18.12</lombok.version>
         <poi.version>4.1.2</poi.version>
-        <!--<easyexcel.version>2.2.0-beta2</easyexcel.version>-->
         <easyexcel.version>2.2.3</easyexcel.version>
-        <!--<fastjson.version>1.2.58</fastjson.version>-->
         <fastjson.version>1.2.68</fastjson.version>
+        <druid.version>1.1.22</druid.version>
         <fileupload.version>1.4</fileupload.version>
         <log4j.version>1.2.17</log4j.version>
         <slf4j.version>2.0.0-alpha1</slf4j.version>
@@ -123,12 +119,18 @@
             <artifactId>commons-fileupload</artifactId>
             <version>${fileupload.version}</version>
         </dependency>
+        <!-- fastjson 解析json字符串-->
         <dependency>
             <groupId>com.alibaba</groupId>
             <artifactId>fastjson</artifactId>
             <version>${fastjson.version}</version>
         </dependency>
-
+        <!-- druid 数据库连接池 性能监控-->
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>druid</artifactId>
+            <version>${druid.version}</version>
+        </dependency>
     </dependencies>
 
 

@@ -32,7 +32,7 @@ CREATE TABLE admin
 DROP TABLE IF EXISTS major;
 CREATE TABLE major
 (
-    majorId    int(2) PRIMARY KEY,
+    majorId    int(2) PRIMARY KEY auto_increment,
     majorName  varchar(30),
     studentMax int(2)
 );
