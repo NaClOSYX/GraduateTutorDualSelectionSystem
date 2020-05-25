@@ -54,6 +54,14 @@ public class IdeaServiceImpl implements IdeaService {
     }
 
     @Override
+    public List<Idea> queryIdeasByTeacherIdDecided(String teacherId) {
+        Connection connection = DBUtil.getConnection();
+        List<Idea> ideaList = ideaDao.queryIdeasByTeacherIdDecided(connection, teacherId);
+        DBUtil.closeResource(connection, null, null);
+        return ideaList;
+    }
+
+    @Override
     public List<Idea> queryIdeasByMajor(String major) {
         Connection connection = DBUtil.getConnection();
         List<Idea> ideaList = ideaDao.queryIdeasByMajor(connection, major);
@@ -65,6 +73,18 @@ public class IdeaServiceImpl implements IdeaService {
     public boolean insertIdea(Idea idea) {
         Connection connection = DBUtil.getConnection();
         int i = ideaDao.insertIdea(connection, idea);
+        DBUtil.closeResource(connection, null, null);
+        if (i > 0) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    @Override
+    public boolean updateIdeaStateById(String studentId, String teacherId, int state) {
+        Connection connection = DBUtil.getConnection();
+        int i = ideaDao.updateIdeaStateById(connection, studentId, teacherId, state);
         DBUtil.closeResource(connection, null, null);
         if (i > 0) {
             return true;

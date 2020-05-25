@@ -18,6 +18,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.1/umd/popper.min.js"></script>
     <script src="https://cdn.bootcdn.net/ajax/libs/twitter-bootstrap/4.4.1/js/bootstrap.min.js"></script>
     <script src="https://cdn.bootcdn.net/ajax/libs/bootstrap-table/1.16.0/bootstrap-table.min.js"></script>
+    <script src="https://cdn.bootcdn.net/ajax/libs/bootstrap-table/1.16.0/locale/bootstrap-table-zh-CN.js"></script>
 
     <link href="../css/dashboard.css" rel="stylesheet">
 
@@ -41,7 +42,7 @@
             <div class="container">
                 <div class="row">
                     <div class="col-lg-9">
-                        <form id="studentForm" name="studentForm" method="post" action="/student/student.do">
+                        <form id="studentForm" name="studentForm" method="post" action="/teacher/teacher.do">
                             <legend>修改密码</legend>
                             <input type="hidden" name="method" value="updatePassword">
                             <div class="info">${message}</div>

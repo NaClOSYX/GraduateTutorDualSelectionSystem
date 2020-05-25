@@ -41,6 +41,11 @@ public class IdeaServiceImplTest {
     }
 
     @Test
+    void queryIdeasByTeacherIdDecidedTest() {
+        ideaService.queryIdeasByTeacherIdDecided("1234567890").forEach(System.out::println);
+    }
+
+    @Test
     void insertIdeaTest() {
         Idea idea = new Idea(0, "软件工程", "20170004", "1234567890", new Date(), 1);
         System.out.println(idea);
@@ -49,6 +54,16 @@ public class IdeaServiceImplTest {
             System.out.println("插入成功");
         } else {
             System.out.println("插入失败");
+        }
+    }
+
+    @Test
+    void updateIdeaStateByIdTest() {
+        boolean flag = ideaService.updateIdeaStateById("20171422", "1234567890", 2);
+        if (flag) {
+            System.out.println("修改成功");
+        } else {
+            System.out.println("修改失败");
         }
     }
 }

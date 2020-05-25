@@ -22,9 +22,15 @@ public interface IdeaDao {
     //根据工号获取志愿数量
     int queryIdeasByTeacherIdCount(Connection connection, String teacherId);
 
+    //根据工号获取确定的志愿
+    List<Idea> queryIdeasByTeacherIdDecided(Connection connection, String teacherId);
+
     //根据专业获取志愿
     List<Idea> queryIdeasByMajor(Connection connection, String major);
 
     //新增志愿
     int insertIdea(Connection connection, Idea Idea);
+
+    //根据工号和学号修改志愿状态
+    int updateIdeaStateById(Connection connection, String studentId, String teacherId, int state);
 }

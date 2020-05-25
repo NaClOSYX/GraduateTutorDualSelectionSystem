@@ -9,6 +9,7 @@ public class Constants {
     public static String ROLE_ADMIN = "roleAdmin";
     public static String ROLE_TEACHER = "roleTeacher";
     public static String ROLE_STUDENT = "roleStudent";
+    public static String MAJOR_MAX_STUDENTS = "majorMaxStudents";
     public static String MESSAGE = "message";
     public static String ERROR = "error";
     public static String INFO = "info";

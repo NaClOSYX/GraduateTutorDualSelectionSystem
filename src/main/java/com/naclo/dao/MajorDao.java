@@ -19,6 +19,9 @@ public interface MajorDao {
     //根据专业编号查询专业
     Major queryMajorById(Connection connection, int id);
 
+    //根据专业名查询专业最大人数
+    int queryMajorMaxStudents(Connection connection, String name);
+
     //插入专业
     int insertMajor(Connection connection, Major major);
 

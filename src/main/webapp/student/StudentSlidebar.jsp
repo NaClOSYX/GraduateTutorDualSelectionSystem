@@ -32,9 +32,19 @@
                             } else
                                 out.print("<a class=\"nav-link\" href=\"StudentChooseTeacher.jsp\">");
                         %>
-                        <%-- <a class="nav-link" href="AdminStudentList.jsp">--%>
                         <span data-feather="file"></span>
                         选择导师
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <%
+                            if (pageTitle.equals("我的志愿")) {
+                                out.print("<a class=\"nav-link active\" href=\"StudentManageIdeas.jsp\">");
+                            } else
+                                out.print("<a class=\"nav-link\" href=\"StudentManageIdeas.jsp\">");
+                        %>
+                        <span data-feather="file"></span>
+                        我的志愿
                         </a>
                     </li>
                 </ul>

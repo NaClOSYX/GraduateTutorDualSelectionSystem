@@ -100,7 +100,6 @@
         <servlet-name>ExportServlet</servlet-name>
         <url-pattern>/export.do</url-pattern>
     </servlet-mapping>
-
     <!--filter-->
     <!--编码过滤 解决中文乱码-->
     <filter>
@@ -193,7 +192,6 @@
             <param-value>admin</param-value>
         </init-param>
     </servlet>
-
 
     <!--druid 性能监控-->
     <servlet-mapping>

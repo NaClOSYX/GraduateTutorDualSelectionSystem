@@ -16,4 +16,10 @@ public class Idea {
     String teacherId;
     Date time;
     int state;
+    //0 学生已加入购物车
+    //1 学生已选择
+    //2 教师已选择
+    //3 教师已拒绝
+    //4 管理员已最终确定
+    //5 管理员已否决
 }

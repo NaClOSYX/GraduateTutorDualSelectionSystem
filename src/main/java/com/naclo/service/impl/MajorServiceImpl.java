@@ -46,6 +46,14 @@ public class MajorServiceImpl implements MajorService {
     }
 
     @Override
+    public int queryMajorMaxStudents(String name) {
+        Connection connection = DBUtil.getConnection();
+        int i = majorDao.queryMajorMaxStudents(connection, name);
+        DBUtil.closeResource(connection, null, null);
+        return i;
+    }
+
+    @Override
     public boolean insertMajor(Major major) {
         Connection connection = DBUtil.getConnection();
         int i = majorDao.insertMajor(connection, major);

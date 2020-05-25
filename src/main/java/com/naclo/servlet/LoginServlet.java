@@ -1,7 +1,9 @@
 package com.naclo.servlet;
 
 import com.naclo.pojo.User;
+import com.naclo.service.MajorService;
 import com.naclo.service.UserService;
+import com.naclo.service.impl.MajorServiceImpl;
 import com.naclo.service.impl.UserServiceImpl;
 import com.naclo.utils.Constants;
 import com.naclo.utils.MD5Utils;
@@ -18,6 +20,7 @@ import java.io.IOException;
 public class LoginServlet extends HttpServlet {
     Logger logger = Logger.getLogger(this.getClass());
     UserService userService = new UserServiceImpl();
+    MajorService majorService = new MajorServiceImpl();
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
@@ -36,13 +39,15 @@ public class LoginServlet extends HttpServlet {
             req.getRequestDispatcher("login.jsp").forward(req, resp);
         } else {
             if (!user.getPassword().equals(MD5Utils.stringToMD5(password))) {
-
                 req.setAttribute("error", "密码错误");
                 req.getRequestDispatcher("login.jsp").forward(req, resp);
             } else {
                 logger.info(userId + " login");
+                String major = user.getMajor();
+                int majorMaxStudents = majorService.queryMajorMaxStudents(major);
                 session.setAttribute(Constants.USER_SESSION, userId);
-                session.setAttribute(Constants.USER_MAJOR, user.getMajor());
+                session.setAttribute(Constants.USER_MAJOR, major);
+                session.setAttribute(Constants.MAJOR_MAX_STUDENTS, majorMaxStudents);
                 if ("学生".equals(user.getRole())) {
                     session.setAttribute(Constants.USER_ROLE, Constants.ROLE_STUDENT);
                     resp.sendRedirect("student/StudentIndex.jsp");

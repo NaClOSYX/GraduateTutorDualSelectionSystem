@@ -86,6 +86,7 @@ public class MajorDaoImpl implements MajorDao {
         return majorList;
     }
 
+
     @Override
     public Major queryMajorById(Connection connection, int id) {
         Major major = new Major();
@@ -107,6 +108,27 @@ public class MajorDaoImpl implements MajorDao {
         }
         DBUtil.closeResource(null, pstm, rs);
         return major;
+    }
+
+    @Override
+    public int queryMajorMaxStudents(Connection connection, String name) {
+        int count = 0;
+        ResultSet rs = null;
+        PreparedStatement pstm = null;
+        if (connection != null) {
+            String sql = "select * from major where majorName=?";
+            Object[] params = new Object[]{name};
+            try {
+                rs = DBUtil.query(connection, sql, pstm, params, rs);
+                if (rs.next()) {
+                    count = rs.getInt(3);
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        DBUtil.closeResource(null, pstm, rs);
+        return count;
     }
 
     @Override

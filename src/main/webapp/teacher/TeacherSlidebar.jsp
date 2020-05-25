@@ -14,7 +14,6 @@
             <div class="sidebar-sticky">
                 <ul class="nav flex-column">
                     <li class="nav-item">
-
                         <%
                             if (pageTitle.equals("修改密码")) {
                                 out.print("<a class=\"nav-link active\" href=\"TeacherUpdatePassword.jsp\">");
@@ -23,6 +22,28 @@
                         %>
                         <span data-feather="file"></span>
                         修改密码
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <%
+                            if (pageTitle.equals("选择学生")) {
+                                out.print("<a class=\"nav-link active\" href=\"TeacherChooseStudent.jsp\">");
+                            } else
+                                out.print("<a class=\"nav-link\" href=\"TeacherChooseStudent.jsp\">");
+                        %>
+                        <span data-feather="file"></span>
+                        选择学生
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <%
+                            if (pageTitle.equals("查看学生")) {
+                                out.print("<a class=\"nav-link active\" href=\"TeacherSeeStudents.jsp\">");
+                            } else
+                                out.print("<a class=\"nav-link\" href=\"TeacherSeeStudents.jsp\">");
+                        %>
+                        <span data-feather="file"></span>
+                        查看学生
                         </a>
                     </li>
                 </ul>

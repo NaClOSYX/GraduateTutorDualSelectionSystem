@@ -737,7 +737,6 @@ public class AdminServlet extends HttpServlet {
         outPrintWriter.close();
     }
 
-
     public void getIdeaTableList(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         List<IdeaTable> ideaTableList = new ArrayList<>();
         String major = (String) (req.getSession().getAttribute(Constants.USER_MAJOR));

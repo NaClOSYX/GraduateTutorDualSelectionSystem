@@ -18,6 +18,9 @@ public interface MajorService {
     //根据专业编号查询专业
     Major queryMajorById(int id);
 
+    //根据专业名查询专业最大人数
+    int queryMajorMaxStudents(String name);
+
     //插入专业
     boolean insertMajor(Major major);
 

@@ -22,6 +22,7 @@ public class LogoutServlet extends HttpServlet {
             session.removeAttribute(Constants.USER_SESSION);
             session.removeAttribute(Constants.USER_ROLE);
             session.removeAttribute(Constants.USER_MAJOR);
+            req.getSession().removeAttribute(Constants.MAJOR_MAX_STUDENTS);
             logger.info(userId + " logout");
         }
         resp.sendRedirect(req.getContextPath() + "/alreadyLogout.jsp");

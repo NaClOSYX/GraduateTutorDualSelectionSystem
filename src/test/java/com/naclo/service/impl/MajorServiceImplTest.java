@@ -30,6 +30,11 @@ class MajorServiceImplTest {
     }
 
     @Test
+    void queryMajorMaxStudentsTest() {
+        System.out.println(majorService.queryMajorMaxStudents("软件工程"));
+    }
+
+    @Test
     void insertMajorTest() {
         Major major = new Major(0, "aaa", 20);
         boolean flag = majorService.insertMajor(major);

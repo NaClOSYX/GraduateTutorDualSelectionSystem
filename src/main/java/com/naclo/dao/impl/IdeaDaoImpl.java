@@ -143,6 +143,35 @@ public class IdeaDaoImpl implements IdeaDao {
     }
 
     @Override
+    public List<Idea> queryIdeasByTeacherIdDecided(Connection connection, String teacherId) {
+        List<Idea> ideaList = new ArrayList<>();
+        ResultSet rs = null;
+        PreparedStatement pstm = null;
+        if (connection != null) {
+            //查询正常志愿的老师
+            String sql = "select * from idea where teacherId=? and state=2";
+            Object[] params = new Object[]{teacherId};
+            try {
+                rs = DBUtil.query(connection, sql, pstm, params, rs);
+                while (rs.next()) {
+                    Idea idea = new Idea();
+                    idea.setIdeaId(rs.getInt(1));
+                    idea.setMajorName(rs.getString(2));
+                    idea.setStudentId(rs.getString(3));
+                    idea.setTeacherId(rs.getString(4));
+                    idea.setTime(rs.getTimestamp(5));
+                    idea.setState(rs.getInt(6));
+                    ideaList.add(idea);
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        DBUtil.closeResource(null, pstm, rs);
+        return ideaList;
+    }
+
+    @Override
     public List<Idea> queryIdeasByMajor(Connection connection, String major) {
         List<Idea> ideaList = new ArrayList<>();
         ResultSet rs = null;
@@ -178,6 +207,24 @@ public class IdeaDaoImpl implements IdeaDao {
         if (connection != null) {
             String sql = "insert into idea values(null,?,?,?,?,?);";
             Object[] params = {idea.getMajorName(), idea.getStudentId(), idea.getTeacherId(), idea.getTime(), idea.getState()};
+            try {
+                flag = DBUtil.execute(connection, sql, pstm, params);
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        DBUtil.closeResource(null, pstm, null);
+        return flag;
+    }
+
+
+    @Override
+    public int updateIdeaStateById(Connection connection, String studentId, String teacherId, int state) {
+        PreparedStatement pstm = null;
+        int flag = 0;
+        if (connection != null) {
+            String sql = "update idea set state=? where studentId=? and teacherId=?";
+            Object[] params = {state, studentId, teacherId};
             try {
                 flag = DBUtil.execute(connection, sql, pstm, params);
             } catch (SQLException e) {

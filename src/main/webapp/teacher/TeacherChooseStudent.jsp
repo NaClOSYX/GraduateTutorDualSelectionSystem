@@ -1,8 +1,8 @@
+<%@ page import="com.naclo.pojo.Teacher" %>
+<%@ page import="com.naclo.service.impl.TeacherServiceImpl" %>
 <%@ page import="com.naclo.utils.Constants" %>
-<%@ page contentType="text/html;charset=UTF-8" language="java" pageEncoding="UTF-8" %>
-<%
-    String path = request.getContextPath();
-%>
+<%@ page import="com.naclo.utils.MD5Utils" %>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <!DOCTYPE HTML>
 <html>
 <head>
@@ -22,29 +22,30 @@
     <script src="https://cdn.bootcdn.net/ajax/libs/bootstrap-table/1.16.0/locale/bootstrap-table-zh-CN.js"></script>
 
     <link href="../css/dashboard.css" rel="stylesheet">
-
-
-    <script src="../js/common.js" charset="UTF-8"></script>
-
 </head>
 
 <body>
 <!--topbar-->
-<jsp:include page="StudentTopbar.jsp"></jsp:include>
+<jsp:include page="TeacherTopbar.jsp"></jsp:include>
 <!--slidebar-->
-<jsp:include page="StudentSlidebar.jsp">
-    <jsp:param name="pageTitle" value="选择导师"/>
+<jsp:include page="TeacherSlidebar.jsp">
+    <jsp:param name="pageTitle" value="选择学生"/>
 </jsp:include>
-
+<%
+    String teacherId = session.getAttribute(Constants.USER_SESSION).toString();
+    TeacherServiceImpl teacherService = new TeacherServiceImpl();
+    Teacher teacher = teacherService.queryTeacherById(teacherId);
+%>
 <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4">
     <div class="panel-body" style="padding-bottom:0px;">
         <%--toolbar--%>
         <div id="toolbar" class="btn-group">
-            <button id="btn_choose" type="button" onclick="chooseTeacher()" class="btn btn-primary">选择
+            <button id="btn_choose" type="button" onclick="chooseStudent()" class="btn btn-primary">选择
             </button>
         </div>
         <%--table--%>
-        <table id="teacherTable"></table>
+        <table id="studentTable"></table>
+
     </div>
 </main>
 
@@ -52,30 +53,20 @@
 <jsp:include page="../commons/copyright.jsp"></jsp:include>
 
 </body>
-
 <script>
-
-    <% //操作成功弹窗
-    if(session.getAttribute(Constants.STATE_MESSAGE)==null||"".equals(session.getAttribute(Constants.STATE_MESSAGE))){
-    }else{
-        String stateMessage = session.getAttribute(Constants.STATE_MESSAGE).toString();
-        out.print("alert('"+stateMessage+"');");
-    }
-    session.setAttribute(Constants.STATE_MESSAGE, "");
-%>
-    $('#teacherTable').bootstrapTable({
+    $('#studentTable').bootstrapTable({
         ajax: function (request) {//使用ajax请求
             $.ajax({
                 type: "GET",
-                url: '/student/student.do',
+                url: '/teacher/teacher.do',
                 contentType: 'application/json;charset=utf-8',
                 dataType: 'json',
-                data: {method: "getTeacherList"},
+                data: {method: "getStudentList"},
                 success: function (res) {
                     request.success({
                         row: res,
                     });
-                    $('#teacherTable').bootstrapTable('load', res);
+                    $('#studentTable').bootstrapTable('load', res);
                 },
                 error: function (error) {
                     console.log(error);
@@ -90,7 +81,7 @@
         sidePagination: 'client',        //server:服务器端分页|client：前端分页
         //queryParams: 'queryParams',    //传递参数
         search: true,                    //是否显示表格搜索
-        sortName: "teacherId",           //定义要排序的列
+        sortName: "studentId",           //定义要排序的列
         sortOrder: "asc",                //排序方式
         pageSize: 10,                    //单页记录数
         clickToSelect: true,             //是否启用点击选中行
@@ -101,52 +92,46 @@
         showColumns: true,               //是否显示所有的列
         switchable: false,               //禁用可切换的列项
         height: $(window).height() - 80,   //行高，如果没有设置height属性，表格自动根据记录条数觉得表格高度
-        uniqueId: "teacherId",           //每一行的唯一标识，一般为主键列
+        uniqueId: "studentId",           //每一行的唯一标识，一般为主键列
         columns: [{
             checkbox: true
         }, {
-            title: '工号',
-            field: 'teacherId',
+            title: '学号',
+            field: 'studentId',
             sortable: true,
             width: 200
         }, {
             title: '姓名',
-            field: 'teacherName',
+            field: 'studentName',
             sortable: true,
             width: 200
         }, {
             title: '专业',
-            field: 'teacherMajor',
-            width: 200
-        }, {
-            title: '简介',
-            field: 'teacherIntroduce',
+            field: 'studentMajor',
+            sortable: true,
             width: 300
         }]
     });
 
-    //确定选择导师操作
-    function chooseTeacher() {
-        var row = $.map($('#teacherTable').bootstrapTable('getSelections'), function (row) {
+    //确定选择学生操作
+    function chooseStudent() {
+        var row = $.map($('#studentTable').bootstrapTable('getSelections'), function (row) {
             return row;
         });
-        if (row.length > 3) {
+        var studentLength = row.length;
+        if (studentLength > 3) {
             alert("人数大于三个")
             return false;
-        } else if (row.length < 3) {
-            alert("人数不足三个")
+        } else if (studentLength == 0) {
+            alert("请选择学生")
             return false;
         } else {
-            var result = confirm("是否确定选择导师？");
+            var result = confirm("您选择了" + studentLength + "位学生，是否确定选择？");
             if (result == true) {
-                var teacherId1 = row[0].teacherId;
-                var teacherId2 = row[1].teacherId;
-                var teacherId3 = row[2].teacherId;
-                window.location.href = "student.do?method=studentChooseTeacher" +
-                    "&teacherId1=" + teacherId1 +
-                    "&teacherId2=" + teacherId2 +
-                    "&teacherId3=" + teacherId3;
+
+                //window.location.href="teacher.do?method=teacherChooseStudent";
             }
+
         }
     }
 </script>
