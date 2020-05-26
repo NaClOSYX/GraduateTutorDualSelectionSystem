@@ -25,10 +25,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 
 public class TeacherServlet extends HttpServlet {
@@ -50,6 +47,8 @@ public class TeacherServlet extends HttpServlet {
             getStudentList(req, resp);
         } else if ("getStudentListDecided".equals(method)) {//获取选定的学生列表
             getStudentListDecided(req, resp);
+        } else if ("teacherChooseStudent".equals(method)) {//获取选定的学生列表
+            teacherChooseStudent(req, resp);
         }
     }
 
@@ -130,5 +129,29 @@ public class TeacherServlet extends HttpServlet {
         outPrintWriter.write(JSONArray.toJSONString(studentList));
         outPrintWriter.flush();
         outPrintWriter.close();
+    }
+
+    public void teacherChooseStudent(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        HttpSession session = req.getSession();
+        int majorMaxStudents = (int) (session.getAttribute(Constants.MAJOR_MAX_STUDENTS));
+        String teacherId = (String) (session.getAttribute(Constants.USER_SESSION));
+        int teacherStudentsCount = ideaService.queryIdeasByTeacherIdCount(teacherId);
+        String[] studentIds = req.getParameterValues("studentId");
+        int studentLength = studentIds.length;
+        if (studentLength + teacherStudentsCount > majorMaxStudents) {
+            String msg = "您已经拥有了" + teacherStudentsCount + "位学生" + "还能选择" + (majorMaxStudents - teacherStudentsCount) + "位学生，请重新选择";
+            req.getSession().setAttribute(Constants.STATE_MESSAGE, msg);
+        } else {
+            boolean flag = true;
+            for (String studentId : studentIds) {
+                flag &= ideaService.updateIdeaStateById(studentId, teacherId, 2);
+            }
+            if (flag) {
+                req.getSession().setAttribute(Constants.STATE_MESSAGE, "选择成功");
+            } else {
+                req.getSession().setAttribute(Constants.STATE_MESSAGE, "选择失败");
+            }
+        }
+        resp.sendRedirect(req.getContextPath() + "/teacher/TeacherChooseStudent.jsp");
     }
 }

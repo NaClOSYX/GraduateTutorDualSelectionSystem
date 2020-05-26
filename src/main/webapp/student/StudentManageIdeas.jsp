@@ -10,6 +10,9 @@
 <%@ page import="com.naclo.service.IdeaTableService" %>
 <%@ page import="com.naclo.service.impl.IdeaTableServiceImpl" %>
 <%@ page import="com.naclo.pojo.IdeaTable" %>
+<%@ page import="com.naclo.pojo.Teacher" %>
+<%@ page import="com.naclo.service.TeacherService" %>
+<%@ page import="com.naclo.service.impl.TeacherServiceImpl" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <!DOCTYPE HTML>
 <html>
@@ -39,11 +42,12 @@
     <jsp:param name="pageTitle" value="我的志愿"/>
 </jsp:include>
 <%
+    StudentService studentService = new StudentServiceImpl();
+    IdeaTableService ideaTableService = new IdeaTableServiceImpl();
+    TeacherService teacherService = new TeacherServiceImpl();
     String studentId = (String) (session.getAttribute(Constants.USER_SESSION));
     String major = (String) (session.getAttribute(Constants.USER_MAJOR));
-    StudentService studentService = new StudentServiceImpl();
     Student student = studentService.queryStudentById(studentId);
-    IdeaTableService ideaTableService = new IdeaTableServiceImpl();
     List<IdeaTable> ideaTableList = ideaTableService.queryStudentIdeasByMajor(major);
     IdeaTable ideaTable = new IdeaTable();
     for (IdeaTable ideaTable1 : ideaTableList) {
@@ -54,6 +58,8 @@
     }
     IdeaService ideaService = new IdeaServiceImpl();
     List<Idea> ideaList = ideaService.queryIdeasByStudentId(studentId);
+    String teacherId = ideaService.queryTeacherByStudentId(studentId).getTeacherId();
+    String teacherName = teacherService.queryTeacherById(teacherId).getTeacherName();
 %>
 <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4">
     <div class="panel-body" style="padding-bottom:0px;">
@@ -95,7 +101,18 @@
                 </div>
             </div>
         </div>
+        <div>
+            <%
+                if (teacherName == null) {
 
+                } else {
+                    out.print("<h1> 您的导师：");
+                    out.print("<b>" + teacherName + "</b>");
+                    out.print("</h1>");
+                }
+            %>
+
+        </div>
     </div>
 </main>
 

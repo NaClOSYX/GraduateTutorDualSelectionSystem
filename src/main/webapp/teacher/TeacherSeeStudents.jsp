@@ -58,6 +58,14 @@
 
 </body>
 <script>
+    <% //操作成功弹窗
+if(session.getAttribute(Constants.STATE_MESSAGE)==null||"".equals(session.getAttribute(Constants.STATE_MESSAGE))){
+}else{
+    String stateMessage = session.getAttribute(Constants.STATE_MESSAGE).toString();
+    out.print("alert('"+stateMessage+"');");
+}
+session.setAttribute(Constants.STATE_MESSAGE, "");
+%>
     $('#studentTable').bootstrapTable({
         ajax: function (request) {//使用ajax请求
             $.ajax({
@@ -65,7 +73,7 @@
                 url: '/teacher/teacher.do',
                 contentType: 'application/json;charset=utf-8',
                 dataType: 'json',
-                data: {method: "getStudentList"},
+                data: {method: "getStudentListDecided"},
                 success: function (res) {
                     request.success({
                         row: res,

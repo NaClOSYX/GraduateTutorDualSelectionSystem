@@ -26,6 +26,11 @@ public class IdeaServiceImplTest {
     }
 
     @Test
+    void queryTeacherByStudentIdTest() {
+        System.out.println(ideaService.queryTeacherByStudentId("20171422"));
+    }
+
+    @Test
     void queryIdeasByTeacherIdTest() {
         ideaService.queryIdeasByTeacherId("1234567890").forEach(System.out::println);
     }

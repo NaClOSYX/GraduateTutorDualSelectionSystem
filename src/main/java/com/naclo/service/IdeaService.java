@@ -2,6 +2,7 @@ package com.naclo.service;
 
 import com.naclo.pojo.Idea;
 
+import java.sql.Connection;
 import java.util.List;
 
 
@@ -14,6 +15,9 @@ public interface IdeaService {
 
     //根据学号获取志愿数量
     int queryIdeasByStudentIdCount(String studentId);
+
+    //根据学号获取老师确定志愿
+    Idea queryTeacherByStudentId(String studentId);
 
     //根据工号获取志愿
     List<Idea> queryIdeasByTeacherId(String teacherId);

@@ -122,11 +122,10 @@ public class StudentServlet extends HttpServlet {
             boolean f3 = ideaService.insertIdea(new Idea(0, major, studentId, teacherId3, new Date(), 1));
             if (f1 == true && f2 == true && f3 == true) {
                 req.getSession().setAttribute(Constants.STATE_MESSAGE, "插入成功");
-                resp.sendRedirect(req.getContextPath() + "/student/StudentChooseTeacher.jsp");
             } else {
                 req.getSession().setAttribute(Constants.STATE_MESSAGE, "插入失败");
-                resp.sendRedirect(req.getContextPath() + "/student/StudentChooseTeacher.jsp");
             }
+            resp.sendRedirect(req.getContextPath() + "/student/StudentChooseTeacher.jsp");
         }
     }
 }

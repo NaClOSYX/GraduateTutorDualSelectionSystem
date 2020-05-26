@@ -19,7 +19,7 @@ public class IdeaDaoImpl implements IdeaDao {
         ResultSet rs = null;
         PreparedStatement pstm = null;
         if (connection != null) {
-            String sql = "select * from idea where state=1";
+            String sql = "select * from idea";
             try {
                 rs = DBUtil.query(connection, sql, pstm, new Object[]{}, rs);
                 while (rs.next()) {
@@ -89,6 +89,33 @@ public class IdeaDaoImpl implements IdeaDao {
         }
         DBUtil.closeResource(null, pstm, rs);
         return count;
+    }
+
+    @Override
+    public Idea queryTeacherByStudentId(Connection connection, String studentId) {
+        Idea idea = new Idea();
+        ResultSet rs = null;
+        PreparedStatement pstm = null;
+        if (connection != null) {
+            //查询学生的所有志愿
+            String sql = "select * from idea where studentId=? and state=2";
+            Object[] params = new Object[]{studentId};
+            try {
+                rs = DBUtil.query(connection, sql, pstm, params, rs);
+                if (rs.next()) {
+                    idea.setIdeaId(rs.getInt(1));
+                    idea.setMajorName(rs.getString(2));
+                    idea.setStudentId(rs.getString(3));
+                    idea.setTeacherId(rs.getString(4));
+                    idea.setTime(rs.getTimestamp(5));
+                    idea.setState(rs.getInt(6));
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        DBUtil.closeResource(null, pstm, rs);
+        return idea;
     }
 
     @Override

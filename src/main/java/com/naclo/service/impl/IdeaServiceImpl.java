@@ -38,6 +38,14 @@ public class IdeaServiceImpl implements IdeaService {
     }
 
     @Override
+    public Idea queryTeacherByStudentId(String studentId) {
+        Connection connection = DBUtil.getConnection();
+        Idea idea = ideaDao.queryTeacherByStudentId(connection, studentId);
+        DBUtil.closeResource(connection, null, null);
+        return idea;
+    }
+
+    @Override
     public List<Idea> queryIdeasByTeacherId(String teacherId) {
         Connection connection = DBUtil.getConnection();
         List<Idea> ideaList = ideaDao.queryIdeasByTeacherId(connection, teacherId);

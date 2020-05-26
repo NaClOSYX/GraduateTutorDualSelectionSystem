@@ -15,10 +15,14 @@ from user;
 
 DROP VIEW IF EXISTS studentTeacherTable;
 create view studentTeacherTable AS
-select I.majorName majorName, S.studentName studentName, T.teacherName teacherName
+select I.majorName   majorName,
+       S.studentId   studentId,
+       S.studentName studentName,
+       T.teacherId   teacherId,
+       T.teacherName teacherName
 from student S,
      teacher T,
      idea I
 where I.studentId = S.studentId
   and I.teacherId = T.teacherId
-  and I.state = 1;
+  and I.state = 2;

@@ -36,6 +36,7 @@ public class AdminServlet extends HttpServlet {
     MajorService majorService = new MajorServiceImpl();
     AdminService adminService = new AdminServiceImpl();
     IdeaTableService ideaTableService = new IdeaTableServiceImpl();
+    StudentTeacherService studentTeacherService = new StudentTeacherServiceImpl();
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -111,6 +112,8 @@ public class AdminServlet extends HttpServlet {
             getIdeaTableList(req, resp);
         } else if ("exportIdeaList".equals(method)) {//导出志愿表
             exportIdeaList(req, resp);
+        } else if ("getStudentTeacherList".equals(method)) {//获取学生导师对
+            getStudentTeacherList(req, resp);
         }
     }
 
@@ -768,5 +771,20 @@ public class AdminServlet extends HttpServlet {
         EasyExcel.write(outputStream, IdeaTable.class).sheet("志愿列表").doWrite(ideaTableList);
         outputStream.flush();
         outputStream.close();
+    }
+
+    public void getStudentTeacherList(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        List<StudentTeacher> studentTeacherList = new ArrayList<>();
+        String major = (String) (req.getSession().getAttribute(Constants.USER_MAJOR));
+        if ("ALL".equals(major)) {
+            studentTeacherList = studentTeacherService.getAllStudentTeacher();
+        } else {
+            studentTeacherList = studentTeacherService.getAllStudentTeacherByMajor(major);
+        }
+        resp.setContentType("application/json");
+        PrintWriter outPrintWriter = resp.getWriter();
+        outPrintWriter.write(JSONArray.toJSONString(studentTeacherList));
+        outPrintWriter.flush();
+        outPrintWriter.close();
     }
 }

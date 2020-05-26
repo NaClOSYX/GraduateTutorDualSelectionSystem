@@ -70,6 +70,17 @@
                         管理志愿
                         </a>
                     </li>
+                    <li class="nav-item">
+                        <%
+                            if (pageTitle.equals("管理结果")) {
+                                out.print("<a class=\"nav-link active\" href=\"AdminStudentTeacherList.jsp\">");
+                            } else
+                                out.print("<a class=\"nav-link\" href=\"AdminStudentTeacherList.jsp\">");
+                        %>
+                        <span data-feather="file"></span>
+                        管理结果
+                        </a>
+                    </li>
                 </ul>
             </div>
         </nav>
