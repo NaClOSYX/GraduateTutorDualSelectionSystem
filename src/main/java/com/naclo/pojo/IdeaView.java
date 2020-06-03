@@ -7,10 +7,12 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class StudentTeacher {
+public class IdeaView {
+    int ideaId;
     String majorName;
     String studentId;
     String studentName;
     String teacherId;
     String teacherName;
+    int state;
 }

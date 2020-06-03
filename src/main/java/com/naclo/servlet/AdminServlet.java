@@ -36,7 +36,7 @@ public class AdminServlet extends HttpServlet {
     MajorService majorService = new MajorServiceImpl();
     AdminService adminService = new AdminServiceImpl();
     IdeaTableService ideaTableService = new IdeaTableServiceImpl();
-    StudentTeacherService studentTeacherService = new StudentTeacherServiceImpl();
+    IdeaViewService ideaViewService = new IdeaViewServiceImpl();
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -114,6 +114,8 @@ public class AdminServlet extends HttpServlet {
             exportIdeaList(req, resp);
         } else if ("getStudentTeacherList".equals(method)) {//获取学生导师对
             getStudentTeacherList(req, resp);
+        } else if ("getTeacherSelectStudentList".equals(method)) {//获取学生导师对
+            getTeacherSelectStudentList(req, resp);
         }
     }
 
@@ -774,16 +776,31 @@ public class AdminServlet extends HttpServlet {
     }
 
     public void getStudentTeacherList(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        List<StudentTeacher> studentTeacherList = new ArrayList<>();
+        List<IdeaView> ideaViewList = new ArrayList<>();
         String major = (String) (req.getSession().getAttribute(Constants.USER_MAJOR));
         if ("ALL".equals(major)) {
-            studentTeacherList = studentTeacherService.getAllStudentTeacher();
+            ideaViewList = ideaViewService.queryIdeas(null, null, null, 4);
         } else {
-            studentTeacherList = studentTeacherService.getAllStudentTeacherByMajor(major);
+            ideaViewList = ideaViewService.queryIdeas(null, null, major, 4);
         }
         resp.setContentType("application/json");
         PrintWriter outPrintWriter = resp.getWriter();
-        outPrintWriter.write(JSONArray.toJSONString(studentTeacherList));
+        outPrintWriter.write(JSONArray.toJSONString(ideaViewList));
+        outPrintWriter.flush();
+        outPrintWriter.close();
+    }
+
+    public void getTeacherSelectStudentList(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        List<IdeaView> ideaViewList = new ArrayList<>();
+        String major = (String) (req.getSession().getAttribute(Constants.USER_MAJOR));
+        if ("ALL".equals(major)) {
+            ideaViewList = ideaViewService.queryIdeas(null, null, null, 2);
+        } else {
+            ideaViewList = ideaViewService.queryIdeas(null, null, major, 2);
+        }
+        resp.setContentType("application/json");
+        PrintWriter outPrintWriter = resp.getWriter();
+        outPrintWriter.write(JSONArray.toJSONString(ideaViewList));
         outPrintWriter.flush();
         outPrintWriter.close();
     }

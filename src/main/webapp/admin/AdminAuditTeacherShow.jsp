@@ -102,26 +102,19 @@
             sortable: true,
             width: 150
         }, {
-            title: '姓名',
+            title: '学生姓名',
             field: 'studentName',
             sortable: true,
             width: 150
         }, {
-            title: '专业',
-            field: 'majorName',
+            title: '工号',
+            field: 'teacherId',
             sortable: true,
             width: 150
         }, {
-            title: '志愿1',
-            field: 'teacherName1',
-            width: 150
-        }, {
-            title: '志愿2',
-            field: 'teacherName2',
-            width: 150
-        }, {
-            title: '志愿3',
-            field: 'teacherName3',
+            title: '教师姓名',
+            field: 'teacherName',
+            sortable: true,
             width: 150
         }]
     });

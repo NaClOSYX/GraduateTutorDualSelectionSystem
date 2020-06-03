@@ -1,11 +1,10 @@
 package com.naclo.utils;
 
 
-import com.alibaba.druid.pool.DruidDataSource;
-import com.alibaba.druid.pool.DruidDataSourceFactory;
 import org.apache.log4j.Logger;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.sql.*;
 import java.util.Properties;
 
@@ -18,21 +17,21 @@ public class DBUtil {
     private static String password = null;
     private static Logger logger = Logger.getLogger(DBUtil.class);
 
-    /*    static {
-            Properties properties = new Properties();
-            //通过类加载器读取对应资源
-            InputStream is = DBUtil.class.getClassLoader().getResourceAsStream("db.properties");
-            try {
-                properties.load(is);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            driver = properties.getProperty("driver");
-            url = properties.getProperty("url");
-            username = properties.getProperty("username");
-            password = properties.getProperty("password");
-        }*/
-    static DruidDataSource dataSource;
+    static {
+        Properties properties = new Properties();
+        //通过类加载器读取对应资源
+        InputStream is = DBUtil.class.getClassLoader().getResourceAsStream("db.properties");
+        try {
+            properties.load(is);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        driver = properties.getProperty("driver");
+        url = properties.getProperty("url");
+        username = properties.getProperty("username");
+        password = properties.getProperty("password");
+    }
+/*    static DruidDataSource dataSource;
 
     static {
         Properties prop = new Properties();
@@ -44,15 +43,15 @@ public class DBUtil {
         } catch (Exception e) {
             e.printStackTrace();
         }
-    }
+    }*/
 
     //获取数据库的链接
     public static Connection getConnection() {
         Connection connection = null;
         try {
-            //Class.forName(driver);
-            //connection = DriverManager.getConnection(url, username, password);
-            connection = dataSource.getConnection();
+            Class.forName(driver);
+            connection = DriverManager.getConnection(url, username, password);
+            //connection = dataSource.getConnection();
         } catch (Exception e) {
             e.printStackTrace();
         }
