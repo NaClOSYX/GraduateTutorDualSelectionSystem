@@ -71,4 +71,20 @@ public class IdeaServiceImplTest {
             System.out.println("修改失败");
         }
     }
+
+    @Test
+    void queryIdeasByStudentIdAndStateTest() {
+        ideaService.queryIdeasByStudentIdAndState("20171422", -1).forEach(System.out::println);
+    }
+
+    @Test
+    void queryIdeasByTeacherIdAndStateTest() {
+        ideaService.queryIdeasByTeacherIdAndState("1234567890", -1).forEach(System.out::println);
+    }
+
+    @Test
+    void queryIdeasByMajorAndStateTest() {
+        ideaService.queryIdeasByMajorAndState("软件工程", -1).forEach(System.out::println);
+    }
+
 }

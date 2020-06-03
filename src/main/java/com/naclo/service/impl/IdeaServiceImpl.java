@@ -100,4 +100,28 @@ public class IdeaServiceImpl implements IdeaService {
             return false;
         }
     }
+
+    @Override
+    public List<Idea> queryIdeasByStudentIdAndState(String studentId, int state) {
+        Connection connection = DBUtil.getConnection();
+        List<Idea> ideaList = ideaDao.queryIdeasByStudentIdAndState(connection, studentId, state);
+        DBUtil.closeResource(connection, null, null);
+        return ideaList;
+    }
+
+    @Override
+    public List<Idea> queryIdeasByTeacherIdAndState(String teacherId, int state) {
+        Connection connection = DBUtil.getConnection();
+        List<Idea> ideaList = ideaDao.queryIdeasByTeacherIdAndState(connection, teacherId, state);
+        DBUtil.closeResource(connection, null, null);
+        return ideaList;
+    }
+
+    @Override
+    public List<Idea> queryIdeasByMajorAndState(String major, int state) {
+        Connection connection = DBUtil.getConnection();
+        List<Idea> ideaList = ideaDao.queryIdeasByMajorAndState(connection, major, state);
+        DBUtil.closeResource(connection, null, null);
+        return ideaList;
+    }
 }

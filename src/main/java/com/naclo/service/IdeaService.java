@@ -2,7 +2,6 @@ package com.naclo.service;
 
 import com.naclo.pojo.Idea;
 
-import java.sql.Connection;
 import java.util.List;
 
 
@@ -36,4 +35,13 @@ public interface IdeaService {
 
     //根据工号和学号修改志愿状态
     boolean updateIdeaStateById(String studentId, String teacherId, int state);
+
+    //根据学号获取志愿
+    List<Idea> queryIdeasByStudentIdAndState(String studentId, int state);
+
+    //根据学号获取志愿
+    List<Idea> queryIdeasByTeacherIdAndState(String teacherId, int state);
+
+    //根据专业获取志愿
+    List<Idea> queryIdeasByMajorAndState(String major, int state);
 }

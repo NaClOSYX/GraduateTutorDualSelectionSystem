@@ -36,4 +36,13 @@ public interface IdeaDao {
 
     //根据工号和学号修改志愿状态
     int updateIdeaStateById(Connection connection, String studentId, String teacherId, int state);
+
+    //根据学号获取志愿
+    List<Idea> queryIdeasByStudentIdAndState(Connection connection, String studentId, int state);
+
+    //根据学号获取志愿
+    List<Idea> queryIdeasByTeacherIdAndState(Connection connection, String teacherId, int state);
+
+    //根据专业获取志愿
+    List<Idea> queryIdeasByMajorAndState(Connection connection, String major, int state);
 }

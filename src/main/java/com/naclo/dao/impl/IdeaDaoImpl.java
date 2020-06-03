@@ -261,4 +261,112 @@ public class IdeaDaoImpl implements IdeaDao {
         DBUtil.closeResource(null, pstm, null);
         return flag;
     }
+
+    @Override
+    public List<Idea> queryIdeasByStudentIdAndState(Connection connection, String studentId, int state) {
+        List<Idea> ideaList = new ArrayList<>();
+        ResultSet rs = null;
+        PreparedStatement pstm = null;
+        if (connection != null) {
+            //查询学生的所有志愿
+            String sql = "";
+            Object[] params = null;
+            if (state == -1) {
+                sql = "select * from idea where studentId=?";
+                params = new Object[]{studentId};
+            } else {
+                sql = "select * from idea where studentId=? and state=?";
+                params = new Object[]{studentId, state};
+            }
+            try {
+                rs = DBUtil.query(connection, sql, pstm, params, rs);
+                while (rs.next()) {
+                    Idea idea = new Idea();
+                    idea.setIdeaId(rs.getInt(1));
+                    idea.setMajorName(rs.getString(2));
+                    idea.setStudentId(rs.getString(3));
+                    idea.setTeacherId(rs.getString(4));
+                    idea.setTime(rs.getTimestamp(5));
+                    idea.setState(rs.getInt(6));
+                    ideaList.add(idea);
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        DBUtil.closeResource(null, pstm, rs);
+        return ideaList;
+    }
+
+    @Override
+    public List<Idea> queryIdeasByTeacherIdAndState(Connection connection, String teacherId, int state) {
+        List<Idea> ideaList = new ArrayList<>();
+        ResultSet rs = null;
+        PreparedStatement pstm = null;
+        if (connection != null) {
+            //查询学生的所有志愿
+            String sql = "";
+            Object[] params = null;
+            if (state == -1) {
+                sql = "select * from idea where teacherId=?";
+                params = new Object[]{teacherId};
+            } else {
+                sql = "select * from idea where teacherId=? and state=?";
+                params = new Object[]{teacherId, state};
+            }
+            try {
+                rs = DBUtil.query(connection, sql, pstm, params, rs);
+                while (rs.next()) {
+                    Idea idea = new Idea();
+                    idea.setIdeaId(rs.getInt(1));
+                    idea.setMajorName(rs.getString(2));
+                    idea.setStudentId(rs.getString(3));
+                    idea.setTeacherId(rs.getString(4));
+                    idea.setTime(rs.getTimestamp(5));
+                    idea.setState(rs.getInt(6));
+                    ideaList.add(idea);
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        DBUtil.closeResource(null, pstm, rs);
+        return ideaList;
+    }
+
+    @Override
+    public List<Idea> queryIdeasByMajorAndState(Connection connection, String major, int state) {
+        List<Idea> ideaList = new ArrayList<>();
+        ResultSet rs = null;
+        PreparedStatement pstm = null;
+        if (connection != null) {
+            //查询学生的所有志愿
+            String sql = "";
+            Object[] params = null;
+            if (state == -1) {
+                sql = "select * from idea where majorName=?";
+                params = new Object[]{major};
+            } else {
+                sql = "select * from idea where majorName=? and state=?";
+                params = new Object[]{major, state};
+            }
+            try {
+                rs = DBUtil.query(connection, sql, pstm, params, rs);
+                while (rs.next()) {
+                    Idea idea = new Idea();
+                    idea.setIdeaId(rs.getInt(1));
+                    idea.setMajorName(rs.getString(2));
+                    idea.setStudentId(rs.getString(3));
+                    idea.setTeacherId(rs.getString(4));
+                    idea.setTime(rs.getTimestamp(5));
+                    idea.setState(rs.getInt(6));
+                    ideaList.add(idea);
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        DBUtil.closeResource(null, pstm, rs);
+        return ideaList;
+    }
 }
