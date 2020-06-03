@@ -102,6 +102,18 @@ public class IdeaServiceImpl implements IdeaService {
     }
 
     @Override
+    public boolean updateIdeaStateByIdeaId(int ideaId, int state) {
+        Connection connection = DBUtil.getConnection();
+        int i = ideaDao.updateIdeaStateByIdeaId(connection, ideaId, state);
+        DBUtil.closeResource(connection, null, null);
+        if (i > 0) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    @Override
     public List<Idea> queryIdeasByStudentIdAndState(String studentId, int state) {
         Connection connection = DBUtil.getConnection();
         List<Idea> ideaList = ideaDao.queryIdeasByStudentIdAndState(connection, studentId, state);

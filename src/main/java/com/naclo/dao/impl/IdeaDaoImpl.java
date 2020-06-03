@@ -251,7 +251,28 @@ public class IdeaDaoImpl implements IdeaDao {
         int flag = 0;
         if (connection != null) {
             String sql = "update idea set state=? where studentId=? and teacherId=?";
-            Object[] params = {state, studentId, teacherId};
+            Object[] params = new Object[]{state, studentId, teacherId};
+            if (null == teacherId) {
+                sql = "update idea set state=? where studentId=?";
+                params = new Object[]{state, studentId};
+            }
+            try {
+                flag = DBUtil.execute(connection, sql, pstm, params);
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        DBUtil.closeResource(null, pstm, null);
+        return flag;
+    }
+
+    @Override
+    public int updateIdeaStateByIdeaId(Connection connection, int ideaId, int state) {
+        PreparedStatement pstm = null;
+        int flag = 0;
+        if (connection != null) {
+            String sql = "update idea set state=? where ideaId=?";
+            Object[] params = new Object[]{state, ideaId};
             try {
                 flag = DBUtil.execute(connection, sql, pstm, params);
             } catch (SQLException e) {

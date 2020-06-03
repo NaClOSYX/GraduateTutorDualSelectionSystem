@@ -1,5 +1,8 @@
+<%@ page import="com.naclo.pojo.Teacher" %>
+<%@ page import="com.naclo.service.impl.TeacherServiceImpl" %>
 <%@ page import="com.naclo.utils.Constants" %>
-<%@ page contentType="text/html;charset=UTF-8" language="java" pageEncoding="UTF-8" %>
+<%@ page import="com.naclo.utils.MD5Utils" %>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <!DOCTYPE HTML>
 <html>
 <head>
@@ -19,30 +22,30 @@
     <script src="https://cdn.bootcdn.net/ajax/libs/bootstrap-table/1.16.0/locale/bootstrap-table-zh-CN.js"></script>
 
     <link href="../css/dashboard.css" rel="stylesheet">
-
-    <script src="../js/common.js"></script>
 </head>
 
 <body>
 <!--topbar-->
-<jsp:include page="AdminTopbar.jsp"></jsp:include>
+<jsp:include page="TeacherTopbar.jsp"></jsp:include>
 <!--slidebar-->
-<jsp:include page="AdminSlidebar.jsp">
-    <jsp:param name="pageTitle" value="审核结果"/>
+<jsp:include page="TeacherSlidebar.jsp">
+    <jsp:param name="pageTitle" value="查看最终的学生"/>
 </jsp:include>
-
+<%
+    String teacherId = session.getAttribute(Constants.USER_SESSION).toString();
+    TeacherServiceImpl teacherService = new TeacherServiceImpl();
+    Teacher teacher = teacherService.queryTeacherById(teacherId);
+    int maxStudents = (int) (session.getAttribute(Constants.MAJOR_MAX_STUDENTS));
+%>
 <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4">
     <div class="panel-body" style="padding-bottom:0px;">
         <%--toolbar--%>
         <div id="toolbar" class="btn-group">
-            <button id="btn_choose" type="button" onclick="chooseIdeas()" class="btn btn-primary">同意
-            </button>
+
         </div>
-
         <%--table--%>
-        <table id="ideaTable"></table>
+        <table id="studentTable"></table>
     </div>
-
 </main>
 
 <!-- Copyright -->
@@ -51,26 +54,27 @@
 </body>
 <script>
     <% //操作成功弹窗
-    if(session.getAttribute(Constants.STATE_MESSAGE)==null||"".equals(session.getAttribute(Constants.STATE_MESSAGE))){
-    }else{
-        String stateMessage = session.getAttribute(Constants.STATE_MESSAGE).toString();
-        out.print("alert('"+stateMessage+"');");
-    }
-    session.setAttribute(Constants.STATE_MESSAGE, "");
+if(session.getAttribute(Constants.STATE_MESSAGE)==null||"".equals(session.getAttribute(Constants.STATE_MESSAGE))){
+}else{
+    String stateMessage = session.getAttribute(Constants.STATE_MESSAGE).toString();
+    out.print("alert('"+stateMessage+"');");
+}
+session.setAttribute(Constants.STATE_MESSAGE, "");
 %>
-    $('#ideaTable').bootstrapTable({
+    $('#studentTable').bootstrapTable({
         ajax: function (request) {//使用ajax请求
             $.ajax({
                 type: "GET",
-                url: '/admin/admin.do',
+                url: '/teacher/teacher.do',
                 contentType: 'application/json;charset=utf-8',
                 dataType: 'json',
-                data: {method: "getTeacherSelectStudentList"},
+                data: {method: "getStudentListFinally"},
                 success: function (res) {
                     request.success({
                         row: res,
                     });
-                    $('#ideaTable').bootstrapTable('load', res);
+                    $('#studentTable').bootstrapTable('load', res);
+                    $('#alreadyDecidedStudents').next().html(res.length)
                 },
                 error: function (error) {
                     console.log(error);
@@ -98,54 +102,22 @@
         height: $(window).height() - 70,   //行高，如果没有设置height属性，表格自动根据记录条数觉得表格高度
         uniqueId: "studentId",           //每一行的唯一标识，一般为主键列
         columns: [{
-            checkbox: true
-        }, {
             title: '学号',
             field: 'studentId',
             sortable: true,
-            width: 150
+            width: 200
         }, {
-            title: '学生姓名',
+            title: '姓名',
             field: 'studentName',
             sortable: true,
-            width: 150
+            width: 200
         }, {
-            title: '工号',
-            field: 'teacherId',
+            title: '专业',
+            field: 'majorName',
             sortable: true,
-            width: 150
-        }, {
-            title: '教师姓名',
-            field: 'teacherName',
-            sortable: true,
-            width: 150
+            width: 300
         }]
     });
-
-    //确定选择学生操作
-    function chooseIdeas() {
-        var row = $.map($('#ideaTable').bootstrapTable('getSelections'), function (row) {
-            return row;
-        });
-
-        var ideaLength = row.length;
-        if (ideaLength > 10) {
-            alert("人数大于十个")
-            return false;
-        } else if (ideaLength == 0) {
-            alert("请选择志愿")
-            return false;
-        } else {
-            var result = confirm("您选择了" + ideaLength + "个人志愿，是否确定选择？");
-            if (result == true) {
-                var href = "admin.do?method=adminAuditTeacherDecide";
-                for (let i = 1; i <= ideaLength; i++) {
-                    href += "&ideaId" + "=" + row[i - 1].ideaId;
-                }
-                window.location.href = href;
-            }
-        }
-    }
 </script>
 
 </html>

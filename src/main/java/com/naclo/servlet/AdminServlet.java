@@ -37,6 +37,7 @@ public class AdminServlet extends HttpServlet {
     AdminService adminService = new AdminServiceImpl();
     IdeaTableService ideaTableService = new IdeaTableServiceImpl();
     IdeaViewService ideaViewService = new IdeaViewServiceImpl();
+    IdeaService ideaService = new IdeaServiceImpl();
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -116,6 +117,8 @@ public class AdminServlet extends HttpServlet {
             getStudentTeacherList(req, resp);
         } else if ("getTeacherSelectStudentList".equals(method)) {//获取学生导师对
             getTeacherSelectStudentList(req, resp);
+        } else if ("adminAuditTeacherDecide".equals(method)) {//获取学生导师对
+            adminAuditTeacherDecide(req, resp);
         }
     }
 
@@ -779,9 +782,9 @@ public class AdminServlet extends HttpServlet {
         List<IdeaView> ideaViewList = new ArrayList<>();
         String major = (String) (req.getSession().getAttribute(Constants.USER_MAJOR));
         if ("ALL".equals(major)) {
-            ideaViewList = ideaViewService.queryIdeas(null, null, null, 4);
+            ideaViewList = ideaViewService.queryIdeas(null, null, null, 5);
         } else {
-            ideaViewList = ideaViewService.queryIdeas(null, null, major, 4);
+            ideaViewList = ideaViewService.queryIdeas(null, null, major, 5);
         }
         resp.setContentType("application/json");
         PrintWriter outPrintWriter = resp.getWriter();
@@ -803,5 +806,20 @@ public class AdminServlet extends HttpServlet {
         outPrintWriter.write(JSONArray.toJSONString(ideaViewList));
         outPrintWriter.flush();
         outPrintWriter.close();
+    }
+
+    public void adminAuditTeacherDecide(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        String[] ideaIds = req.getParameterValues("ideaId");
+        boolean flag = true;
+        for (String ideaId : ideaIds) {
+            flag &= ideaService.updateIdeaStateByIdeaId(Integer.parseInt(ideaId), 5);
+        }
+        if (flag) {
+            req.getSession().setAttribute(Constants.STATE_MESSAGE, "选择成功");
+        } else {
+            req.getSession().setAttribute(Constants.STATE_MESSAGE, "选择失败");
+        }
+
+        resp.sendRedirect(req.getContextPath() + "/admin/AdminAuditTeacherShow.jsp");
     }
 }

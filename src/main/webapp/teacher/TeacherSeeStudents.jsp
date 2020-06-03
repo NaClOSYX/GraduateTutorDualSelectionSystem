@@ -29,7 +29,7 @@
 <jsp:include page="TeacherTopbar.jsp"></jsp:include>
 <!--slidebar-->
 <jsp:include page="TeacherSlidebar.jsp">
-    <jsp:param name="pageTitle" value="查看学生"/>
+    <jsp:param name="pageTitle" value="查看选择的学生"/>
 </jsp:include>
 <%
     String teacherId = session.getAttribute(Constants.USER_SESSION).toString();
@@ -118,7 +118,7 @@ session.setAttribute(Constants.STATE_MESSAGE, "");
             width: 200
         }, {
             title: '专业',
-            field: 'studentMajor',
+            field: 'majorName',
             sortable: true,
             width: 300
         }]

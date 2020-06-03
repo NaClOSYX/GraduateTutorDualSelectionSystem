@@ -3,17 +3,10 @@ package com.naclo.servlet;
 
 import com.alibaba.fastjson.JSONArray;
 import com.mysql.cj.util.StringUtils;
-import com.naclo.pojo.Idea;
-import com.naclo.pojo.Student;
+import com.naclo.pojo.IdeaView;
 import com.naclo.pojo.Teacher;
-import com.naclo.service.IdeaService;
-import com.naclo.service.IdeaTableService;
-import com.naclo.service.StudentService;
-import com.naclo.service.TeacherService;
-import com.naclo.service.impl.IdeaServiceImpl;
-import com.naclo.service.impl.IdeaTableServiceImpl;
-import com.naclo.service.impl.StudentServiceImpl;
-import com.naclo.service.impl.TeacherServiceImpl;
+import com.naclo.service.*;
+import com.naclo.service.impl.*;
 import com.naclo.utils.Constants;
 import com.naclo.utils.MD5Utils;
 import org.apache.log4j.Logger;
@@ -25,7 +18,9 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 
 public class TeacherServlet extends HttpServlet {
@@ -34,6 +29,7 @@ public class TeacherServlet extends HttpServlet {
     TeacherService teacherService = new TeacherServiceImpl();
     IdeaService ideaService = new IdeaServiceImpl();
     IdeaTableService ideaTableService = new IdeaTableServiceImpl();
+    IdeaViewService ideaViewService = new IdeaViewServiceImpl();
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -49,6 +45,8 @@ public class TeacherServlet extends HttpServlet {
             getStudentListDecided(req, resp);
         } else if ("teacherChooseStudent".equals(method)) {//获取选定的学生列表
             teacherChooseStudent(req, resp);
+        } else if ("getStudentListFinally".equals(method)) {//获取最终的学生列表
+            getStudentListFinally(req, resp);
         }
     }
 
@@ -99,34 +97,33 @@ public class TeacherServlet extends HttpServlet {
 
     public void getStudentList(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         HttpSession session = req.getSession();
-        List<Student> studentList = new ArrayList<>();
         String teacherId = (String) (session.getAttribute(Constants.USER_SESSION));
-        List<Idea> ideaList = ideaService.queryIdeasByTeacherId(teacherId);
-        for (Idea idea : ideaList) {
-            String studentId = idea.getStudentId();
-            Student student = studentService.queryStudentById(studentId);
-            studentList.add(student);
-        }
+        List<IdeaView> ideaViewList = ideaViewService.queryIdeas(null, teacherId, null, 1);
         resp.setContentType("application/json");
         PrintWriter outPrintWriter = resp.getWriter();
-        outPrintWriter.write(JSONArray.toJSONString(studentList));
+        outPrintWriter.write(JSONArray.toJSONString(ideaViewList));
         outPrintWriter.flush();
         outPrintWriter.close();
     }
 
     public void getStudentListDecided(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         HttpSession session = req.getSession();
-        List<Student> studentList = new ArrayList<>();
         String teacherId = (String) (session.getAttribute(Constants.USER_SESSION));
-        List<Idea> ideaList = ideaService.queryIdeasByTeacherIdDecided(teacherId);
-        for (Idea idea : ideaList) {
-            String studentId = idea.getStudentId();
-            Student student = studentService.queryStudentById(studentId);
-            studentList.add(student);
-        }
+        List<IdeaView> ideaViewList = ideaViewService.queryIdeas(null, teacherId, null, 2);
         resp.setContentType("application/json");
         PrintWriter outPrintWriter = resp.getWriter();
-        outPrintWriter.write(JSONArray.toJSONString(studentList));
+        outPrintWriter.write(JSONArray.toJSONString(ideaViewList));
+        outPrintWriter.flush();
+        outPrintWriter.close();
+    }
+
+    public void getStudentListFinally(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        HttpSession session = req.getSession();
+        String teacherId = (String) (session.getAttribute(Constants.USER_SESSION));
+        List<IdeaView> ideaViewList = ideaViewService.queryIdeas(null, teacherId, null, 5);
+        resp.setContentType("application/json");
+        PrintWriter outPrintWriter = resp.getWriter();
+        outPrintWriter.write(JSONArray.toJSONString(ideaViewList));
         outPrintWriter.flush();
         outPrintWriter.close();
     }
@@ -144,6 +141,7 @@ public class TeacherServlet extends HttpServlet {
         } else {
             boolean flag = true;
             for (String studentId : studentIds) {
+                flag &= ideaService.updateIdeaStateById(studentId, null, 4);
                 flag &= ideaService.updateIdeaStateById(studentId, teacherId, 2);
             }
             if (flag) {

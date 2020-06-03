@@ -36,6 +36,9 @@ public interface IdeaService {
     //根据工号和学号修改志愿状态
     boolean updateIdeaStateById(String studentId, String teacherId, int state);
 
+    //根据工号和学号修改志愿状态
+    boolean updateIdeaStateByIdeaId(int ideaId, int state);
+
     //根据学号获取志愿
     List<Idea> queryIdeasByStudentIdAndState(String studentId, int state);
 
