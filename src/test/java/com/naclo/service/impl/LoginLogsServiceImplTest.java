@@ -19,7 +19,18 @@ public class LoginLogsServiceImplTest {
     }
 
     @Test
-    void name() {
+    void getAllLoginLogsLimitTest() {
+        loginLogsService.getAllLoginLogsLimit(10, 10, "").forEach(System.out::println);
+    }
+
+    @Test
+    void getAllLoginLogsLimitCountTest() {
+        int count = loginLogsService.getAllLoginLogsLimitCount(0, 10, "");
+        System.out.println("count = " + count);
+    }
+
+    @Test
+    void insertLoginLogsTest() {
         LoginLogs loginLogs = new LoginLogs(0, "1234567890", "教师", "登陆", new Date(), "127.0.0.1");
         boolean flag = loginLogsService.insertLoginLogs(loginLogs);
         if (flag) {

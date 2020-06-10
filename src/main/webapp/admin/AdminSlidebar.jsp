@@ -92,6 +92,27 @@
                         管理结果
                         </a>
                     </li>
+                    <%
+                        if ("ALL".equals(adminMajor)) {
+                            out.print("<li class=\"nav-item\">");
+                            if (pageTitle.equals("查看系统日志")) {
+                                out.print("<a class=\"nav-link active\" href=\"AdminSeeSystemLogs.jsp\">");
+                            } else {
+                                out.print("<a class=\"nav-link\" href=\"AdminSeeSystemLogs.jsp\">");
+                            }
+                            out.print("<span data-feather=\"file\"></span>查看系统日志</a></li>");
+                        }
+                    %>                    <%
+                    if ("ALL".equals(adminMajor)) {
+                        out.print("<li class=\"nav-item\">");
+                        if (pageTitle.equals("自主选择时间设定")) {
+                            out.print("<a class=\"nav-link active\" href=\"AdminOpenSystem.jsp\">");
+                        } else {
+                            out.print("<a class=\"nav-link\" href=\"AdminOpenSystem.jsp\">");
+                        }
+                        out.print("<span data-feather=\"file\"></span>自主选择时间设定</a></li>");
+                    }
+                %>
                 </ul>
             </div>
         </nav>

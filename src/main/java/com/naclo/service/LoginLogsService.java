@@ -11,5 +11,9 @@ import java.util.List;
 public interface LoginLogsService {
     List<LoginLogs> getAllLoginLogs();
 
+    List<LoginLogs> getAllLoginLogsLimit(int offset, int limit, String search);
+
+    int getAllLoginLogsLimitCount(int offset, int limit, String search);
+
     boolean insertLoginLogs(LoginLogs loginLogs);
 }

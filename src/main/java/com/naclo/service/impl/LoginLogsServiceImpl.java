@@ -25,6 +25,22 @@ public class LoginLogsServiceImpl implements LoginLogsService {
     }
 
     @Override
+    public List<LoginLogs> getAllLoginLogsLimit(int offset, int limit, String search) {
+        Connection connection = DBUtil.getConnection();
+        List<LoginLogs> loginLogsList = loginLogsDao.getAllLoginLogsLimit(connection, offset, limit, search);
+        DBUtil.closeResource(connection, null, null);
+        return loginLogsList;
+    }
+
+    @Override
+    public int getAllLoginLogsLimitCount(int offset, int limit, String search) {
+        Connection connection = DBUtil.getConnection();
+        int count = loginLogsDao.getAllLoginLogsLimitCount(connection, offset, limit, search);
+        DBUtil.closeResource(connection, null, null);
+        return count;
+    }
+
+    @Override
     public boolean insertLoginLogs(LoginLogs loginLogs) {
         Connection connection = DBUtil.getConnection();
         int i = loginLogsDao.insertLoginLogs(connection, loginLogs);

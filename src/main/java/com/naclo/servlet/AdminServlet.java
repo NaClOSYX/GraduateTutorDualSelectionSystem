@@ -38,6 +38,7 @@ public class AdminServlet extends HttpServlet {
     IdeaTableService ideaTableService = new IdeaTableServiceImpl();
     IdeaViewService ideaViewService = new IdeaViewServiceImpl();
     IdeaService ideaService = new IdeaServiceImpl();
+    LoginLogsService loginLogsService = new LoginLogsServiceImpl();
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -119,6 +120,10 @@ public class AdminServlet extends HttpServlet {
             getTeacherSelectStudentList(req, resp);
         } else if ("adminAuditTeacherDecide".equals(method)) {//获取学生导师对
             adminAuditTeacherDecide(req, resp);
+        } else if ("getAllLogs".equals(method)) {//获取所有日志
+            getAllLogs(req, resp);
+        } else if ("getAllLogsLimit".equals(method)) {//获取所有日志分页
+            getAllLogsLimit(req, resp);
         }
     }
 
@@ -819,7 +824,35 @@ public class AdminServlet extends HttpServlet {
         } else {
             req.getSession().setAttribute(Constants.STATE_MESSAGE, "选择失败");
         }
-
         resp.sendRedirect(req.getContextPath() + "/admin/AdminAuditTeacherShow.jsp");
+    }
+
+    public void getAllLogs(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        List<LoginLogs> loginLogsList = new ArrayList<>();
+        String major = (String) (req.getSession().getAttribute(Constants.USER_MAJOR));
+        loginLogsList = loginLogsService.getAllLoginLogs();
+        resp.setContentType("application/json");
+        PrintWriter outPrintWriter = resp.getWriter();
+        outPrintWriter.write(JSONArray.toJSONString(loginLogsList));
+        outPrintWriter.flush();
+        outPrintWriter.close();
+    }
+
+    public void getAllLogsLimit(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        int limit = Integer.parseInt(req.getParameter("limit"));
+        int offset = Integer.parseInt(req.getParameter("offset"));
+        String search = req.getParameter("search");
+        int count = loginLogsService.getAllLoginLogsLimitCount(offset, limit, search);
+        List<LoginLogs> loginLogsList = new ArrayList<>();
+        String major = (String) (req.getSession().getAttribute(Constants.USER_MAJOR));
+        loginLogsList = loginLogsService.getAllLoginLogsLimit(offset, limit, search);
+        resp.setContentType("application/json");
+        PrintWriter outPrintWriter = resp.getWriter();
+        String s = JSONArray.toJSONString(loginLogsList);
+        String all = "{\"total\":" + count + ",\"rows\":" + s + "}";
+        //{"total":4,"rows":}
+        outPrintWriter.write(all);
+        outPrintWriter.flush();
+        outPrintWriter.close();
     }
 }
