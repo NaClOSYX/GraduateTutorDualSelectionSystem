@@ -115,7 +115,7 @@ session.setAttribute(Constants.STATE_MESSAGE, "");
             width: 200
         }, {
             title: '专业',
-            field: 'studentMajor',
+            field: 'majorName',
             sortable: true,
             width: 300
         }]

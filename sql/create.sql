@@ -50,3 +50,15 @@ CREATE TABLE idea
     foreign key (studentId) references student (studentId),
     foreign key (teacherId) references teacher (teacherId)
 );
+
+#登陆日志表
+DROP TABLE IF EXISTS loginLogs;
+CREATE TABLE loginLogs
+(
+    logId    int(10) auto_increment primary key,
+    userId   varchar(20),
+    userRole varchar(20),
+    userOp   varchar(10),
+    opTime   datetime,
+    opIp     varchar(30)
+);
