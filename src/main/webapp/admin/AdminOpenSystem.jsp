@@ -27,6 +27,7 @@
     <link href="../css/dashboard.css" rel="stylesheet">
 
     <script src="../js/common.js"></script>
+    <script src="../js/DateFormat.js"></script>
 </head>
 
 <body>
@@ -36,23 +37,32 @@
 <jsp:include page="AdminSlidebar.jsp">
     <jsp:param name="pageTitle" value="自主选择时间设定"/>
 </jsp:include>
-<%
-    MajorService majorService = new MajorServiceImpl();
-    List<Major> majorList = majorService.queryAllMajors();
-    String adminMajor = (String) (session.getAttribute(Constants.USER_MAJOR));
-    if (!"ALL".equals(adminMajor)) {
-        majorList = majorService.queryMajorByName(adminMajor);
-    }
-%>
 <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4">
-    <h3><p>请设定自选时间段</p>
-        <hr>
 
-        <button onclick="a()" value="sada"></button>
-
-        <!-- 日期时间范围选择代码 -->
-        <div class="box">
-            <input type="text" id="datetimes" name="datePicker" class="form-control" id="datePicker">
+    <!-- 日期时间范围选择代码 -->
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <h3><p>请设定自选时间段</p></h3>
+                <hr>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="box">
+                    <input type="text" id="datePicker" name="datePicker" class="form-control" id="datePicker"
+                           value="${applicationScope.startTime} - ${applicationScope.endTime}">
+                </div>
+            </div>
+        </div>
+        <br/>
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="box">
+                    <button id="submit" value="提交" class="btn btn-primary">提交</button>
+                    <button id="closeSystem" value="关闭系统" class="btn btn-primary">关闭系统</button>
+                </div>
+            </div>
         </div>
 </main>
 
@@ -70,45 +80,16 @@
     session.setAttribute(Constants.STATE_MESSAGE, "");
 %>
 
-    Date.prototype.format = function (fmt) {
-        var o = {
-            "M+": this.getMonth() + 1,                 //月份
-            "d+": this.getDate(),                    //日
-            "h+": this.getHours(),                   //小时
-            "m+": this.getMinutes(),                 //分
-            "s+": this.getSeconds(),                 //秒
-            "q+": Math.floor((this.getMonth() + 3) / 3), //季度
-            "S": this.getMilliseconds()             //毫秒
-        };
-        if (/(y+)/.test(fmt)) {
-            fmt = fmt.replace(RegExp.$1, (this.getFullYear() + "").substr(4 - RegExp.$1.length));
-        }
-        for (var k in o) {
-            if (new RegExp("(" + k + ")").test(fmt)) {
-                fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
-            }
-        }
-        return fmt;
-    }
     var startTime = new Date().format("yyyy-MM-dd hh:mm");
     var endTime = new Date().format("yyyy-MM-dd hh:mm");
 
-    function a() {
-        //var val = $('#datetimes').val();
-        console.log(startTime)
-        console.log(endTime)
-
-    }
-
-    $('#datetimes').daterangepicker({
+    $('#datePicker').daterangepicker({
         timePicker: true, //显示时间
         timePicker24Hour: true, //时间制
-        startDate: moment().hours(0).minutes(0).seconds(0), //设置开始日期
-        endDate: moment(new Date()), //设置结束器日期
-        maxDate: moment(new Date()), //设置最大日期
-        //"opens": "center",
-
-        showWeekNumbers: true,
+        showWeekNumbers: true,//显示周数
+        minDate: new Date(),//过期时间不能选择
+        timePickerIncrement: 30,// 分钟选择列表的增量
+        linkedCalendars: false,//显示的两个日历将始终为两个连续月份
         locale: {
             format: "YYYY-MM-DD HH:mm", //设置显示格式
             applyLabel: '确定', //确定按钮文本
@@ -125,6 +106,45 @@
         endTime = end.format('YYYY-MM-DD HH:mm')
     });
 
+    function updateDate() {
+        //var val = $('#datetimes').val();
+        console.log(startTime)
+        console.log(endTime)
+        $.post({})
+    }
+
+    $("#submit").click(function () {
+        //发起异步请求//参数一：请求的地址；参数二：传递的参数；参数三：回调函数，接收服务器回传的数据
+        $.ajax({
+            type: "POST",
+            url: "admin.do",
+            async: false,
+            data: {
+                method: 'setChooseTime',
+                startTime: startTime,
+                endTime: endTime
+            },
+            dataType: "json",
+            success: function (data) {
+                alert(data.message)
+            }
+        });
+    });
+    $("#closeSystem").click(function () {
+        $.ajax({
+            type: "POST",
+            url: "admin.do",
+            async: false,
+            data: {
+                method: 'closeSystem',
+            },
+            dataType: "json",
+            success: function (data) {
+                alert(data.message)
+                window.location.reload()
+            }
+        });
+    });
 
 </script>
 

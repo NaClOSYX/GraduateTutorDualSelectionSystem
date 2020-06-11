@@ -2,7 +2,6 @@
 <%@ page import="com.naclo.service.impl.StudentServiceImpl" %>
 <%@ page import="com.naclo.utils.Constants" %>
 <%@ page import="com.naclo.pojo.Student" %>
-<%@ page import="com.naclo.utils.MD5Utils" %>
 <%@ page import="com.naclo.service.IdeaService" %>
 <%@ page import="com.naclo.service.impl.IdeaServiceImpl" %>
 <%@ page import="com.naclo.pojo.Idea" %>
@@ -10,7 +9,6 @@
 <%@ page import="com.naclo.service.IdeaTableService" %>
 <%@ page import="com.naclo.service.impl.IdeaTableServiceImpl" %>
 <%@ page import="com.naclo.pojo.IdeaTable" %>
-<%@ page import="com.naclo.pojo.Teacher" %>
 <%@ page import="com.naclo.service.TeacherService" %>
 <%@ page import="com.naclo.service.impl.TeacherServiceImpl" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
@@ -57,45 +55,39 @@
         }
     }
     IdeaService ideaService = new IdeaServiceImpl();
-    List<Idea> ideaList = ideaService.queryIdeasByStudentId(studentId);
-    String teacherId = ideaService.queryTeacherByStudentId(studentId).getTeacherId();
-    String teacherName = teacherService.queryTeacherById(teacherId).getTeacherName();
+    List<Idea> ideaList = ideaService.queryIdeasByStudentIdAndState(studentId, 5);
+    ideaList.forEach(System.out::println);
+    String teacherName = null;
+    if (ideaList.size() > 0) {
+        String teacherId = ideaList.get(0).getTeacherId();
+        teacherName = teacherService.queryTeacherById(teacherId).getTeacherName();
+    }
+
+
 %>
 <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4">
     <div class="panel-body" style="padding-bottom:0px;">
         <br/><br/>
         <div class="container">
             <div class="row">
-
-
                 <div class="col-md-4">
                     <div class="card mb-4 shadow-sm">
                         <h1 style="text-align: center">
-                            <%
-                                out.print(ideaTable.getTeacherName1());
-                            %>
+                            <%=ideaTable.getTeacherName1()%>
                         </h1>
                     </div>
                 </div>
-
-
                 <div class="col-md-4">
                     <div class="card mb-4 shadow-sm">
                         <h1 style="text-align: center">
-                            <%
-                                out.print(ideaTable.getTeacherName2());
-                            %>
+                            <%=ideaTable.getTeacherName2()%>
                         </h1>
                     </div>
                 </div>
-
-
                 <div class="col-md-4">
                     <div class="card mb-4 shadow-sm">
                         <h1 style="text-align: center">
-                            <%
-                                out.print(ideaTable.getTeacherName3());
-                            %>
+                            <%=ideaTable.getTeacherName3()%>
                         </h1>
                     </div>
                 </div>
@@ -104,14 +96,12 @@
         <div>
             <%
                 if (teacherName == null) {
-
                 } else {
                     out.print("<h1> 您的导师：");
                     out.print("<b>" + teacherName + "</b>");
                     out.print("</h1>");
                 }
             %>
-
         </div>
     </div>
 </main>

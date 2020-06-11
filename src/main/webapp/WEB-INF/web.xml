@@ -30,6 +30,15 @@
     </jsp-config>
     <!--servlet-->
     <servlet>
+        <servlet-name>InitServlet</servlet-name>
+        <servlet-class>com.naclo.servlet.InitServlet</servlet-class>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>InitServlet</servlet-name>
+        <url-pattern>/init/init/init/init</url-pattern>
+    </servlet-mapping>
+    <servlet>
         <servlet-name>login</servlet-name>
         <servlet-class>com.naclo.servlet.LoginServlet</servlet-class>
     </servlet>

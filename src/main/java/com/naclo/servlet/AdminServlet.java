@@ -15,6 +15,7 @@ import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.apache.log4j.Logger;
 
+import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServlet;
@@ -23,10 +24,8 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.text.SimpleDateFormat;
+import java.util.*;
 import java.util.regex.Pattern;
 
 public class AdminServlet extends HttpServlet {
@@ -124,6 +123,10 @@ public class AdminServlet extends HttpServlet {
             getAllLogs(req, resp);
         } else if ("getAllLogsLimit".equals(method)) {//获取所有日志分页
             getAllLogsLimit(req, resp);
+        } else if ("setChooseTime".equals(method)) {//设定系统开启时间
+            setChooseTime(req, resp);
+        } else if ("closeSystem".equals(method)) {//关闭系统
+            closeSystem(req, resp);
         }
     }
 
@@ -850,8 +853,53 @@ public class AdminServlet extends HttpServlet {
         PrintWriter outPrintWriter = resp.getWriter();
         String s = JSONArray.toJSONString(loginLogsList);
         String all = "{\"total\":" + count + ",\"rows\":" + s + "}";
-        //{"total":4,"rows":}
         outPrintWriter.write(all);
+        outPrintWriter.flush();
+        outPrintWriter.close();
+    }
+
+    public void setChooseTime(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        ServletContext servletContext = req.getServletContext();
+        Map<String, String> resultMap = new HashMap<String, String>();
+        String startTime = req.getParameter("startTime");
+        String endTime = req.getParameter("endTime");
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+        resultMap.put("message", "设定成功");
+        servletContext.setAttribute("startTime", startTime);
+        servletContext.setAttribute("endTime", endTime);
+        resp.setContentType("application/json");
+        PrintWriter outPrintWriter = resp.getWriter();
+        outPrintWriter.write(JSONArray.toJSONString(resultMap));
+        outPrintWriter.flush();
+        outPrintWriter.close();
+    }
+
+    public void closeSystem(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        ServletContext servletContext = req.getServletContext();
+        Map<String, String> resultMap = new HashMap<String, String>();
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+        String startTime = servletContext.getAttribute("startTime").toString();
+        String endTime = servletContext.getAttribute("endTime").toString();
+        Date startDate = new Date();
+        Date endDate = new Date();
+        try {
+            //开始日期比今天晚的设置成今天
+            if (format.parse(startTime).after(startDate)) {
+                startTime = format.format(startDate);
+            }
+            //结束日期比今天晚的设置成今天
+            if (format.parse(endTime).after(endDate)) {
+                endTime = format.format(endDate);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        resultMap.put("message", "设定成功");
+        servletContext.setAttribute("startTime", startTime);
+        servletContext.setAttribute("endTime", endTime);
+        resp.setContentType("application/json");
+        PrintWriter outPrintWriter = resp.getWriter();
+        outPrintWriter.write(JSONArray.toJSONString(resultMap));
         outPrintWriter.flush();
         outPrintWriter.close();
     }

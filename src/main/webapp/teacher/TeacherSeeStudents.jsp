@@ -2,6 +2,10 @@
 <%@ page import="com.naclo.service.impl.TeacherServiceImpl" %>
 <%@ page import="com.naclo.utils.Constants" %>
 <%@ page import="com.naclo.utils.MD5Utils" %>
+<%@ page import="com.naclo.dao.IdeaDao" %>
+<%@ page import="com.naclo.dao.impl.IdeaDaoImpl" %>
+<%@ page import="com.naclo.service.IdeaService" %>
+<%@ page import="com.naclo.service.impl.IdeaServiceImpl" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <!DOCTYPE HTML>
 <html>
@@ -32,9 +36,11 @@
     <jsp:param name="pageTitle" value="查看选择的学生"/>
 </jsp:include>
 <%
+    IdeaService ideaService = new IdeaServiceImpl();
     String teacherId = session.getAttribute(Constants.USER_SESSION).toString();
     TeacherServiceImpl teacherService = new TeacherServiceImpl();
     Teacher teacher = teacherService.queryTeacherById(teacherId);
+    int studnetCount = ideaService.queryIdeasByTeacherIdCount(teacherId);
     int maxStudents = (int) (session.getAttribute(Constants.MAJOR_MAX_STUDENTS));
 %>
 <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4">
@@ -42,7 +48,9 @@
         <%--toolbar--%>
         <div id="toolbar" class="btn-group">
             <h3 id="alreadyDecidedStudents">已选择:&nbsp;</h3>
-            <h3 style="color: red"></h3>
+            <h3 style="color: red">
+                <%=studnetCount%>
+            </h3>
             <h3>&nbsp;&nbsp;&nbsp;</h3>
             <h3 id="teacherChooseMaxStudents">可选人数:&nbsp;</h3>
             <h3 style="color: red"><%=maxStudents%>
@@ -79,7 +87,6 @@ session.setAttribute(Constants.STATE_MESSAGE, "");
                         row: res,
                     });
                     $('#studentTable').bootstrapTable('load', res);
-                    $('#alreadyDecidedStudents').next().html(res.length)
                 },
                 error: function (error) {
                     console.log(error);

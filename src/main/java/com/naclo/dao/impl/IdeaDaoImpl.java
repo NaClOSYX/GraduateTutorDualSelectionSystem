@@ -47,7 +47,7 @@ public class IdeaDaoImpl implements IdeaDao {
         PreparedStatement pstm = null;
         if (connection != null) {
             //查询学生的所有志愿
-            String sql = "select * from idea where studentId=? and state=1";
+            String sql = "select * from idea where studentId=?";
             Object[] params = new Object[]{studentId};
             try {
                 rs = DBUtil.query(connection, sql, pstm, params, rs);
@@ -76,7 +76,7 @@ public class IdeaDaoImpl implements IdeaDao {
         PreparedStatement pstm = null;
         if (connection != null) {
             //查询正常志愿的学生
-            String sql = "select count(*) from idea where studentId=? and state=1";
+            String sql = "select count(*) from idea where studentId=?";
             Object[] params = new Object[]{studentId};
             try {
                 rs = DBUtil.query(connection, sql, pstm, params, rs);
@@ -154,7 +154,7 @@ public class IdeaDaoImpl implements IdeaDao {
         PreparedStatement pstm = null;
         if (connection != null) {
             //查询老师的所有学生
-            String sql = "select count(*) from idea where teacherId=? and state=2";
+            String sql = "select count(*) from idea where teacherId=? and state in (2,5)";
             Object[] params = new Object[]{teacherId};
             try {
                 rs = DBUtil.query(connection, sql, pstm, params, rs);
