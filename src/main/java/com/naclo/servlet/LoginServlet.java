@@ -34,7 +34,7 @@ public class LoginServlet extends HttpServlet {
         //获取登陆的用户id和密码
         String userId = req.getParameter("userId");
         String password = req.getParameter("password");
-
+        //获取ip
         String ip = getIpAddr(req);
 
         //在数据库中查询用户

@@ -127,6 +127,8 @@ public class AdminServlet extends HttpServlet {
             setChooseTime(req, resp);
         } else if ("closeSystem".equals(method)) {//关闭系统
             closeSystem(req, resp);
+        } else if ("adminSetTeacher".equals(method)) {//管理员指定老师
+            adminSetTeacher(req, resp);
         }
     }
 
@@ -902,5 +904,10 @@ public class AdminServlet extends HttpServlet {
         outPrintWriter.write(JSONArray.toJSONString(resultMap));
         outPrintWriter.flush();
         outPrintWriter.close();
+    }
+
+    public void adminSetTeacher(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        String studentId = req.getParameter("studentId");
+        String teacherId = req.getParameter("teacherId");
     }
 }

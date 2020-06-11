@@ -1,4 +1,12 @@
+<%@ page import="com.naclo.pojo.Major" %>
+<%@ page import="com.naclo.service.MajorService" %>
+<%@ page import="com.naclo.service.TeacherService" %>
+<%@ page import="com.naclo.service.impl.MajorServiceImpl" %>
+<%@ page import="com.naclo.service.impl.TeacherServiceImpl" %>
 <%@ page import="com.naclo.utils.Constants" %>
+<%@ page import="java.util.List" %>
+<%@ page import="com.naclo.pojo.Teacher" %>
+<%@ page import="java.util.ArrayList" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" pageEncoding="UTF-8" %>
 <!DOCTYPE HTML>
 <html>
@@ -22,7 +30,16 @@
 
     <script src="../js/common.js"></script>
 </head>
-
+<%
+    MajorService majorService = new MajorServiceImpl();
+    TeacherService teacherService = new TeacherServiceImpl();
+    List<Major> majorList = majorService.queryAllMajors();
+    String adminMajor = (String) (session.getAttribute(Constants.USER_MAJOR));
+    List<Teacher> teacherList = teacherService.queryAllTeachers();
+    if (!"ALL".equals(adminMajor)) {
+        teacherList = teacherService.queryTeacherByMajor(adminMajor);
+    }
+%>
 <body>
 <!--topbar-->
 <jsp:include page="AdminTopbar.jsp"></jsp:include>
@@ -49,6 +66,7 @@
 <jsp:include page="../commons/copyright.jsp"></jsp:include>
 
 </body>
+
 <script>
     <% //操作成功弹窗
     if(session.getAttribute(Constants.STATE_MESSAGE)==null||"".equals(session.getAttribute(Constants.STATE_MESSAGE))){
@@ -115,12 +133,39 @@
             sortable: true,
             width: 150
         }, {
-            title: '教师姓名',
+            title: '导师姓名',
             field: 'teacherName',
             sortable: true,
             width: 150
+        }, {
+            title: '指定导师',
+            field: 'setTeacher',
+            sortable: true,
+            width: 150,
+            formatter: operation,//对资源进行操作
         }]
     });
+
+
+    function operation(value, row, index) {
+        var htm = "<form action='admin.do'>" +
+            "<input type='hidden' name='method' value='adminSetTeacher'>" +
+            "<input type='hidden' name='studentId' value=" + row["studentId"] + ">" +
+            "<select name=teacherId>" +
+            <%
+            out.print("'");
+            for (Teacher teacher : teacherList) {
+                String teacherName = teacher.getTeacherName();
+                String teacherId = teacher.getTeacherId();
+                out.print("<option value="+teacherId+">"+teacherName+"</option>");
+            }
+                out.print("'");
+            %>
+            +"</select>" +
+            "<input type='submit'>" +
+            "</form>"
+        return htm;
+    }
 
     //确定选择学生操作
     function chooseIdeas() {
