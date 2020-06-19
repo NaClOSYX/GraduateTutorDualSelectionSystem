@@ -16,8 +16,7 @@ public class AdminListener extends AnalysisEventListener<Admin> {
     Logger logger = Logger.getLogger(this.getClass());
     List<Admin> adminList = new ArrayList<Admin>();
 
-    //每隔5条存储数据库，实际使用中可以3000条，然后清理list ，方便内存回收
-    private static final int BATCH_COUNT = 5;
+    private static final int BATCH_COUNT = 100;
     private AdminService AdminService;
 
     public AdminListener() {

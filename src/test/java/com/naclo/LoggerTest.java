@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Test;
  * @Author NaClO
  * @create 2020/4/27 22:26
  */
-public class loggerTest {
+public class LoggerTest {
     private Logger logger = Logger.getLogger(this.getClass());
 
     @Test

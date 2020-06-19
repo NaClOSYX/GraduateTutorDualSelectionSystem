@@ -10,7 +10,7 @@ import java.util.Properties;
  * @Author NaClO
  * @create 2020/4/27 22:13
  */
-public class pTest {
+public class PropertiesReadTest {
     private static String driver = "com.mysql.cj.jdbc.Driver";
     private static String url = "jdbc:mysql://localhost:3306/j2eeclass?serverTimezone=UTC&useSSL=true&useUnicode=true&characterEncoding=UTF-8";
     private static String username = "root";
@@ -19,7 +19,7 @@ public class pTest {
     static {
         Properties properties = new Properties();
         //通过类加载器读取对应资源
-        InputStream is = pTest.class.getClassLoader().getResourceAsStream("db.properties");
+        InputStream is = PropertiesReadTest.class.getClassLoader().getResourceAsStream("db.properties");
         try {
             properties.load(is);
         } catch (IOException e) {

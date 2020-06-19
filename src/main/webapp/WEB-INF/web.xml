@@ -182,27 +182,27 @@
     </session-config>
 
 
-    <servlet>
+<!--    <servlet>
         <servlet-name>StatViewServlet</servlet-name>
         <servlet-class>com.alibaba.druid.support.http.StatViewServlet</servlet-class>
         <init-param>
-            <!-- 允许清空统计数据 -->
+            &lt;!&ndash; 允许清空统计数据 &ndash;&gt;
             <param-name>resetEnable</param-name>
             <param-value>true</param-value>
         </init-param>
         <init-param>
-            <!-- 用户名 -->
+            &lt;!&ndash; 用户名 &ndash;&gt;
             <param-name>loginUsername</param-name>
             <param-value>admin</param-value>
         </init-param>
         <init-param>
-            <!-- 密码 -->
+            &lt;!&ndash; 密码 &ndash;&gt;
             <param-name>loginPassword</param-name>
             <param-value>admin</param-value>
         </init-param>
     </servlet>
 
-    <!--druid 性能监控-->
+    &lt;!&ndash;druid 性能监控&ndash;&gt;
     <servlet-mapping>
         <servlet-name>StatViewServlet</servlet-name>
         <url-pattern>/druid/*</url-pattern>
@@ -226,5 +226,5 @@
     <filter-mapping>
         <filter-name>druidWebStatFilter</filter-name>
         <url-pattern>/*</url-pattern>
-    </filter-mapping>
+    </filter-mapping>-->
 </web-app>
