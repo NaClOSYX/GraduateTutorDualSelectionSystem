@@ -6,13 +6,15 @@ import com.naclo.pojo.Idea;
 import com.naclo.pojo.Student;
 import com.naclo.pojo.Teacher;
 import com.naclo.service.IdeaService;
+import com.naclo.service.IdeaViewService;
 import com.naclo.service.StudentService;
 import com.naclo.service.TeacherService;
 import com.naclo.service.impl.IdeaServiceImpl;
+import com.naclo.service.impl.IdeaViewServiceImpl;
 import com.naclo.service.impl.StudentServiceImpl;
 import com.naclo.service.impl.TeacherServiceImpl;
 import com.naclo.utils.Constants;
-import com.naclo.utils.MD5Utils;
+import com.naclo.utils.MD5Util;
 import org.apache.log4j.Logger;
 
 import javax.servlet.ServletException;
@@ -32,6 +34,7 @@ public class StudentServlet extends HttpServlet {
     StudentService studentService = new StudentServiceImpl();
     TeacherService teacherService = new TeacherServiceImpl();
     IdeaService ideaService = new IdeaServiceImpl();
+    IdeaViewService ideaViewService = new IdeaViewServiceImpl();
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -45,6 +48,8 @@ public class StudentServlet extends HttpServlet {
             getTeacherList(req, resp);
         } else if ("studentChooseTeacher".equals(method)) {//选择老师
             studentChooseTeacher(req, resp);
+        } else if ("changeIdea".equals(method)) {//修改志愿
+            changeIdea(req, resp);
         }
     }
 
@@ -74,7 +79,7 @@ public class StudentServlet extends HttpServlet {
     public void validateOldPassword(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String studentId = req.getSession().getAttribute(Constants.USER_SESSION).toString();
         String oldPassword = req.getParameter("oldPassword");
-        String oldPwd = MD5Utils.stringToMD5(oldPassword);
+        String oldPwd = MD5Util.stringToMD5(oldPassword);
         Student student = studentService.queryStudentById(studentId);
         Map<String, String> resultMap = new HashMap<String, String>();
         if (StringUtils.isNullOrEmpty(oldPwd)) {//旧密码输入为空
@@ -113,7 +118,7 @@ public class StudentServlet extends HttpServlet {
         String teacherId3 = req.getParameter("teacherId3");
 
         int count = ideaService.queryIdeasByStudentIdCount(studentId);
-        if (count == 3) {
+        if (count >= 3) {
             req.getSession().setAttribute(Constants.STATE_MESSAGE, "您已经选择过导师了");
             resp.sendRedirect(req.getContextPath() + "/student/StudentChooseTeacher.jsp");
         } else {
@@ -127,5 +132,24 @@ public class StudentServlet extends HttpServlet {
             }
             resp.sendRedirect(req.getContextPath() + "/student/StudentChooseTeacher.jsp");
         }
+    }
+
+    public void changeIdea(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        HttpSession session = req.getSession();
+        String studentId = (String) (session.getAttribute(Constants.USER_SESSION));
+        String major = (String) (session.getAttribute(Constants.USER_MAJOR));
+        String oldTeacher = req.getParameter("oldTeacher");
+        String newTeacher = req.getParameter("newTeacher");
+        String oldTeacherId = teacherService.queryTeacherByName(oldTeacher).get(0).getTeacherId();
+        String newTeacherId = teacherService.queryTeacherByName(newTeacher).get(0).getTeacherId();
+        boolean flag = false;
+        int ideaId = ideaViewService.queryIdeas(studentId, oldTeacherId, major, -1).get(0).getIdeaId();
+        flag = ideaService.updateIdeaTeacherByIdeaId(ideaId, newTeacherId);
+        if (flag) {
+            req.getSession().setAttribute(Constants.STATE_MESSAGE, "修改成功");
+        } else {
+            req.getSession().setAttribute(Constants.STATE_MESSAGE, "修改成功");
+        }
+        resp.sendRedirect(req.getContextPath() + "/student/StudentManageIdeas.jsp");
     }
 }

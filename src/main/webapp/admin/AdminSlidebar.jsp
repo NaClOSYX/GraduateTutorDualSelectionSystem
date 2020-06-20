@@ -87,6 +87,7 @@
                             </a>
                         </c:if>
                     </li>
+                    <%--<c:if test="${!'ALL'.equals(adminMajor)}">--%>
                     <li class="nav-item">
                         <c:if test="${'审核结果'.equals(pageTitle)}">
                             <a class="nav-link active" href="AdminAuditTeacherShow.jsp">
@@ -101,6 +102,7 @@
                             </a>
                         </c:if>
                     </li>
+                    <%--</c:if>--%>
                     <li class="nav-item">
                         <c:if test="${'管理结果'.equals(pageTitle)}">
                             <a class="nav-link active" href="AdminStudentTeacherList.jsp">
@@ -108,7 +110,7 @@
                                 管理结果
                             </a>
                         </c:if>
-                        <c:if test="${!'审核结果'.equals(pageTitle)}">
+                        <c:if test="${!'管理结果'.equals(pageTitle)}">
                             <a class="nav-link" href="AdminStudentTeacherList.jsp">
                                 <span data-feather="file"></span>
                                 管理结果

@@ -21,7 +21,7 @@
         } else {
             window.clearInterval(timer);
             /*要跳转的请求*/
-            location.href = "/index.jsp";
+            location.href = "/login.jsp";
         }
     }
 
@@ -30,7 +30,7 @@
         if (timer != null && timer != undefined) {
             window.clearInterval(timer);
             /*取消跳转的请求*/
-            location.href = "/index.jsp";
+            location.href = "/login.jsp";
         }
     }
 </script>
@@ -38,8 +38,8 @@
 
 <body class="error_page" onload="startTimes();">
 <h1 id="error">
-    已注销，&nbsp;<span id="secondes">5</span>&nbsp;秒后将自动跳转到首页，立即跳转请点击&nbsp;
-    <a href="javascript:resetTimer();">首页</a>
+    已注销，&nbsp;<span id="secondes">5</span>&nbsp;秒后将自动跳转到登陆界面，立即跳转请点击&nbsp;
+    <a href="javascript:resetTimer();">登陆</a>
 </h1>
 </body>
 </body>

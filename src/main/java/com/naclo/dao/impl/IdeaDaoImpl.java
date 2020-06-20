@@ -19,7 +19,7 @@ public class IdeaDaoImpl implements IdeaDao {
         ResultSet rs = null;
         PreparedStatement pstm = null;
         if (connection != null) {
-            String sql = "select * from idea";
+            String sql = "select * from idea where state <> 7";
             try {
                 rs = DBUtil.query(connection, sql, pstm, new Object[]{}, rs);
                 while (rs.next()) {
@@ -38,6 +38,34 @@ public class IdeaDaoImpl implements IdeaDao {
         }
         DBUtil.closeResource(null, pstm, rs);
         return ideaList;
+    }
+
+
+    @Override
+    public Idea queryIdeasByIdeaId(Connection connection, String ideaId) {
+        Idea idea = new Idea();
+        ResultSet rs = null;
+        PreparedStatement pstm = null;
+        if (connection != null) {
+            String sql = "select * from idea where ideaId = ?";
+            Object[] params = new Object[]{ideaId};
+            try {
+                rs = DBUtil.query(connection, sql, pstm, params, rs);
+                while (rs.next()) {
+
+                    idea.setIdeaId(rs.getInt(1));
+                    idea.setMajorName(rs.getString(2));
+                    idea.setStudentId(rs.getString(3));
+                    idea.setTeacherId(rs.getString(4));
+                    idea.setTime(rs.getTimestamp(5));
+                    idea.setState(rs.getInt(6));
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        DBUtil.closeResource(null, pstm, rs);
+        return idea;
     }
 
     @Override
@@ -154,7 +182,7 @@ public class IdeaDaoImpl implements IdeaDao {
         PreparedStatement pstm = null;
         if (connection != null) {
             //查询老师的所有学生
-            String sql = "select count(*) from idea where teacherId=? and state in (2,5)";
+            String sql = "select count(*) from idea where teacherId=? and state in (2,5,7)";
             Object[] params = new Object[]{teacherId};
             try {
                 rs = DBUtil.query(connection, sql, pstm, params, rs);
@@ -197,6 +225,36 @@ public class IdeaDaoImpl implements IdeaDao {
         DBUtil.closeResource(null, pstm, rs);
         return ideaList;
     }
+
+    @Override
+    public List<Idea> queryIdeasByTeacherIdAdminDecided(Connection connection, String teacherId) {
+        List<Idea> ideaList = new ArrayList<>();
+        ResultSet rs = null;
+        PreparedStatement pstm = null;
+        if (connection != null) {
+            //查询正常志愿的老师
+            String sql = "select * from idea where teacherId=? and state in (5,7)";
+            Object[] params = new Object[]{teacherId};
+            try {
+                rs = DBUtil.query(connection, sql, pstm, params, rs);
+                while (rs.next()) {
+                    Idea idea = new Idea();
+                    idea.setIdeaId(rs.getInt(1));
+                    idea.setMajorName(rs.getString(2));
+                    idea.setStudentId(rs.getString(3));
+                    idea.setTeacherId(rs.getString(4));
+                    idea.setTime(rs.getTimestamp(5));
+                    idea.setState(rs.getInt(6));
+                    ideaList.add(idea);
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        DBUtil.closeResource(null, pstm, rs);
+        return ideaList;
+    }
+
 
     @Override
     public List<Idea> queryIdeasByMajor(Connection connection, String major) {
@@ -244,6 +302,22 @@ public class IdeaDaoImpl implements IdeaDao {
         return flag;
     }
 
+    @Override
+    public int deleteIdea(Connection connection, int ideaId) {
+        PreparedStatement pstm = null;
+        int flag = 0;
+        if (connection != null) {
+            String sql = "delete from idea where ideaId = ?;";
+            Object[] params = {ideaId};
+            try {
+                flag = DBUtil.execute(connection, sql, pstm, params);
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        DBUtil.closeResource(null, pstm, null);
+        return flag;
+    }
 
     @Override
     public int updateIdeaStateById(Connection connection, String studentId, String teacherId, int state) {
@@ -273,6 +347,23 @@ public class IdeaDaoImpl implements IdeaDao {
         if (connection != null) {
             String sql = "update idea set state=? where ideaId=?";
             Object[] params = new Object[]{state, ideaId};
+            try {
+                flag = DBUtil.execute(connection, sql, pstm, params);
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        DBUtil.closeResource(null, pstm, null);
+        return flag;
+    }
+
+    @Override
+    public int updateIdeaTeacherByIdeaId(Connection connection, int ideaId, String teacherId) {
+        PreparedStatement pstm = null;
+        int flag = 0;
+        if (connection != null) {
+            String sql = "update idea set teacherId=? where ideaId=?";
+            Object[] params = new Object[]{teacherId, ideaId};
             try {
                 flag = DBUtil.execute(connection, sql, pstm, params);
             } catch (SQLException e) {

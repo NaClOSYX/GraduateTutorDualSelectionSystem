@@ -42,7 +42,7 @@
             <button id="btn_add" type="button" class="btn btn-primary" data-toggle="modal"
                     data-target="#addStudentModel">新增
             </button>
-            <button id="btn_import" type="button" onclick="F_Open_dialog()" class="btn btn-primary">导入
+            <button id="btn_import" type="button" onclick="openUploadDialog()" class="btn btn-primary">导入
             </button>
             <button id="btn_export" type="button" class="btn btn-primary">
                 <a href="/admin/admin.do?method=exportStudentList" style="color: white">导出

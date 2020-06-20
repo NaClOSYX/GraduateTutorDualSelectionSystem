@@ -8,7 +8,7 @@ import com.naclo.pojo.Teacher;
 import com.naclo.service.*;
 import com.naclo.service.impl.*;
 import com.naclo.utils.Constants;
-import com.naclo.utils.MD5Utils;
+import com.naclo.utils.MD5Util;
 import org.apache.log4j.Logger;
 
 import javax.servlet.ServletException;
@@ -76,7 +76,7 @@ public class TeacherServlet extends HttpServlet {
     public void validateOldPassword(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String teacherId = req.getSession().getAttribute(Constants.USER_SESSION).toString();
         String oldPassword = req.getParameter("oldPassword");
-        String oldPwd = MD5Utils.stringToMD5(oldPassword);
+        String oldPwd = MD5Util.stringToMD5(oldPassword);
         Teacher teacher = teacherService.queryTeacherById(teacherId);
         Map<String, String> resultMap = new HashMap<String, String>();
         if (StringUtils.isNullOrEmpty(oldPwd)) {//旧密码输入为空

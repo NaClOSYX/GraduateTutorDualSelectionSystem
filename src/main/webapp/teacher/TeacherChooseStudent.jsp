@@ -1,7 +1,7 @@
 <%@ page import="com.naclo.pojo.Teacher" %>
 <%@ page import="com.naclo.service.impl.TeacherServiceImpl" %>
 <%@ page import="com.naclo.utils.Constants" %>
-<%@ page import="com.naclo.utils.MD5Utils" %>
+<%@ page import="com.naclo.utils.MD5Util" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <!DOCTYPE HTML>
 <html>

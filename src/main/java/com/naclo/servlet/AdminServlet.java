@@ -10,9 +10,7 @@ import com.naclo.pojo.*;
 import com.naclo.service.*;
 import com.naclo.service.impl.*;
 import com.naclo.utils.Constants;
-import org.apache.commons.fileupload.FileItem;
-import org.apache.commons.fileupload.disk.DiskFileItemFactory;
-import org.apache.commons.fileupload.servlet.ServletFileUpload;
+import com.naclo.utils.UploadFileUtil;
 import org.apache.log4j.Logger;
 
 import javax.servlet.ServletContext;
@@ -226,74 +224,14 @@ public class AdminServlet extends HttpServlet {
     }
 
     public void importStudentList(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        // 上传文件存储目录
-        String UPLOAD_DIRECTORY = "upload";
-
-        // 上传配置
-        int MEMORY_THRESHOLD = 1024 * 1024 * 3;  // 3MB
-        int MAX_FILE_SIZE = 1024 * 1024 * 40; // 40MB
-        int MAX_REQUEST_SIZE = 1024 * 1024 * 50; // 50MB
-        // 检测是否为多媒体上传
-        if (!ServletFileUpload.isMultipartContent(req)) {
-            // 如果不是则停止
-            PrintWriter writer = resp.getWriter();
-            writer.println("Error: 表单必须包含 enctype=multipart/form-data");
-            writer.flush();
-            return;
-        }
-
-        // 配置上传参数
-        DiskFileItemFactory factory = new DiskFileItemFactory();
-        // 设置内存临界值 - 超过后将产生临时文件并存储于临时目录中
-        factory.setSizeThreshold(MEMORY_THRESHOLD);
-        // 设置临时存储目录
-        factory.setRepository(new File(System.getProperty("java.io.tmpdir")));
-
-        ServletFileUpload upload = new ServletFileUpload(factory);
-
-        // 设置最大文件上传值
-        upload.setFileSizeMax(MAX_FILE_SIZE);
-
-        // 设置最大请求值 (包含文件和表单数据)
-        upload.setSizeMax(MAX_REQUEST_SIZE);
-
-        // 中文处理
-        upload.setHeaderEncoding("UTF-8");
-
-        // 构造临时路径来存储上传的文件
-        // 这个路径相对当前应用的目录
-        String uploadPath = getServletContext().getRealPath("/") + File.separator + UPLOAD_DIRECTORY;
-
-        // 如果目录不存在则创建
-        File uploadDir = new File(uploadPath);
-        if (!uploadDir.exists()) {
-            uploadDir.mkdir();
-        }
-        try {
-            // 解析请求的内容提取文件数据
-            @SuppressWarnings("unchecked")
-            List<FileItem> formItems = upload.parseRequest(req);
-            if (formItems != null && formItems.size() > 0) {
-                // 迭代表单数据
-                for (FileItem item : formItems) {
-                    // 处理不在表单中的字段
-                    if (!item.isFormField()) {
-                        String fileName = new File(item.getName()).getName();
-                        String filePath = uploadPath + File.separator + fileName;
-                        File storeFile = new File(filePath);
-                        // 在控制台输出文件的上传路径
-                        logger.info(filePath);
-                        // 保存文件到硬盘
-                        item.write(storeFile);
-                        EasyExcel.read(storeFile, Student.class, new StudentListener()).sheet().doRead();
-                        File delFile = new File(filePath);
-                        delFile.delete();
-                    }
-                }
-            }
-        } catch (Exception ex) {
-            req.setAttribute("message",
-                    "错误信息: " + ex.getMessage());
+        String filePath = UploadFileUtil.uploadFile(req, resp);
+        if ("".equals(filePath)) {
+            req.getSession().setAttribute(Constants.STATE_MESSAGE, "上传失败");
+        } else {
+            File file = new File(filePath);
+            EasyExcel.read(file, Student.class, new StudentListener()).sheet().doRead();
+            file.delete();
+            req.getSession().setAttribute(Constants.STATE_MESSAGE, "上传成功");
         }
         resp.sendRedirect(req.getHeader("Referer"));
     }
@@ -359,7 +297,6 @@ public class AdminServlet extends HttpServlet {
         if (flag) {
             req.getSession().setAttribute(Constants.STATE_MESSAGE, "删除导师成功");
             resp.sendRedirect(req.getContextPath() + "/admin/AdminTeacherList.jsp");
-            //req.getRequestDispatcher(req.getContextPath() + "/admin/AdminTeacherList.jsp").forward(req, resp);
         } else {
             resp.sendRedirect(req.getContextPath() + "/error/error.jsp");
         }
@@ -428,48 +365,14 @@ public class AdminServlet extends HttpServlet {
     }
 
     public void importTeacherList(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        String UPLOAD_DIRECTORY = "upload";
-        int MEMORY_THRESHOLD = 1024 * 1024 * 3;  // 3MB
-        int MAX_FILE_SIZE = 1024 * 1024 * 40; // 40MB
-        int MAX_REQUEST_SIZE = 1024 * 1024 * 50; // 50MB
-        if (!ServletFileUpload.isMultipartContent(req)) {
-            PrintWriter writer = resp.getWriter();
-            writer.println("Error: 表单必须包含 enctype=multipart/form-data");
-            writer.flush();
-            return;
-        }
-        DiskFileItemFactory factory = new DiskFileItemFactory();
-        factory.setSizeThreshold(MEMORY_THRESHOLD);
-        factory.setRepository(new File(System.getProperty("java.io.tmpdir")));
-        ServletFileUpload upload = new ServletFileUpload(factory);
-        upload.setFileSizeMax(MAX_FILE_SIZE);
-        upload.setSizeMax(MAX_REQUEST_SIZE);
-        upload.setHeaderEncoding("UTF-8");
-        String uploadPath = getServletContext().getRealPath("/") + File.separator + UPLOAD_DIRECTORY;
-        File uploadDir = new File(uploadPath);
-        if (!uploadDir.exists()) {
-            uploadDir.mkdir();
-        }
-        try {
-            @SuppressWarnings("unchecked")
-            List<FileItem> formItems = upload.parseRequest(req);
-            if (formItems != null && formItems.size() > 0) {
-                for (FileItem item : formItems) {
-                    if (!item.isFormField()) {
-                        String fileName = new File(item.getName()).getName();
-                        String filePath = uploadPath + File.separator + fileName;
-                        File storeFile = new File(filePath);
-                        logger.info(filePath);
-                        item.write(storeFile);
-                        EasyExcel.read(storeFile, Teacher.class, new TeacherListener()).sheet().doRead();
-                        File delFile = new File(filePath);
-                        delFile.delete();
-                    }
-                }
-            }
-        } catch (Exception ex) {
-            req.setAttribute("message",
-                    "错误信息: " + ex.getMessage());
+        String filePath = UploadFileUtil.uploadFile(req, resp);
+        if ("".equals(filePath)) {
+            req.getSession().setAttribute(Constants.STATE_MESSAGE, "上传失败");
+        } else {
+            File file = new File(filePath);
+            EasyExcel.read(file, Teacher.class, new TeacherListener()).sheet().doRead();
+            file.delete();
+            req.getSession().setAttribute(Constants.STATE_MESSAGE, "上传成功");
         }
         resp.sendRedirect(req.getHeader("Referer"));
     }
@@ -593,48 +496,14 @@ public class AdminServlet extends HttpServlet {
     }
 
     public void importAdminList(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        String UPLOAD_DIRECTORY = "upload";
-        int MEMORY_THRESHOLD = 1024 * 1024 * 3;  // 3MB
-        int MAX_FILE_SIZE = 1024 * 1024 * 40; // 40MB
-        int MAX_REQUEST_SIZE = 1024 * 1024 * 50; // 50MB
-        if (!ServletFileUpload.isMultipartContent(req)) {
-            PrintWriter writer = resp.getWriter();
-            writer.println("Error: 表单必须包含 enctype=multipart/form-data");
-            writer.flush();
-            return;
-        }
-        DiskFileItemFactory factory = new DiskFileItemFactory();
-        factory.setSizeThreshold(MEMORY_THRESHOLD);
-        factory.setRepository(new File(System.getProperty("java.io.tmpdir")));
-        ServletFileUpload upload = new ServletFileUpload(factory);
-        upload.setFileSizeMax(MAX_FILE_SIZE);
-        upload.setSizeMax(MAX_REQUEST_SIZE);
-        upload.setHeaderEncoding("UTF-8");
-        String uploadPath = getServletContext().getRealPath("/") + File.separator + UPLOAD_DIRECTORY;
-        File uploadDir = new File(uploadPath);
-        if (!uploadDir.exists()) {
-            uploadDir.mkdir();
-        }
-        try {
-            @SuppressWarnings("unchecked")
-            List<FileItem> formItems = upload.parseRequest(req);
-            if (formItems != null && formItems.size() > 0) {
-                for (FileItem item : formItems) {
-                    if (!item.isFormField()) {
-                        String fileName = new File(item.getName()).getName();
-                        String filePath = uploadPath + File.separator + fileName;
-                        File storeFile = new File(filePath);
-                        logger.info(filePath);
-                        item.write(storeFile);
-                        EasyExcel.read(storeFile, Admin.class, new AdminListener()).sheet().doRead();
-                        File delFile = new File(filePath);
-                        delFile.delete();
-                    }
-                }
-            }
-        } catch (Exception ex) {
-            req.setAttribute("message",
-                    "错误信息: " + ex.getMessage());
+        String filePath = UploadFileUtil.uploadFile(req, resp);
+        if ("".equals(filePath)) {
+            req.getSession().setAttribute(Constants.STATE_MESSAGE, "上传失败");
+        } else {
+            File file = new File(filePath);
+            EasyExcel.read(file, Admin.class, new AdminListener()).sheet().doRead();
+            file.delete();
+            req.getSession().setAttribute(Constants.STATE_MESSAGE, "上传成功");
         }
         resp.sendRedirect(req.getHeader("Referer"));
     }
@@ -644,7 +513,6 @@ public class AdminServlet extends HttpServlet {
         String adminId = req.getParameter("adminId");
         System.out.println(adminId);
         Map<String, String> resultMap = new HashMap<String, String>();
-
         if (StringUtils.isNullOrEmpty(adminId)) {//用户名输入为空
             resultMap.put("result", "error");
         } else {
@@ -820,14 +688,30 @@ public class AdminServlet extends HttpServlet {
 
     public void adminAuditTeacherDecide(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String[] ideaIds = req.getParameterValues("ideaId");
+        ArrayList<String> wrongList = new ArrayList<>();
         boolean flag = true;
         for (String ideaId : ideaIds) {
-            flag &= ideaService.updateIdeaStateByIdeaId(Integer.parseInt(ideaId), 5);
+            Idea idea = ideaService.queryIdeasByIdeaId(ideaId);
+            String teacherId = idea.getTeacherId();
+            String majorName = idea.getMajorName();
+            int count = ideaService.queryIdeasByTeacherIdAdminDecided(teacherId).size();
+            int maxStudents = majorService.queryMajorMaxStudents(majorName);
+            if (count < maxStudents) {
+                flag &= ideaService.updateIdeaStateByIdeaId(Integer.parseInt(ideaId), 5);
+            } else {
+                flag = false;
+                wrongList.add(idea.getStudentId());
+            }
         }
         if (flag) {
-            req.getSession().setAttribute(Constants.STATE_MESSAGE, "选择成功");
+            req.getSession().setAttribute(Constants.STATE_MESSAGE, "操作成功");
         } else {
-            req.getSession().setAttribute(Constants.STATE_MESSAGE, "选择失败");
+            StringBuffer message = new StringBuffer("选择失败");
+            message.append(",失败学号");
+            for (String s : wrongList) {
+                message.append(s + ",");
+            }
+            req.getSession().setAttribute(Constants.STATE_MESSAGE, message);
         }
         resp.sendRedirect(req.getContextPath() + "/admin/AdminAuditTeacherShow.jsp");
     }
@@ -909,5 +793,23 @@ public class AdminServlet extends HttpServlet {
     public void adminSetTeacher(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String studentId = req.getParameter("studentId");
         String teacherId = req.getParameter("teacherId");
+        String ideaId = req.getParameter("ideaId");
+        boolean flag = true;
+        int count = ideaService.queryIdeasByTeacherIdAdminDecided(teacherId).size();
+        String major = studentService.queryStudentById(studentId).getStudentMajor();
+        int maxStudents = majorService.queryMajorMaxStudents(major);
+
+        if (count < maxStudents) {
+            flag &= ideaService.updateIdeaStateByIdeaId(Integer.parseInt(ideaId), 6);
+            flag &= ideaService.insertIdea(new Idea(0, major, studentId, teacherId, new Date(), 7));
+        } else {
+            flag = false;
+        }
+        if (flag) {
+            req.getSession().setAttribute(Constants.STATE_MESSAGE, "操作成功");
+        } else {
+            req.getSession().setAttribute(Constants.STATE_MESSAGE, "操作失败");
+        }
+        resp.sendRedirect(req.getContextPath() + "/admin/AdminAuditTeacherShow.jsp");
     }
 }

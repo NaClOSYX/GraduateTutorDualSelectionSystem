@@ -9,7 +9,7 @@ import com.naclo.service.impl.LoginLogsServiceImpl;
 import com.naclo.service.impl.MajorServiceImpl;
 import com.naclo.service.impl.UserServiceImpl;
 import com.naclo.utils.Constants;
-import com.naclo.utils.MD5Utils;
+import com.naclo.utils.MD5Util;
 import org.apache.log4j.Logger;
 
 import javax.servlet.ServletException;
@@ -45,7 +45,7 @@ public class LoginServlet extends HttpServlet {
             req.setAttribute("error", "用户不存在");
             req.getRequestDispatcher("login.jsp").forward(req, resp);
         } else {
-            if (!user.getPassword().equals(MD5Utils.stringToMD5(password))) {
+            if (!user.getPassword().equals(MD5Util.stringToMD5(password))) {
                 req.setAttribute("error", "密码错误");
                 req.getRequestDispatcher("login.jsp").forward(req, resp);
             } else {

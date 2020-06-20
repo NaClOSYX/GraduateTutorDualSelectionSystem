@@ -4,7 +4,7 @@ package com.naclo.dao.impl;
 import com.naclo.dao.AdminDao;
 import com.naclo.pojo.Admin;
 import com.naclo.utils.DBUtil;
-import com.naclo.utils.MD5Utils;
+import com.naclo.utils.MD5Util;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -113,7 +113,7 @@ public class AdminDaoImpl implements AdminDao {
 
     @Override
     public int insertAdmin(Connection connection, Admin admin) {
-        String password = MD5Utils.stringToMD5(admin.getAdminId());
+        String password = MD5Util.stringToMD5(admin.getAdminId());
         PreparedStatement pstm = null;
         int flag = 0;
         if (connection != null) {
@@ -131,7 +131,7 @@ public class AdminDaoImpl implements AdminDao {
 
     @Override
     public int updateAdminPasswordById(Connection connection, String id, String newPwd) {
-        String newPassword = MD5Utils.stringToMD5(newPwd);
+        String newPassword = MD5Util.stringToMD5(newPwd);
         PreparedStatement pstm = null;
         int flag = 0;
         if (connection != null) {

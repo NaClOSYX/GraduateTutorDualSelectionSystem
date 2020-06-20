@@ -49,7 +49,6 @@
         <table id="ideaTable"></table>
     </div>
 </main>
-
 <!-- Copyright -->
 <jsp:include page="../commons/copyright.jsp"></jsp:include>
 
@@ -69,7 +68,11 @@
         var htm = "<form action='admin.do'>" +
             "<input type='hidden' name='method' value='adminSetTeacher'>" +
             "<input type='hidden' name='studentId' value=" + row["studentId"] + ">" +
-            "<select name=teacherId>" +
+            "<input type='hidden' name='ideaId' value=" + row["ideaId"] + ">" +
+            "    <div class=\"container\">\n" +
+            "        <div class=\"row\">\n" +
+            "            <div class=\"col-6\">" +
+            "<select name=teacherId class=\"form-control\">" +
             <%
             out.print("'");
             for (Teacher teacher : teacherList) {
@@ -80,7 +83,12 @@
                 out.print("'");
             %>
             +"</select>" +
-            "<input type='submit'>" +
+            "            </div>\n" +
+            "            <div class=\"col-6\">" +
+            "<input type='submit' class=\"form-control\">" +
+            "            </div>\n" +
+            "        </div>\n" +
+            "    </div>" +
             "</form>"
         return htm;
     }

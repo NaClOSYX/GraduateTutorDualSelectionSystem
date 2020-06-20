@@ -5,8 +5,8 @@ $('#datePicker').daterangepicker({
     timePicker: true, //显示时间
     timePicker24Hour: true, //时间制
     showWeekNumbers: true,//显示周数
-    minDate: new Date(),//过期时间不能选择
-    timePickerIncrement: 30,// 分钟选择列表的增量
+    // minDate: new Date(),//过期时间不能选择
+    //timePickerIncrement: 30,// 分钟选择列表的增量
     linkedCalendars: false,//显示的两个日历将始终为两个连续月份
     locale: {
         format: "YYYY-MM-DD HH:mm", //设置显示格式

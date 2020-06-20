@@ -3,7 +3,7 @@ package com.naclo.dao.impl;
 import com.naclo.dao.StudentDao;
 import com.naclo.pojo.Student;
 import com.naclo.utils.DBUtil;
-import com.naclo.utils.MD5Utils;
+import com.naclo.utils.MD5Util;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -148,7 +148,7 @@ public class StudentDaoImpl implements StudentDao {
 
     @Override
     public int insertStudent(Connection connection, Student student) {
-        String password = MD5Utils.stringToMD5(student.getStudentId());
+        String password = MD5Util.stringToMD5(student.getStudentId());
         PreparedStatement pstm = null;
         int flag = 0;
         if (connection != null) {
@@ -166,7 +166,7 @@ public class StudentDaoImpl implements StudentDao {
 
     @Override
     public int updateStudentPasswordById(Connection connection, String id, String newPwd) {
-        String newPassword = MD5Utils.stringToMD5(newPwd);
+        String newPassword = MD5Util.stringToMD5(newPwd);
         PreparedStatement pstm = null;
         int flag = 0;
         if (connection != null) {

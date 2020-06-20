@@ -3,7 +3,7 @@ package com.naclo.dao.impl;
 import com.naclo.dao.TeacherDao;
 import com.naclo.pojo.Teacher;
 import com.naclo.utils.DBUtil;
-import com.naclo.utils.MD5Utils;
+import com.naclo.utils.MD5Util;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -182,7 +182,7 @@ public class TeacherDaoImpl implements TeacherDao {
 
     @Override
     public int insertTeacher(Connection connection, Teacher teacher) {
-        String passwoed = MD5Utils.stringToMD5(teacher.getTeacherId());
+        String passwoed = MD5Util.stringToMD5(teacher.getTeacherId());
         PreparedStatement pstm = null;
         int flag = 0;
         if (connection != null) {
@@ -200,7 +200,7 @@ public class TeacherDaoImpl implements TeacherDao {
 
     @Override
     public int updateTeacherPasswordById(Connection connection, String id, String newPwd) {
-        String newPassword = MD5Utils.stringToMD5(newPwd);
+        String newPassword = MD5Util.stringToMD5(newPwd);
         PreparedStatement pstm = null;
         int flag = 0;
         if (connection != null) {

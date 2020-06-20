@@ -22,6 +22,14 @@ public class IdeaServiceImpl implements IdeaService {
     }
 
     @Override
+    public Idea queryIdeasByIdeaId(String ideaId) {
+        Connection connection = DBUtil.getConnection();
+        Idea idea = ideaDao.queryIdeasByIdeaId(connection, ideaId);
+        DBUtil.closeResource(connection, null, null);
+        return idea;
+    }
+
+    @Override
     public List<Idea> queryIdeasByStudentId(String studentId) {
         Connection connection = DBUtil.getConnection();
         List<Idea> ideaList = ideaDao.queryIdeasByStudentId(connection, studentId);
@@ -70,6 +78,15 @@ public class IdeaServiceImpl implements IdeaService {
     }
 
     @Override
+    //根据工号获取管理员确定的志愿
+    public List<Idea> queryIdeasByTeacherIdAdminDecided(String teacherId) {
+        Connection connection = DBUtil.getConnection();
+        List<Idea> ideaList = ideaDao.queryIdeasByTeacherIdAdminDecided(connection, teacherId);
+        DBUtil.closeResource(connection, null, null);
+        return ideaList;
+    }
+
+    @Override
     public List<Idea> queryIdeasByMajor(String major) {
         Connection connection = DBUtil.getConnection();
         List<Idea> ideaList = ideaDao.queryIdeasByMajor(connection, major);
@@ -90,9 +107,33 @@ public class IdeaServiceImpl implements IdeaService {
     }
 
     @Override
+    public boolean deleteIdea(int ideaId) {
+        Connection connection = DBUtil.getConnection();
+        int i = ideaDao.deleteIdea(connection, ideaId);
+        DBUtil.closeResource(connection, null, null);
+        if (i > 0) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    @Override
     public boolean updateIdeaStateById(String studentId, String teacherId, int state) {
         Connection connection = DBUtil.getConnection();
         int i = ideaDao.updateIdeaStateById(connection, studentId, teacherId, state);
+        DBUtil.closeResource(connection, null, null);
+        if (i > 0) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    @Override
+    public boolean updateIdeaTeacherByIdeaId(int ideaId, String teacherId) {
+        Connection connection = DBUtil.getConnection();
+        int i = ideaDao.updateIdeaTeacherByIdeaId(connection, ideaId, teacherId);
         DBUtil.closeResource(connection, null, null);
         if (i > 0) {
             return true;

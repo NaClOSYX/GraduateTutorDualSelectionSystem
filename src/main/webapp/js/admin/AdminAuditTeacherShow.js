@@ -38,32 +38,33 @@ $('#ideaTable').bootstrapTable({
     height: $(window).height() - 70,   //行高，如果没有设置height属性，表格自动根据记录条数觉得表格高度
     uniqueId: "studentId",           //每一行的唯一标识，一般为主键列
     columns: [{
-        checkbox: true
+        checkbox: true,
+        width: 50
     }, {
         title: '学号',
         field: 'studentId',
         sortable: true,
-        width: 150
+        width: 200
     }, {
         title: '学生姓名',
         field: 'studentName',
         sortable: true,
-        width: 150
+        width: 200
     }, {
         title: '工号',
         field: 'teacherId',
         sortable: true,
-        width: 150
+        width: 200
     }, {
         title: '导师姓名',
         field: 'teacherName',
         sortable: true,
-        width: 150
+        width: 200
     }, {
         title: '指定导师',
         field: 'setTeacher',
         sortable: true,
-        width: 150,
+        //width: 180,
         formatter: operation,//对资源进行操作
     }]
 });

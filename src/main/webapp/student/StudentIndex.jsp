@@ -2,7 +2,7 @@
 <%@ page import="com.naclo.service.impl.StudentServiceImpl" %>
 <%@ page import="com.naclo.utils.Constants" %>
 <%@ page import="com.naclo.pojo.Student" %>
-<%@ page import="com.naclo.utils.MD5Utils" %>
+<%@ page import="com.naclo.utils.MD5Util" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <!DOCTYPE HTML>
 <html>
@@ -44,7 +44,7 @@
             </b>
             登陆
             <%
-                if (student.getStudentPassword().equals(MD5Utils.stringToMD5(student.getStudentId()))) {
+                if (student.getStudentPassword().equals(MD5Util.stringToMD5(student.getStudentId()))) {
                     out.print(",请<a href=\"StudentUpdatePassword.jsp\">修改密码</a>。");
                 } else {
                     out.print("。");
