@@ -83,32 +83,6 @@
         <url-pattern>/teacher/teacher.do</url-pattern>
     </servlet-mapping>
 
-    <servlet>
-        <servlet-name>UploadServlet</servlet-name>
-        <servlet-class>com.naclo.servlet.UploadServlet</servlet-class>
-    </servlet>
-    <servlet-mapping>
-        <servlet-name>UploadServlet</servlet-name>
-        <url-pattern>/upload.do</url-pattern>
-    </servlet-mapping>
-
-    <servlet>
-        <servlet-name>ImportServlet</servlet-name>
-        <servlet-class>com.naclo.servlet.ImportServlet</servlet-class>
-    </servlet>
-    <servlet-mapping>
-        <servlet-name>ImportServlet</servlet-name>
-        <url-pattern>/import.do</url-pattern>
-    </servlet-mapping>
-
-    <servlet>
-        <servlet-name>ExportServlet</servlet-name>
-        <servlet-class>com.naclo.servlet.ExportServlet</servlet-class>
-    </servlet>
-    <servlet-mapping>
-        <servlet-name>ExportServlet</servlet-name>
-        <url-pattern>/export.do</url-pattern>
-    </servlet-mapping>
     <!--filter-->
     <!--编码过滤 解决中文乱码-->
     <filter>

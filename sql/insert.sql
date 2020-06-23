@@ -20,7 +20,7 @@ VALUES ('3333333333', '赵七', MD5('3333333333'), '控制工程', '赵七，最
 INSERT INTO admin
 VALUES ('admin', MD5('admin'), '软件工程');
 INSERT INTO admin
-VALUES ('sadmin', MD5('cadmin'), 'All');
+VALUES ('sadmin', MD5('sadmin'), 'All');
 
 
 Insert into major
