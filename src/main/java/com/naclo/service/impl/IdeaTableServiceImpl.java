@@ -19,6 +19,7 @@ public class IdeaTableServiceImpl implements IdeaTableService {
     TeacherService teacherService = new TeacherServiceImpl();
     StudentService studentService = new StudentServiceImpl();
 
+    @Override
     public List<IdeaTable> queryStudentIdeasByMajor(String major) {
         List<Student> studentList = new ArrayList<>();
         List<IdeaTable> ideaTableList = new ArrayList<>();

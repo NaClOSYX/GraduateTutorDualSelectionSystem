@@ -31,19 +31,6 @@ public class DBUtil {
         username = properties.getProperty("username");
         password = properties.getProperty("password");
     }
-/*    static DruidDataSource dataSource;
-
-    static {
-        Properties prop = new Properties();
-        try {
-            prop.load(DBUtil.class.getClassLoader().getResourceAsStream("druid.properties"));
-            dataSource = (DruidDataSource) DruidDataSourceFactory.createDataSource(prop);
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }*/
 
     //获取数据库的链接
     public static Connection getConnection() {
@@ -51,7 +38,6 @@ public class DBUtil {
         try {
             Class.forName(driver);
             connection = DriverManager.getConnection(url, username, password);
-            //connection = dataSource.getConnection();
         } catch (Exception e) {
             e.printStackTrace();
         }

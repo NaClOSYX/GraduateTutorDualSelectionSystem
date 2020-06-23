@@ -17,10 +17,10 @@ public class AdminListener extends AnalysisEventListener<Admin> {
     List<Admin> adminList = new ArrayList<Admin>();
 
     private static final int BATCH_COUNT = 100;
-    private AdminService AdminService;
+    private AdminService adminService;
 
     public AdminListener() {
-        AdminService = new AdminServiceImpl();
+        adminService = new AdminServiceImpl();
     }
 
     @Override
@@ -44,7 +44,7 @@ public class AdminListener extends AnalysisEventListener<Admin> {
     private void saveData() {
         logger.info(adminList.size());
         for (Admin admin : adminList) {
-            AdminService.insertAdmin(admin);
+            adminService.insertAdmin(admin);
         }
         logger.info("存储数据库成功！");
     }

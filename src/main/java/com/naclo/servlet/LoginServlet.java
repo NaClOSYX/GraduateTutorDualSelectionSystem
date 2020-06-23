@@ -112,7 +112,7 @@ public class LoginServlet extends HttpServlet {
         }
 
         // ip配置
-        if (ip.equals("127.0.0.1") || ip.endsWith("0:0:0:0:0:0:1")) {
+        if ("127.0.0.1".equals(ip) || ip.endsWith("0:0:0:0:0:0:1")) {
             // 根据网卡取本机配置的IP
             ip = "127.0.0.1";
         }
