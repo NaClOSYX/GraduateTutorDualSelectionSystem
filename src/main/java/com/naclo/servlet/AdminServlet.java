@@ -661,8 +661,10 @@ public class AdminServlet extends HttpServlet {
         String major = (String) (req.getSession().getAttribute(Constants.USER_MAJOR));
         if ("ALL".equals(major)) {
             ideaViewList = ideaViewService.queryIdeas(null, null, null, 5);
+            ideaViewList.addAll(ideaViewService.queryIdeas(null, null, null, 7));
         } else {
             ideaViewList = ideaViewService.queryIdeas(null, null, major, 5);
+            ideaViewList.addAll(ideaViewService.queryIdeas(null, null, major, 7));
         }
         resp.setContentType("application/json");
         PrintWriter outPrintWriter = resp.getWriter();

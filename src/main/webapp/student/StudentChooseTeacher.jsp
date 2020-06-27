@@ -50,7 +50,7 @@
 
         <%
             Date today = new Date();
-            if (!(today.after(startDate) && today.before(endDate))) {
+            if ((today.after(startDate) && today.before(endDate))) {
                 out.print("        <div id=\"toolbar\" class=\"btn-group\">\n" +
                         "            <button id=\"btn_choose\" type=\"button\" onclick=\"chooseTeacher()\" class=\"btn btn-primary\">选择\n" +
                         "            </button>\n" +
