@@ -34,7 +34,7 @@
         <lombok.version>1.18.12</lombok.version>
         <poi.version>4.1.2</poi.version>
         <easyexcel.version>2.2.3</easyexcel.version>
-        <fastjson.version>1.2.68</fastjson.version>
+        <fastjson.version>1.2.83</fastjson.version>
         <fileupload.version>1.4</fileupload.version>
         <log4j.version>1.2.17</log4j.version>
         <slf4j.version>2.0.0-alpha1</slf4j.version>
